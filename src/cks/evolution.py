@@ -26,6 +26,7 @@ from .core import (
 # Structural Operator Contract
 # ---------------------------------------------------------------------------
 
+
 @dataclass(frozen=True)
 class OperatorContract:
     """Formal contract for a StructuralOperator (CKS‑004, Section 7)."""
@@ -39,6 +40,7 @@ class OperatorContract:
 # ---------------------------------------------------------------------------
 # Abstract Structural Operator
 # ---------------------------------------------------------------------------
+
 
 class StructuralOperator(ABC):
     """Abstract base class for all admissible structural evolutions."""
@@ -61,6 +63,7 @@ class StructuralOperator(ABC):
 # Genesis – Knowledge Object Extension
 # ---------------------------------------------------------------------------
 
+
 class AddObject(StructuralOperator):
     """Introduce a new KnowledgeObject into the structure."""
 
@@ -69,9 +72,7 @@ class AddObject(StructuralOperator):
 
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
         if self._obj.identity.id in structure:
-            raise ValueError(
-                f"Object '{self._obj.identity.id}' already exists."
-            )
+            raise ValueError(f"Object '{self._obj.identity.id}' already exists.")
         new_objects = list(structure.objects)
         new_objects.append(self._obj)
         return KnowledgeStructure(new_objects)
@@ -79,7 +80,9 @@ class AddObject(StructuralOperator):
     def contract(self) -> OperatorContract:
         return OperatorContract(
             description=f"Add KnowledgeObject '{self._obj.identity.id}'.",
-            preconditions=("The object's identity must be unique within the structure.",),
+            preconditions=(
+                "The object's identity must be unique within the structure.",
+            ),
             postconditions=("The object is present in the structure.",),
             invariant_obligations=("Object identity uniqueness is preserved.",),
         )
@@ -89,6 +92,7 @@ class AddObject(StructuralOperator):
 # Genesis – Canonical Relation Extension
 # ---------------------------------------------------------------------------
 
+
 class AddRelation(StructuralOperator):
     """Introduce a new CanonicalRelation between existing objects."""
 
@@ -97,15 +101,11 @@ class AddRelation(StructuralOperator):
 
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
         if self._relation.identity.id in structure:
-            raise ValueError(
-                f"Relation '{self._relation.identity.id}' already exists."
-            )
+            raise ValueError(f"Relation '{self._relation.identity.id}' already exists.")
         # Ensure every participant exists
         for pid in self._relation.participants:
             if pid not in structure:
-                raise ValueError(
-                    f"Participant '{pid}' does not exist."
-                )
+                raise ValueError(f"Participant '{pid}' does not exist.")
         new_objects = list(structure.objects)
         new_objects.append(self._relation)
         return KnowledgeStructure(new_objects)
@@ -126,6 +126,7 @@ class AddRelation(StructuralOperator):
 # Decay – Removal Operators
 # ---------------------------------------------------------------------------
 
+
 class RemoveObject(StructuralOperator):
     """Remove a KnowledgeObject and all relations that reference it."""
 
@@ -134,14 +135,10 @@ class RemoveObject(StructuralOperator):
 
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
         if self._object_id not in structure:
-            raise ValueError(
-                f"Object '{self._object_id}' does not exist."
-            )
+            raise ValueError(f"Object '{self._object_id}' does not exist.")
         # Remove the object itself
         new_objects = [
-            obj
-            for obj in structure.objects
-            if obj.identity.id != self._object_id
+            obj for obj in structure.objects if obj.identity.id != self._object_id
         ]
         # Remove any relation that referenced the object
         new_objects = [
@@ -175,9 +172,7 @@ class RemoveRelation(StructuralOperator):
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
         target = structure.get(self._relation_id)
         if target is None:
-            raise ValueError(
-                f"Relation '{self._relation_id}' does not exist."
-            )
+            raise ValueError(f"Relation '{self._relation_id}' does not exist.")
         if not isinstance(target, CanonicalRelation):
             # Without this check, RemoveRelation would silently accept
             # a plain KnowledgeObject id and remove the object itself
@@ -191,9 +186,7 @@ class RemoveRelation(StructuralOperator):
                 "also cascade-remove any relations that reference it)."
             )
         new_objects = [
-            obj
-            for obj in structure.objects
-            if obj.identity.id != self._relation_id
+            obj for obj in structure.objects if obj.identity.id != self._relation_id
         ]
         return KnowledgeStructure(new_objects)
 
@@ -213,6 +206,7 @@ class RemoveRelation(StructuralOperator):
 # ---------------------------------------------------------------------------
 # Metabolism – In-Place Update
 # ---------------------------------------------------------------------------
+
 
 class UpdateObject(StructuralOperator):
     """
@@ -285,8 +279,7 @@ class UpdateObject(StructuralOperator):
     def contract(self) -> OperatorContract:
         return OperatorContract(
             description=(
-                f"Update KnowledgeObject '{self._object_id}' "
-                f"(mode={self._mode})."
+                f"Update KnowledgeObject '{self._object_id}' (mode={self._mode})."
             ),
             preconditions=(
                 "The object must exist.",
@@ -313,6 +306,7 @@ class UpdateObject(StructuralOperator):
 # This is the single canonical place that turns that wire format into
 # concrete StructuralOperator instances, so every adapter shares the
 # same admissible operation set and the same error messages.
+
 
 def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
     """
@@ -387,9 +381,7 @@ def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
                 raise ValueError(f"Operation #{i}: missing 'object_id' field")
             structure_patch = op.get("structure_patch")
             if structure_patch is None:
-                raise ValueError(
-                    f"Operation #{i}: missing 'structure_patch' field"
-                )
+                raise ValueError(f"Operation #{i}: missing 'structure_patch' field")
             mode = op.get("mode", "merge")
             try:
                 operators.append(UpdateObject(object_id, structure_patch, mode=mode))
@@ -405,6 +397,7 @@ def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
 # ---------------------------------------------------------------------------
 # Composition
 # ---------------------------------------------------------------------------
+
 
 def compose(
     structure: KnowledgeStructure,

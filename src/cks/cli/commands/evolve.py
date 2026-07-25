@@ -1,13 +1,18 @@
 """
 CLI command: evolve.
 """
+
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-from ...serialization import parse as cks_parse, serialize as cks_serialize, SerializationError
+from ...serialization import (
+    parse as cks_parse,
+    serialize as cks_serialize,
+    SerializationError,
+)
 from ...evolution import compose, AddObject, AddRelation, RemoveObject, RemoveRelation
 from ...core import KnowledgeObject, CanonicalRelation, ObjectIdentity
 from ...evolution import StructuralOperator
@@ -17,7 +22,9 @@ def add_parser(subparsers):
     parser = subparsers.add_parser("evolve", help="Apply structural evolution")
     parser.add_argument("input", type=Path, help="Path to canonical JSON file")
     parser.add_argument("operations", type=Path, help="JSON file describing operations")
-    parser.add_argument("--output", "-o", type=Path, default=None, help="Write result to file")
+    parser.add_argument(
+        "--output", "-o", type=Path, default=None, help="Write result to file"
+    )
     return parser
 
 

@@ -23,8 +23,7 @@ class Constraint(ABC):
     def evaluate(
         self,
         structure: KnowledgeStructure,
-    ) -> list[Diagnostic]:
-        ...
+    ) -> list[Diagnostic]: ...
 
     def __call__(
         self,

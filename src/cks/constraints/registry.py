@@ -25,13 +25,9 @@ class ConstraintRegistry:
     Duplicate identities are rejected.
     """
 
-    _constraints: list[Constraint] = field(
-        default_factory=list
-    )
+    _constraints: list[Constraint] = field(default_factory=list)
 
-    _index: dict[str, Constraint] = field(
-        default_factory=dict
-    )
+    _index: dict[str, Constraint] = field(default_factory=dict)
 
     # ------------------------------------------------------------------
 
@@ -45,8 +41,7 @@ class ConstraintRegistry:
 
         if constraint.identity in self._index:
             raise ValueError(
-                f"Constraint '{constraint.identity}' "
-                "is already registered."
+                f"Constraint '{constraint.identity}' is already registered."
             )
 
         self._constraints.append(constraint)
@@ -80,9 +75,7 @@ class ConstraintRegistry:
             return tuple(self._constraints)
 
         return tuple(
-            constraint
-            for constraint in self._constraints
-            if constraint.stage is stage
+            constraint for constraint in self._constraints if constraint.stage is stage
         )
 
     # ------------------------------------------------------------------
@@ -92,11 +85,8 @@ class ConstraintRegistry:
         Canonical constraint identifiers.
         """
 
-        return tuple(
-            constraint.identity
-            for constraint in self._constraints
-        )
-    
+        return tuple(constraint.identity for constraint in self._constraints)
+
     # ------------------------------------------------------------------
 
     def __contains__(
@@ -109,7 +99,7 @@ class ConstraintRegistry:
         """
 
         return identity in self._index
-    
+
     # ------------------------------------------------------------------
 
     def get(
@@ -137,11 +127,10 @@ class ConstraintRegistry:
         diagnostics: list[Diagnostic] = []
 
         for constraint in self.constraints(stage=stage):
-            diagnostics.extend(
-                constraint(structure)
-            )
+            diagnostics.extend(constraint(structure))
 
         return diagnostics
+
 
 # =============================================================================
 # Canonical Global Registry

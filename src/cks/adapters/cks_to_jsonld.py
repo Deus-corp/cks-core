@@ -53,10 +53,12 @@ class CksToJsonLdConverter:
                     break
             else:
                 # Subject not found — create a minimal entity
-                graph.append({
-                    "@id": subj_id,
-                    "@type": "Entity",
-                    rel.relation_type: [{"@id": obj_id}],
-                })
+                graph.append(
+                    {
+                        "@id": subj_id,
+                        "@type": "Entity",
+                        rel.relation_type: [{"@id": obj_id}],
+                    }
+                )
 
         return {"@graph": graph}

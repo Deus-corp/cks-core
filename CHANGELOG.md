@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.1] - 2026-07-25
+
+### Fixed
+- Applied `ruff` auto-fixes across the codebase (import sorting, deprecated type annotations, `__all__` ordering). No functional changes.
+
+---
+
 ## [1.10.0] - 2026-07-25
 
 ### Added

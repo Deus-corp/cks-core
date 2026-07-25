@@ -93,7 +93,14 @@ class JsonLdToCksConverter:
             if not subject_id:
                 continue
             for predicate, objects in entity.items():
-                if predicate in ("@id", "@type", "@context", "@graph", "name", "rdfs:label"):
+                if predicate in (
+                    "@id",
+                    "@type",
+                    "@context",
+                    "@graph",
+                    "name",
+                    "rdfs:label",
+                ):
                     continue
                 if not isinstance(objects, list):
                     objects = [objects]

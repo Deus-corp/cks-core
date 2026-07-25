@@ -1,6 +1,7 @@
 """
 CLI command: validate.
 """
+
 from __future__ import annotations
 
 import sys
@@ -15,8 +16,12 @@ from ..formatters import format_json, format_text, format_html, format_markdown
 
 def add_parser(subparsers):
     parser = subparsers.add_parser("validate", help="Validate a Knowledge Structure")
-    parser.add_argument("input", type=Path, nargs="+", help="Path(s) to canonical JSON file(s)")
-    parser.add_argument("--format", "-f", choices=("text", "json", "html", "markdown"), default="text")
+    parser.add_argument(
+        "input", type=Path, nargs="+", help="Path(s) to canonical JSON file(s)"
+    )
+    parser.add_argument(
+        "--format", "-f", choices=("text", "json", "html", "markdown"), default="text"
+    )
     parser.add_argument("--output", "-o", type=Path, default=None)
     parser.add_argument(
         "--min-severity",

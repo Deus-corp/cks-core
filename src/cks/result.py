@@ -42,17 +42,11 @@ class ValidationResult:
 
     is_valid: bool
 
-    diagnostics: DiagnosticCollection = field(
-        default_factory=DiagnosticCollection
-    )
+    diagnostics: DiagnosticCollection = field(default_factory=DiagnosticCollection)
 
-    evaluated_constraints: tuple[str, ...] = field(
-        default_factory=tuple
-    )
+    evaluated_constraints: tuple[str, ...] = field(default_factory=tuple)
 
-    metadata: Mapping[str, Any] = field(
-        default_factory=dict
-    )
+    metadata: Mapping[str, Any] = field(default_factory=dict)
 
     # ------------------------------------------------------------------
 
@@ -70,9 +64,7 @@ class ValidationResult:
             tuple(self.evaluated_constraints),
         )
 
-        metadata = MappingProxyType(
-            dict(self.metadata)
-        )
+        metadata = MappingProxyType(dict(self.metadata))
 
         object.__setattr__(
             self,
@@ -133,14 +125,12 @@ class ValidationResult:
 
     def has_information(self) -> bool:
         return self.diagnostics.has_information()
-    
+
     def errors(self):
         return self.diagnostics.errors()
 
-
     def warnings(self):
         return self.diagnostics.warnings()
-
 
     def information(self):
         return self.diagnostics.information()
@@ -167,14 +157,12 @@ class ValidationResult:
 
         if self.error_count:
             parts.append(
-                f"{self.error_count} error"
-                f"{'' if self.error_count == 1 else 's'}"
+                f"{self.error_count} error{'' if self.error_count == 1 else 's'}"
             )
 
         if self.warning_count:
             parts.append(
-                f"{self.warning_count} warning"
-                f"{'' if self.warning_count == 1 else 's'}"
+                f"{self.warning_count} warning{'' if self.warning_count == 1 else 's'}"
             )
 
         parts.append(
@@ -203,10 +191,7 @@ class ValidationResult:
             is_valid=self.is_valid and other.is_valid,
             diagnostics=self.diagnostics.merge(other.diagnostics),
             evaluated_constraints=tuple(
-                dict.fromkeys(
-                    self.evaluated_constraints
-                    + other.evaluated_constraints
-                )
+                dict.fromkeys(self.evaluated_constraints + other.evaluated_constraints)
             ),
             metadata={
                 **dict(self.metadata),
@@ -233,6 +218,7 @@ class ValidationResult:
             f"info={self.information_count}, "
             f"constraints={self.constraint_count})"
         )
+
 
 # ============================================================================
 # Public Symbols

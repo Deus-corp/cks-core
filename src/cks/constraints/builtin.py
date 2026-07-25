@@ -29,7 +29,6 @@ BUILTIN_CONSTRAINTS = (
     # --- Structural Domain ---
     UniqueIdentityConstraint(),
     NoDanglingRelationConstraint(),
-
     # --- Semantic Domain ---
     DerivationArityConstraint(),
     DerivationCycleConstraint(),

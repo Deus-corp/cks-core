@@ -77,12 +77,9 @@ from .interface import (
 
 _EXTERNAL_COUNT = load_external_constraints()
 
-__version__ = "1.10.0"
+__version__ = "1.10.1"
 
-VERSION = tuple(
-    int(part)
-    for part in __version__.split(".")
-)
+VERSION = tuple(int(part) for part in __version__.split("."))
 
 __all__ = [
     # Public API
@@ -98,7 +95,6 @@ __all__ = [
     "evolve",
     "merge",
     "query_subgraph",
-
     # Core model
     "ObjectIdentity",
     "KnowledgeObject",
@@ -108,28 +104,22 @@ __all__ = [
     "MergeConflictError",
     "MergeResolution",
     "SubgraphResult",
-
     # Evolution operators
     "AddObject",
     "AddRelation",
     "RemoveObject",
     "RemoveRelation",
     "compose",
-
     # Diagnostics
     "DiagnosticSeverity",
     "Diagnostic",
     "DiagnosticCollection",
-
     # Validation
     "ValidationResult",
-
     # Engine
     "ReferenceEngine",
-
     # Exceptions
     "SerializationError",
-
     # Package metadata
     "__version__",
     "VERSION",

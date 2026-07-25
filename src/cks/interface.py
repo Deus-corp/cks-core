@@ -37,24 +37,19 @@ __all__ = [
     "construct",
     "parse",
     "serialize",
-
     # Validation
     "validate",
     "diagnose",
-
     # Inspection
     "inspect",
     "compare",
     "extract",
     "project",
-
     # Evolution
     "evolve",
-
     # Public classes
     "ReferenceEngine",
     "SerializationError",
-
     "merge",
 ]
 
@@ -71,6 +66,7 @@ _ENGINE = ReferenceEngine()
 # ---------------------------------------------------------------------------
 # Construction & Serialization
 # ---------------------------------------------------------------------------
+
 
 def construct(
     objects: Iterable[KnowledgeObject],
@@ -111,6 +107,7 @@ def serialize(
 # Validation
 # ---------------------------------------------------------------------------
 
+
 def diagnose(
     structure: KnowledgeStructure,
 ) -> DiagnosticCollection:
@@ -125,6 +122,7 @@ def diagnose(
 # ---------------------------------------------------------------------------
 # Inspection & Comparison
 # ---------------------------------------------------------------------------
+
 
 def inspect(
     structure: KnowledgeStructure,
@@ -173,6 +171,7 @@ def project(
 # Evolution
 # ---------------------------------------------------------------------------
 
+
 def evolve(
     structure: KnowledgeStructure,
     operators: Iterable[Any],
@@ -189,6 +188,7 @@ def evolve(
         (Genesis/Decay).  Each operator must satisfy its contract.
     """
     return _ENGINE.evolve(structure, operators=operators)
+
 
 def validate(
     structure: KnowledgeStructure,
@@ -214,6 +214,7 @@ def validate_all(
         min_severity=min_severity,
         extra_constraints=extra_constraints,
     )
+
 
 def merge(
     base: KnowledgeStructure,

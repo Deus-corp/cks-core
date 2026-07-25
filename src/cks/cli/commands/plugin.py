@@ -1,8 +1,8 @@
 """
 CLI command: plugin.
 """
-from __future__ import annotations
 
+from __future__ import annotations
 
 
 def add_parser(subparsers):
@@ -14,6 +14,7 @@ def add_parser(subparsers):
 
 def handle(args):
     from ...constraints import registry
+
     constraints = registry.constraints()
     if not constraints:
         print("No constraints registered.")

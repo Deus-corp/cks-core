@@ -35,13 +35,13 @@ def _freeze_mapping(
     frozen: dict[str, Any] = {}
 
     for key, value in mapping.items():
-
         if isinstance(value, list):
             value = tuple(value)
 
         frozen[key] = value
 
     return MappingProxyType(frozen)
+
 
 # ============================================================================
 # Diagnostic Severity
@@ -115,14 +115,10 @@ class Diagnostic:
     def __post_init__(self) -> None:
 
         if not self.identity:
-            raise ValueError(
-                "Diagnostic identity cannot be empty."
-            )
+            raise ValueError("Diagnostic identity cannot be empty.")
 
         if not self.message:
-            raise ValueError(
-                "Diagnostic message cannot be empty."
-            )
+            raise ValueError("Diagnostic message cannot be empty.")
 
         #
         # Make metadata immutable.
@@ -166,6 +162,7 @@ class Diagnostic:
             self.location or "",
             self.message,
         )
+
 
 # ============================================================================
 # Diagnostic Collection
@@ -219,10 +216,7 @@ class DiagnosticCollection:
         if not isinstance(identity, str):
             return False
 
-        return any(
-            d.identity == identity
-            for d in self.diagnostics
-        )
+        return any(d.identity == identity for d in self.diagnostics)
 
     # ------------------------------------------------------------------
     # Statistics
@@ -259,47 +253,27 @@ class DiagnosticCollection:
     # ------------------------------------------------------------------
 
     def errors(self) -> tuple[Diagnostic, ...]:
-        return tuple(
-            d
-            for d in self.diagnostics
-            if d.is_error
-        )
+        return tuple(d for d in self.diagnostics if d.is_error)
 
     def warnings(self) -> tuple[Diagnostic, ...]:
-        return tuple(
-            d
-            for d in self.diagnostics
-            if d.is_warning
-        )
+        return tuple(d for d in self.diagnostics if d.is_warning)
 
     def information(self) -> tuple[Diagnostic, ...]:
-        return tuple(
-            d
-            for d in self.diagnostics
-            if d.is_information
-        )
+        return tuple(d for d in self.diagnostics if d.is_information)
 
     def filter_by_identity(
         self,
         identity: str,
     ) -> tuple[Diagnostic, ...]:
 
-        return tuple(
-            d
-            for d in self.diagnostics
-            if d.identity == identity
-        )
+        return tuple(d for d in self.diagnostics if d.identity == identity)
 
     def filter_by_location(
         self,
         location: str,
     ) -> tuple[Diagnostic, ...]:
 
-        return tuple(
-            d
-            for d in self.diagnostics
-            if d.location == location
-        )
+        return tuple(d for d in self.diagnostics if d.location == location)
 
     # ------------------------------------------------------------------
     # Composition
@@ -310,9 +284,7 @@ class DiagnosticCollection:
         other: "DiagnosticCollection",
     ) -> "DiagnosticCollection":
 
-        return DiagnosticCollection(
-            self.diagnostics + other.diagnostics
-        )
+        return DiagnosticCollection(self.diagnostics + other.diagnostics)
 
     # ------------------------------------------------------------------
 
@@ -321,9 +293,7 @@ class DiagnosticCollection:
         diagnostics: tuple[Diagnostic, ...],
     ) -> "DiagnosticCollection":
 
-        return DiagnosticCollection(
-            self.diagnostics + tuple(diagnostics)
-        )
+        return DiagnosticCollection(self.diagnostics + tuple(diagnostics))
 
     # ------------------------------------------------------------------
 
@@ -337,6 +307,7 @@ class DiagnosticCollection:
             f"information={self.information_count}"
             ")"
         )
+
 
 # ============================================================================
 # Factory Functions

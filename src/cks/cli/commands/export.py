@@ -1,6 +1,7 @@
 """
 CLI command: export.
 """
+
 from __future__ import annotations
 
 import json
@@ -14,13 +15,17 @@ def add_parser(subparsers):
     parser = subparsers.add_parser("export", help="Export CKS to another format")
     parser.add_argument("input", type=Path, help="Path to CKS JSON file")
     parser.add_argument(
-        "--format", "-f",
+        "--format",
+        "-f",
         choices=("json-ld", "turtle", "rdf-xml"),
         default="json-ld",
         help="Output format (default: json-ld)",
     )
     parser.add_argument(
-        "--output", "-o", type=Path, default=None,
+        "--output",
+        "-o",
+        type=Path,
+        default=None,
         help="Write output to file instead of stdout",
     )
     return parser
@@ -39,15 +44,18 @@ def handle(args):
 
     if args.format == "json-ld":
         from ...adapters.cks_to_jsonld import CksToJsonLdConverter
+
         converter = CksToJsonLdConverter(structure)
         output_data = converter.convert()
         formatted = json.dumps(output_data, indent=2)
     elif args.format == "turtle":
         from ...adapters.cks_to_rdf import CksToRdfConverter
+
         converter = CksToRdfConverter(structure)
         formatted = converter.to_turtle()
     elif args.format == "rdf-xml":
         from ...adapters.cks_to_rdf import CksToRdfConverter
+
         converter = CksToRdfConverter(structure)
         formatted = converter.to_rdfxml()
     else:

@@ -45,7 +45,7 @@ class ReferenceEngine:
         • implementation-independent
     """
 
-    VERSION: str = "1.10.0"
+    VERSION: str = "1.10.1"
 
     # ------------------------------------------------------------------
     # Construction & Serialization
@@ -122,27 +122,16 @@ class ReferenceEngine:
         """
 
         relation_types = sorted(
-            {
-                relation.relation_type
-                for relation in structure.relations()
-            }
+            {relation.relation_type for relation in structure.relations()}
         )
 
         return {
             "version": self.VERSION,
             "object_count": len(structure.objects),
             "relation_count": len(structure.relations()),
-            "object_types": sorted(
-                {
-                    obj.identity.type
-                    for obj in structure.objects
-                }
-            ),
+            "object_types": sorted({obj.identity.type for obj in structure.objects}),
             "relation_types": relation_types,
-            "identities": tuple(
-                obj.identity.id
-                for obj in structure
-            ),
+            "identities": tuple(obj.identity.id for obj in structure),
             "immutable": True,
         }
 
@@ -162,27 +151,17 @@ class ReferenceEngine:
         Mapping[str, object]
         """
 
-        left_ids = frozenset(
-            obj.identity.id
-            for obj in left.objects
-        )
+        left_ids = frozenset(obj.identity.id for obj in left.objects)
 
-        right_ids = frozenset(
-            obj.identity.id
-            for obj in right.objects
-        )
+        right_ids = frozenset(obj.identity.id for obj in right.objects)
 
         identity_equivalent = left.identity_equivalent(right)
 
         semantic_equivalent = left.structurally_equivalent(right)
 
-        only_left = tuple(
-            sorted(left_ids - right_ids)
-        )
+        only_left = tuple(sorted(left_ids - right_ids))
 
-        only_right = tuple(
-            sorted(right_ids - left_ids)
-        )
+        only_right = tuple(sorted(right_ids - left_ids))
 
         return {
             "identity_equivalent": identity_equivalent,
@@ -206,7 +185,7 @@ class ReferenceEngine:
         """
 
         return structure.get(identity)
-    
+
     def project(
         self,
         structure: KnowledgeStructure,
@@ -223,7 +202,7 @@ class ReferenceEngine:
             for identity in identities
             if (obj := structure.get(identity)) is not None
         )
-    
+
     def evolve(
         self,
         structure: KnowledgeStructure,
@@ -241,10 +220,7 @@ class ReferenceEngine:
     # ------------------------------------------------------------------
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__name__}"
-            f"(version={self.VERSION!r})"
-        )
+        return f"{self.__class__.__name__}(version={self.VERSION!r})"
 
 
 __all__ = ["ReferenceEngine"]

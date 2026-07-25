@@ -5,6 +5,7 @@ Formatters convert validation results and inspection summaries into
 machine‑readable (JSON) or human‑readable (Plain Text, HTML, Markdown)
 representations.
 """
+
 from __future__ import annotations
 
 import html

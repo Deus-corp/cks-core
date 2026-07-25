@@ -67,11 +67,13 @@ class ReferenceValidator:
 
     def __init__(self, registry: ConstraintRegistry | None = None) -> None:
         self._registry = registry or _registry
-        self._pipeline = ValidationPipeline([
-            PipelineStage(ValidationStage.STRUCTURAL, self.structural_validate),
-            PipelineStage(ValidationStage.SEMANTIC, self.semantic_validate),
-            PipelineStage(ValidationStage.CONSTRAINTS, self.constraint_validate),
-        ])
+        self._pipeline = ValidationPipeline(
+            [
+                PipelineStage(ValidationStage.STRUCTURAL, self.structural_validate),
+                PipelineStage(ValidationStage.SEMANTIC, self.semantic_validate),
+                PipelineStage(ValidationStage.CONSTRAINTS, self.constraint_validate),
+            ]
+        )
 
     # ------------------------------------------------------------------
     # Scoped (per-call) constraint sets
@@ -207,6 +209,7 @@ _validator = ReferenceValidator()
 # Public API
 # =============================================================================
 
+
 def register_constraint(fn: Constraint) -> None:
     """Register a canonical validation constraint."""
     _registry.register(fn)
@@ -218,7 +221,9 @@ def structural_validate(
     extra_constraints: Iterable[Constraint] | None = None,
 ) -> list[Diagnostic]:
     """Execute only structural validation."""
-    return _validator.structural_validate(structure, extra_constraints=extra_constraints)
+    return _validator.structural_validate(
+        structure, extra_constraints=extra_constraints
+    )
 
 
 def semantic_validate(
@@ -236,7 +241,9 @@ def evaluate_constraints(
     extra_constraints: Iterable[Constraint] | None = None,
 ) -> list[Diagnostic]:
     """Execute all registered canonical constraints."""
-    return _validator.constraint_validate(structure, extra_constraints=extra_constraints)
+    return _validator.constraint_validate(
+        structure, extra_constraints=extra_constraints
+    )
 
 
 def validate(

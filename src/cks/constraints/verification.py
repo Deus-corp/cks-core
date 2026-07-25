@@ -79,11 +79,13 @@ _CHECKED_VIA_KEY = "checked_via"
 # adapter maps its concrete tool (web_fetch, a browser, a human review
 # queue, ...) onto one of these before constructing the record; core
 # never sees vendor-specific tool names.
-_ALLOWED_CHECKED_VIA = frozenset({
-    "automated_http_check",
-    "automated_search_check",
-    "manual_review",
-})
+_ALLOWED_CHECKED_VIA = frozenset(
+    {
+        "automated_http_check",
+        "automated_search_check",
+        "manual_review",
+    }
+)
 
 # A VerificationRecord states a technical fact about a check, not an
 # opinion about the subject. Qualitative judgment must not be smuggled
@@ -91,8 +93,12 @@ _ALLOWED_CHECKED_VIA = frozenset({
 # "reliability score" table this constraint exists to make impossible
 # to pass off as verified fact.
 _DISALLOWED_QUALITATIVE_KEYS = (
-    "reliability_score", "confidence", "score",
-    "reasons", "warning_signs", "recommendations",
+    "reliability_score",
+    "confidence",
+    "score",
+    "reasons",
+    "warning_signs",
+    "recommendations",
 )
 
 
@@ -170,49 +176,57 @@ class VerificationRecordIntegrityConstraint(Constraint):
 
             subjects = subjects_by_record.get(obj.identity.id, [])
             if len(subjects) != 1:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"VerificationRecord '{obj.identity.id}' must have "
-                        f"exactly one '{VERIFIED_BY_RELATION}' relation to "
-                        f"the subject it verifies (found {len(subjects)})."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"VerificationRecord '{obj.identity.id}' must have "
+                            f"exactly one '{VERIFIED_BY_RELATION}' relation to "
+                            f"the subject it verifies (found {len(subjects)})."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
             elif subjects[0] not in existing:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"VerificationRecord '{obj.identity.id}' references "
-                        f"unknown subject object '{subjects[0]}'."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"VerificationRecord '{obj.identity.id}' references "
+                            f"unknown subject object '{subjects[0]}'."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
             checked_at = obj.structure.get(_CHECKED_AT_KEY)
             if not _is_valid_iso8601(checked_at):
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"VerificationRecord '{obj.identity.id}' must carry "
-                        f"a well-formed ISO 8601 '{_CHECKED_AT_KEY}' "
-                        f"timestamp (got {checked_at!r})."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"VerificationRecord '{obj.identity.id}' must carry "
+                            f"a well-formed ISO 8601 '{_CHECKED_AT_KEY}' "
+                            f"timestamp (got {checked_at!r})."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
             checked_via = obj.structure.get(_CHECKED_VIA_KEY)
             if checked_via not in _ALLOWED_CHECKED_VIA:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"VerificationRecord '{obj.identity.id}' has "
-                        f"'{_CHECKED_VIA_KEY}'={checked_via!r}, which is not "
-                        f"one of the recognized verification methods "
-                        f"({', '.join(sorted(_ALLOWED_CHECKED_VIA))})."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"VerificationRecord '{obj.identity.id}' has "
+                            f"'{_CHECKED_VIA_KEY}'={checked_via!r}, which is not "
+                            f"one of the recognized verification methods "
+                            f"({', '.join(sorted(_ALLOWED_CHECKED_VIA))})."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
             if _HTTP_STATUS_KEY in obj.structure:
                 http_status = obj.structure.get(_HTTP_STATUS_KEY)
@@ -221,29 +235,33 @@ class VerificationRecordIntegrityConstraint(Constraint):
                     or isinstance(http_status, bool)
                     or not (100 <= http_status <= 599)
                 ):
-                    diagnostics.append(_error(
-                        identity=self.identity,
-                        message=(
-                            f"VerificationRecord '{obj.identity.id}' has "
-                            f"'{_HTTP_STATUS_KEY}'={http_status!r}, which is "
-                            f"not a valid HTTP status code (100-599)."
-                        ),
-                        location=obj.identity.id,
-                    ))
+                    diagnostics.append(
+                        _error(
+                            identity=self.identity,
+                            message=(
+                                f"VerificationRecord '{obj.identity.id}' has "
+                                f"'{_HTTP_STATUS_KEY}'={http_status!r}, which is "
+                                f"not a valid HTTP status code (100-599)."
+                            ),
+                            location=obj.identity.id,
+                        )
+                    )
 
             leaked = [k for k in _DISALLOWED_QUALITATIVE_KEYS if k in obj.structure]
             if leaked:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"VerificationRecord '{obj.identity.id}' must not "
-                        f"carry qualitative judgment fields "
-                        f"({', '.join(sorted(leaked))}); a verification "
-                        f"record states a technical fact about the check, "
-                        f"not an opinion about the subject."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"VerificationRecord '{obj.identity.id}' must not "
+                            f"carry qualitative judgment fields "
+                            f"({', '.join(sorted(leaked))}); a verification "
+                            f"record states a technical fact about the check, "
+                            f"not an opinion about the subject."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
         return diagnostics
 

@@ -1,6 +1,7 @@
 """
 CLI command: schema.
 """
+
 from __future__ import annotations
 
 import json
@@ -11,7 +12,9 @@ from pathlib import Path
 def add_parser(subparsers):
     parser = subparsers.add_parser("schema", help="Schema-related utilities")
     sub = parser.add_subparsers(dest="schema_command", required=True)
-    validate_parser = sub.add_parser("validate", help="Validate a JSON document against the canonical schema")
+    validate_parser = sub.add_parser(
+        "validate", help="Validate a JSON document against the canonical schema"
+    )
     validate_parser.add_argument("input", type=Path, help="Path to JSON file")
     return parser
 
@@ -28,6 +31,7 @@ def handle(args):
         sys.exit(1)
 
     from ...schema import validate_json, SchemaValidationError
+
     try:
         validate_json(data)
         print("✅ Schema valid")

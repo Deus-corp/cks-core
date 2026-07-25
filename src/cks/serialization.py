@@ -75,24 +75,16 @@ def _jsonify(value: Any) -> Any:
         value = dict(value)
 
     if isinstance(value, dict):
-        return {
-            key: _jsonify(val)
-            for key, val in value.items()
-        }
+        return {key: _jsonify(val) for key, val in value.items()}
 
     if isinstance(value, tuple):
-        return [
-            _jsonify(item)
-            for item in value
-        ]
+        return [_jsonify(item) for item in value]
 
     if isinstance(value, frozenset):
-        return sorted(
-            _jsonify(item)
-            for item in value
-        )
+        return sorted(_jsonify(item) for item in value)
 
     return value
+
 
 # ============================================================================
 # Exceptions
@@ -126,9 +118,7 @@ class CanonicalDeserializer:
         data = self._load_json(source)
 
         if not isinstance(data, dict):
-            raise SerializationError(
-                "Top-level JSON value must be an object."
-            )
+            raise SerializationError("Top-level JSON value must be an object.")
 
         self._validate_root(data)
 
@@ -141,9 +131,7 @@ class CanonicalDeserializer:
             oid = obj.identity.id
 
             if oid in seen:
-                raise SerializationError(
-                    f"Duplicate canonical identity: {oid!r}"
-                )
+                raise SerializationError(f"Duplicate canonical identity: {oid!r}")
 
             seen.add(oid)
             objects.append(obj)
@@ -156,10 +144,10 @@ class CanonicalDeserializer:
         self,
         source: str | dict[str, Any],
     ) -> dict[str, Any]:
-        
+
         if not isinstance(source, (str, dict)):
             raise SerializationError(
-               "Source must be a JSON string or decoded JSON object."
+                "Source must be a JSON string or decoded JSON object."
             )
 
         if isinstance(source, dict):
@@ -168,14 +156,10 @@ class CanonicalDeserializer:
         try:
             data = json.loads(source)
         except json.JSONDecodeError as exc:
-            raise SerializationError(
-                f"Invalid JSON: {exc}"
-            ) from exc
+            raise SerializationError(f"Invalid JSON: {exc}") from exc
 
         if not isinstance(data, dict):
-            raise SerializationError(
-                "Top-level JSON value must be an object."
-            )
+            raise SerializationError("Top-level JSON value must be an object.")
         return data
 
     # ---------------------------------------------------------------------
@@ -186,25 +170,19 @@ class CanonicalDeserializer:
     ) -> None:
 
         if ROOT_OBJECTS_KEY not in data:
-            raise SerializationError(
-                "Missing top-level 'objects' array."
-            )
+            raise SerializationError("Missing top-level 'objects' array.")
 
         objects = data[ROOT_OBJECTS_KEY]
 
         if not isinstance(objects, list):
-            raise SerializationError(
-                "'objects' must be a JSON array."
-            )
+            raise SerializationError("'objects' must be a JSON array.")
 
         version = data.get(ROOT_VERSION_KEY)
 
         if version is not None:
-
             if version != CANONICAL_JSON_VERSION:
                 raise SerializationError(
-                    f"Unsupported serialization version "
-                    f"{version!r}."
+                    f"Unsupported serialization version {version!r}."
                 )
 
     # ---------------------------------------------------------------------
@@ -215,16 +193,13 @@ class CanonicalDeserializer:
     ) -> ObjectIdentity:
 
         if not isinstance(data, dict):
-            raise SerializationError(
-                "Object identity must be an object."
-            )
+            raise SerializationError("Object identity must be an object.")
 
         unknown = set(data.keys()) - IDENTITY_FIELDS
 
         if unknown:
             raise SerializationError(
-                "Unknown identity field(s): "
-                + ", ".join(sorted(unknown))
+                "Unknown identity field(s): " + ", ".join(sorted(unknown))
             )
 
         try:
@@ -237,13 +212,8 @@ class CanonicalDeserializer:
                 f"Missing identity field {exc.args[0]!r}."
             ) from exc
 
-        if not all(
-            isinstance(x, str)
-            for x in (oid, typ, name)
-        ):
-            raise SerializationError(
-                "Identity fields must all be strings."
-            )
+        if not all(isinstance(x, str) for x in (oid, typ, name)):
+            raise SerializationError("Identity fields must all be strings.")
 
         return ObjectIdentity(
             id=oid,
@@ -262,23 +232,18 @@ class CanonicalDeserializer:
             raise SerializationError(
                 "Each object must be represented by a JSON object."
             )
-        
+
         unknown = set(data.keys()) - OBJECT_FIELDS
 
         if unknown:
             raise SerializationError(
-                "Unknown object field(s): "
-                + ", ".join(sorted(unknown))
+                "Unknown object field(s): " + ", ".join(sorted(unknown))
             )
 
         if IDENTITY_KEY not in data:
-            raise SerializationError(
-                "Missing object identity."
-            )
+            raise SerializationError("Missing object identity.")
 
-        identity = self._parse_identity(
-            data[IDENTITY_KEY]
-        )
+        identity = self._parse_identity(data[IDENTITY_KEY])
 
         structure = data.get(
             STRUCTURE_KEY,
@@ -286,56 +251,37 @@ class CanonicalDeserializer:
         )
 
         if not isinstance(structure, dict):
-            raise SerializationError(
-                "Object structure must be an object."
-            )
+            raise SerializationError("Object structure must be an object.")
 
         # -------------------------------------------------------------
         # Canonical Relation
         # -------------------------------------------------------------
 
         is_relation = (
-            RELATION_PARTICIPANTS_KEY in structure
-            and RELATION_TYPE_KEY in structure
+            RELATION_PARTICIPANTS_KEY in structure and RELATION_TYPE_KEY in structure
         )
 
         if is_relation:
+            participants = structure.get(RELATION_PARTICIPANTS_KEY)
 
-            participants = structure.get(
-                RELATION_PARTICIPANTS_KEY
-            )
-
-            relation_type = structure.get(
-                RELATION_TYPE_KEY
-            )
+            relation_type = structure.get(RELATION_TYPE_KEY)
 
             if not isinstance(participants, list):
-                raise SerializationError(
-                    "Relation participants must be a list."
-                )
-            
+                raise SerializationError("Relation participants must be a list.")
+
             if len(participants) < 2:
                 raise SerializationError(
                     "CanonicalRelation requires at least two participants."
                 )
-            
-            if not all(
-                isinstance(participant, str)
-                for participant in participants
-            ):
-                raise SerializationError(
-                    "Relation participants must all be strings."
-                )
+
+            if not all(isinstance(participant, str) for participant in participants):
+                raise SerializationError("Relation participants must all be strings.")
 
             if not isinstance(relation_type, str):
-                raise SerializationError(
-                    "Relation type must be a string."
-                )
-            
+                raise SerializationError("Relation type must be a string.")
+
             if not relation_type.strip():
-                raise SerializationError(
-                    "Relation type cannot be empty."
-                )
+                raise SerializationError("Relation type cannot be empty.")
 
             return CanonicalRelation(
                 identity=identity,
@@ -352,6 +298,7 @@ class CanonicalDeserializer:
             identity=identity,
             structure=structure,
         )
+
 
 # ============================================================================
 # Canonical Serializer
@@ -381,7 +328,7 @@ class CanonicalSerializer:
             sort_keys=True,
             ensure_ascii=False,
         )
-    
+
     def roundtrip(
         self,
         structure: KnowledgeStructure,
@@ -392,9 +339,7 @@ class CanonicalSerializer:
         Useful for conformance testing.
         """
 
-        return _deserializer.deserialize(
-            self.serialize(structure)
-        )
+        return _deserializer.deserialize(self.serialize(structure))
 
     # ---------------------------------------------------------------------
 
@@ -405,10 +350,7 @@ class CanonicalSerializer:
 
         return {
             ROOT_VERSION_KEY: CANONICAL_JSON_VERSION,
-            ROOT_OBJECTS_KEY: [
-                self._encode_object(obj)
-                for obj in structure.objects
-            ],
+            ROOT_OBJECTS_KEY: [self._encode_object(obj) for obj in structure.objects],
         }
 
     # ---------------------------------------------------------------------
@@ -430,6 +372,7 @@ class CanonicalSerializer:
             IDENTITY_KEY: identity,
             STRUCTURE_KEY: structure,
         }
+
 
 # ============================================================================
 # Singleton Instances
@@ -490,8 +433,6 @@ def serialize(structure: KnowledgeStructure) -> str:
     where ≡ denotes Structural Equivalence (CKS-001, Section 15).
     """
     return _serializer.serialize(structure)
-
-
 
 
 # ============================================================================

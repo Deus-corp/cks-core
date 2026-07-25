@@ -69,8 +69,7 @@ def _canonical_hash(value: Any) -> bytes:
     """Return a 32-byte deterministic digest of a frozen CKS value."""
     if isinstance(value, Mapping):
         entries = sorted(
-            (_canonical_hash(key), _canonical_hash(val))
-            for key, val in value.items()
+            (_canonical_hash(key), _canonical_hash(val)) for key, val in value.items()
         )
         body = b"".join(k_digest + v_digest for k_digest, v_digest in entries)
         return hashlib.sha256(_HASH_TAG_MAP + _uint32(len(entries)) + body).digest()
@@ -91,13 +90,14 @@ def _canonical_hash(value: Any) -> bytes:
     type_name = type(value).__name__.encode("ascii")
     value_bytes = repr(value).encode("utf-8")
     payload = (
-        _uint32(len(type_name)) + type_name
-        + _uint32(len(value_bytes)) + value_bytes
+        _uint32(len(type_name)) + type_name + _uint32(len(value_bytes)) + value_bytes
     )
     return hashlib.sha256(_HASH_TAG_LEAF + payload).digest()
 
 
-def _compute_leaf_hash(identity: "ObjectIdentity", structure: Mapping[str, Any]) -> bytes:
+def _compute_leaf_hash(
+    identity: "ObjectIdentity", structure: Mapping[str, Any]
+) -> bytes:
     """Merkle leaf hash for one KnowledgeObject: its identity plus its
     (already-frozen) semantic structure."""
     identity_tuple = (identity.id, identity.type, identity.name)
@@ -134,7 +134,9 @@ class KnowledgeObject:
     def __post_init__(self) -> None:
         frozen_structure = _freeze_mapping(self.structure)
         object.__setattr__(self, "structure", frozen_structure)
-        object.__setattr__(self, "_hash", _compute_leaf_hash(self.identity, frozen_structure))
+        object.__setattr__(
+            self, "_hash", _compute_leaf_hash(self.identity, frozen_structure)
+        )
         object.__setattr__(self, "_id_hash", _canonical_hash(self.identity.id))
 
     # ------------------------------------------------------------------
@@ -193,7 +195,9 @@ class CanonicalRelation(KnowledgeObject):
         return str(self.structure["relation_type"])
 
 
-def _normalize_structure(structure: Mapping[str, Any]) -> tuple[tuple[str, object], ...]:
+def _normalize_structure(
+    structure: Mapping[str, Any],
+) -> tuple[tuple[str, object], ...]:
     frozen = _freeze_mapping(structure)
     return tuple(sorted(frozen.items()))
 
@@ -223,7 +227,9 @@ class KnowledgeStructure:
         # guaranteed before this hash existed.
         sorted_leaf_hashes = sorted(obj._hash for obj in object_list)
         self._root_hash = hashlib.sha256(
-            _HASH_TAG_SET + _uint32(len(sorted_leaf_hashes)) + b"".join(sorted_leaf_hashes)
+            _HASH_TAG_SET
+            + _uint32(len(sorted_leaf_hashes))
+            + b"".join(sorted_leaf_hashes)
         ).digest()
 
         # A second, narrower hash over identities only (ids present),
@@ -235,8 +241,7 @@ class KnowledgeStructure:
         # changed.
         sorted_id_hashes = sorted(obj._id_hash for obj in object_list)
         self._identity_hash = hashlib.sha256(
-            _HASH_TAG_SET + _uint32(len(sorted_id_hashes))
-            + b"".join(sorted_id_hashes)
+            _HASH_TAG_SET + _uint32(len(sorted_id_hashes)) + b"".join(sorted_id_hashes)
         ).digest()
 
     def __len__(self) -> int:
@@ -267,7 +272,9 @@ class KnowledgeStructure:
         signature = []
         for obj in self._objects:
             structure = _normalize_structure(obj.structure)
-            signature.append((obj.identity.id, obj.identity.type, obj.identity.name, structure))
+            signature.append(
+                (obj.identity.id, obj.identity.type, obj.identity.name, structure)
+            )
         return tuple(sorted(signature))
 
     def structurally_equivalent(self, other: object) -> bool:
@@ -360,7 +367,8 @@ class KnowledgeStructure:
         added_ids = target_ids - source_ids
         removed_ids = source_ids - target_ids
         modified_ids = {
-            oid for oid in common_ids
+            oid
+            for oid in common_ids
             if self._index[oid]._hash != target._index[oid]._hash
         }
 
@@ -368,10 +376,18 @@ class KnowledgeStructure:
             return isinstance(structure._index[oid], CanonicalRelation)
 
         # Direct (non-cascade) changes, split into objects vs relations.
-        direct_remove_relations = {oid for oid in (removed_ids | modified_ids) if is_relation(self, oid)}
-        direct_remove_objects = {oid for oid in (removed_ids | modified_ids) if not is_relation(self, oid)}
-        direct_add_relations = {oid for oid in (added_ids | modified_ids) if is_relation(target, oid)}
-        direct_add_objects = {oid for oid in (added_ids | modified_ids) if not is_relation(target, oid)}
+        direct_remove_relations = {
+            oid for oid in (removed_ids | modified_ids) if is_relation(self, oid)
+        }
+        direct_remove_objects = {
+            oid for oid in (removed_ids | modified_ids) if not is_relation(self, oid)
+        }
+        direct_add_relations = {
+            oid for oid in (added_ids | modified_ids) if is_relation(target, oid)
+        }
+        direct_add_objects = {
+            oid for oid in (added_ids | modified_ids) if not is_relation(target, oid)
+        }
 
         # Cascade: every relation in SOURCE that references an object
         # about to disappear (removed outright, or modified -- which
@@ -535,7 +551,8 @@ class KnowledgeStructure:
             added = ids - base_ids
             removed = base_ids - ids
             modified = {
-                oid for oid in (base_ids & ids)
+                oid
+                for oid in (base_ids & ids)
                 if self._index[oid]._hash != index[oid]._hash
             }
             return added | removed | modified
@@ -601,7 +618,8 @@ class KnowledgeStructure:
 
         surviving_ids = set(merged)
         final_objects = [
-            obj for obj in merged.values()
+            obj
+            for obj in merged.values()
             if not (
                 isinstance(obj, CanonicalRelation)
                 and not set(obj.participants) <= surviving_ids
@@ -716,8 +734,10 @@ class KnowledgeStructure:
         # are already excluded the same way further down; mirror that
         # here for seeds.
         valid_seeds = {
-            sid for sid in seeds
-            if sid in self._index and not isinstance(self._index[sid], CanonicalRelation)
+            sid
+            for sid in seeds
+            if sid in self._index
+            and not isinstance(self._index[sid], CanonicalRelation)
         }
         if not valid_seeds:
             return SubgraphResult(
@@ -734,7 +754,10 @@ class KnowledgeStructure:
         adj_relations: dict[str, list[CanonicalRelation]] = {}
         degree_map: dict[str, int] = {}
         for rel in self._relations:
-            if include_relation_types and rel.relation_type not in include_relation_types:
+            if (
+                include_relation_types
+                and rel.relation_type not in include_relation_types
+            ):
                 continue
             for pid in rel.participants:
                 adj_relations.setdefault(pid, []).append(rel)
@@ -755,7 +778,10 @@ class KnowledgeStructure:
                             obj = self._index[part_id]
                             if isinstance(obj, CanonicalRelation):
                                 continue
-                            if include_object_types and obj.identity.type not in include_object_types:
+                            if (
+                                include_object_types
+                                and obj.identity.type not in include_object_types
+                            ):
                                 continue
                             visited_object_ids.add(part_id)
                             distance_map[part_id] = current_depth
@@ -812,8 +838,12 @@ class KnowledgeStructure:
             obj for oid, obj in self._index.items() if oid in selected_object_ids
         ]
         extracted_relations: list[KnowledgeObject] = [
-            rel for rel in self._relations
-            if not (include_relation_types and rel.relation_type not in include_relation_types)
+            rel
+            for rel in self._relations
+            if not (
+                include_relation_types
+                and rel.relation_type not in include_relation_types
+            )
             and all(pid in selected_object_ids for pid in rel.participants)
         ]
 
@@ -907,7 +937,9 @@ def _estimate_subgraph_tokens(obj: "KnowledgeObject") -> int:
     ``query_subgraph``'s ``max_tokens`` -- not a real tokenizer count,
     and callers must not treat it as one.
     """
-    text_repr = f"{obj.identity.id}:{obj.identity.type}:{obj.identity.name}:{obj.structure}"
+    text_repr = (
+        f"{obj.identity.id}:{obj.identity.type}:{obj.identity.name}:{obj.structure}"
+    )
     return len(text_repr) // 4 + 10
 
 

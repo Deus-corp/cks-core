@@ -3,6 +3,7 @@ CKS Command-Line Interface.
 
 Canonical entry point for interacting with CKS from the terminal.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -27,7 +28,9 @@ def _create_parser() -> argparse.ArgumentParser:
         description="Canonical Knowledge Structure — CLI",
     )
 
-    parser.add_argument("--strict", action="store_true", help="Fail on any plugin loading error")
+    parser.add_argument(
+        "--strict", action="store_true", help="Fail on any plugin loading error"
+    )
 
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -48,6 +51,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     args = parser.parse_args(argv)
 
     from cks.plugin import load_external_constraints
+
     load_external_constraints(strict=args.strict)
 
     if args.command == "validate":

@@ -1,5 +1,9 @@
 from .registry import registry
-from .builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS, OPTIONAL_CONSTRAINTS_BY_NAME
+from .builtin import (
+    BUILTIN_CONSTRAINTS,
+    OPTIONAL_CONSTRAINTS,
+    OPTIONAL_CONSTRAINTS_BY_NAME,
+)
 
 for constraint in BUILTIN_CONSTRAINTS:
     registry.register(constraint)

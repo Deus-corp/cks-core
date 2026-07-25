@@ -103,52 +103,60 @@ class EmbeddingProjectionIntegrityConstraint(Constraint):
 
             sources = sources_by_projection.get(obj.identity.id, [])
             if len(sources) != 1:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"EmbeddingProjection '{obj.identity.id}' must have "
-                        f"exactly one '{REPRESENTS_RELATION}' relation to its "
-                        f"source object (found {len(sources)})."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"EmbeddingProjection '{obj.identity.id}' must have "
+                            f"exactly one '{REPRESENTS_RELATION}' relation to its "
+                            f"source object (found {len(sources)})."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
             elif sources[0] not in existing:
                 # Also independently caught by NoDanglingRelationConstraint
                 # at the STRUCTURAL stage; reported here too so this
                 # constraint's own diagnostic is self-explanatory.
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"EmbeddingProjection '{obj.identity.id}' references "
-                        f"unknown source object '{sources[0]}'."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"EmbeddingProjection '{obj.identity.id}' references "
+                            f"unknown source object '{sources[0]}'."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
             store_ref = obj.structure.get(_STORE_REF_KEY)
             if not store_ref:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"EmbeddingProjection '{obj.identity.id}' must "
-                        f"reference its payload via a non-empty "
-                        f"'{_STORE_REF_KEY}' rather than embedding it."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"EmbeddingProjection '{obj.identity.id}' must "
+                            f"reference its payload via a non-empty "
+                            f"'{_STORE_REF_KEY}' rather than embedding it."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
             leaked = [k for k in _DISALLOWED_INLINE_PAYLOAD_KEYS if k in obj.structure]
             if leaked:
-                diagnostics.append(_error(
-                    identity=self.identity,
-                    message=(
-                        f"EmbeddingProjection '{obj.identity.id}' must not "
-                        f"embed raw vector payloads inline "
-                        f"({', '.join(sorted(leaked))}); store the vector "
-                        f"externally and reference it via '{_STORE_REF_KEY}'."
-                    ),
-                    location=obj.identity.id,
-                ))
+                diagnostics.append(
+                    _error(
+                        identity=self.identity,
+                        message=(
+                            f"EmbeddingProjection '{obj.identity.id}' must not "
+                            f"embed raw vector payloads inline "
+                            f"({', '.join(sorted(leaked))}); store the vector "
+                            f"externally and reference it via '{_STORE_REF_KEY}'."
+                        ),
+                        location=obj.identity.id,
+                    )
+                )
 
         return diagnostics
 

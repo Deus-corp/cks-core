@@ -61,17 +61,13 @@ class UniqueIdentityConstraint(Constraint):
         seen: set[str] = set()
 
         for obj in structure.objects:
-
             oid = obj.identity.id
 
             if oid in seen:
-
                 diagnostics.append(
                     _error(
                         identity=self.identity,
-                        message=(
-                            f"Duplicate canonical identity '{oid}'."
-                        ),
+                        message=(f"Duplicate canonical identity '{oid}'."),
                         location=oid,
                     )
                 )
@@ -101,17 +97,11 @@ class NoDanglingRelationConstraint(Constraint):
 
         diagnostics: list[Diagnostic] = []
 
-        existing = {
-            obj.identity.id
-            for obj in structure.objects
-        }
+        existing = {obj.identity.id for obj in structure.objects}
 
         for relation in structure.relations():
-
             for participant in relation.participants:
-
                 if participant not in existing:
-
                     diagnostics.append(
                         _error(
                             identity=self.identity,
@@ -125,6 +115,7 @@ class NoDanglingRelationConstraint(Constraint):
                     )
 
         return diagnostics
+
 
 # ============================================================================
 # Canonical Structural Constraint Set

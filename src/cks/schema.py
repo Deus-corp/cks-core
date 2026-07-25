@@ -22,9 +22,11 @@ _SCHEMA_PACKAGE = "cks.schemas"
 _SCHEMA_FILENAME = "cks-schema.json"
 
 # Load schema once at import time.
-with resources.files(_SCHEMA_PACKAGE).joinpath(_SCHEMA_FILENAME).open(
-    "r", encoding="utf-8"
-) as _fh:
+with (
+    resources.files(_SCHEMA_PACKAGE)
+    .joinpath(_SCHEMA_FILENAME)
+    .open("r", encoding="utf-8") as _fh
+):
     _CANONICAL_SCHEMA: Dict[str, Any] = json.load(_fh)
 
 
@@ -32,7 +34,9 @@ class SchemaValidationError(Exception):
     """Raised when a JSON document fails schema validation."""
 
 
-def validate_json(data: Dict[str, Any], *, schema: Optional[Dict[str, Any]] = None) -> None:
+def validate_json(
+    data: Dict[str, Any], *, schema: Optional[Dict[str, Any]] = None
+) -> None:
     """Validate *data* against the canonical CKS JSON Schema.
 
     Parameters

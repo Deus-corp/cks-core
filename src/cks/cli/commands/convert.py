@@ -1,6 +1,7 @@
 """
 CLI command: convert.
 """
+
 from __future__ import annotations
 
 import json
@@ -11,11 +12,16 @@ from ...serialization import serialize as cks_serialize
 
 
 def add_parser(subparsers):
-    parser = subparsers.add_parser("convert", help="Convert JSON‑LD, Turtle, or RDF/XML to CKS")
+    parser = subparsers.add_parser(
+        "convert", help="Convert JSON‑LD, Turtle, or RDF/XML to CKS"
+    )
     parser.add_argument("input", type=Path, help="Path to input file")
-    parser.add_argument("--output", "-o", type=Path, default=None, help="Write CKS JSON to file")
     parser.add_argument(
-        "--format", "-f",
+        "--output", "-o", type=Path, default=None, help="Write CKS JSON to file"
+    )
+    parser.add_argument(
+        "--format",
+        "-f",
         choices=("json-ld", "rdf-xml", "turtle"),
         default="json-ld",
         help="Input format (default: json-ld)",
@@ -36,10 +42,12 @@ def handle(args):
 
     if args.format == "json-ld":
         from ...adapters.jsonld_to_cks import JsonLdToCksConverter
+
         converter = JsonLdToCksConverter(data)
         structure = converter.convert()
     elif args.format in ("rdf-xml", "turtle"):
         from ...adapters.rdf_to_cks import RdfToCksConverter
+
         rdf_format = "xml" if args.format == "rdf-xml" else args.format
         converter = RdfToCksConverter(data, format=rdf_format)
         structure = converter.convert()

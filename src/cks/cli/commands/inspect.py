@@ -1,6 +1,7 @@
 """
 CLI command: inspect.
 """
+
 from __future__ import annotations
 
 import json
@@ -40,11 +41,19 @@ def handle(args):
     if args.format == "json":
         data = {
             "objects": [
-                {"id": obj.identity.id, "type": obj.identity.type, "name": obj.identity.name}
+                {
+                    "id": obj.identity.id,
+                    "type": obj.identity.type,
+                    "name": obj.identity.name,
+                }
                 for obj in structure.objects
             ],
             "relations": [
-                {"id": r.identity.id, "type": r.relation_type, "participants": list(r.participants)}
+                {
+                    "id": r.identity.id,
+                    "type": r.relation_type,
+                    "participants": list(r.participants),
+                }
                 for r in structure.relations()
             ],
         }
