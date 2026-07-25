@@ -162,6 +162,9 @@ The current Python reference implementation provides:
 - Optional Extension Constraints (opt‑in validators for specialised knowledge types)
 - Merkle‑tree based structural hashing for O(1) comparison and diff computation
 - Three‑way merge (base‑branch‑branch) with conflict detection and structured error reporting
+- In‑place object updates via `UpdateObject` (merge and replace modes)
+- k‑hop subgraph extraction (`query_subgraph`) with optional budget and type‑weighted ranking
+- Partial three‑way merge with per‑identity conflict resolution (`resolutions` parameter)
 
 ---
 
@@ -283,6 +286,17 @@ try:
 except MergeConflictError as e:
     for conflict in e.conflicts:
         print(f"Conflict on {conflict.object_id}")
+
+# Partial three-way merge with conflict resolution
+base = construct([obj1, obj2])
+branch_a = construct([obj1, obj3])
+branch_b = construct([obj2, obj4])
+
+try:
+    merged = merge(base, branch_a, branch_b, resolutions={"obj-1": "branch_a"})
+except MergeConflictError as e:
+    for conflict in e.conflicts:
+        print(f"Unresolved conflict on {conflict.object_id}")
 ```
 
 Or convert between formats:
@@ -366,6 +380,8 @@ Current implementation status:
 | Optional Constraints | ✅ Complete |
 | Merkle Hashing & Diff | ✅ Complete |
 | Three‑Way Merge | ✅ Complete |
+| Query Subgraph | ✅ Complete |
+| Partial Merge (Resolutions) | ✅ Complete |
 
 The current implementation serves as the reference implementation of the
 existing CKS specifications.
