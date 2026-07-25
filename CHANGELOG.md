@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.2] - 2026-07-25
+
+### Fixed
+- CI linting step (ruff) now passes cleanly after full auto-fix pass. No functional changes.
+
+---
+
 ## [1.10.1] - 2026-07-25
 
 ### Fixed
