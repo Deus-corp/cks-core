@@ -55,6 +55,7 @@ nav:
   - Case Studies:
     - Overview: case-studies/index.md
     - Catching Fake Citations: case-studies/catching-fake-citations.md
+    - Semantic Search and Partial Merge: case-studies/semantic-search-and-partial-merge.md
 
   - cks-core:
       - Overview: cks-core/index.md
