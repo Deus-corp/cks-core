@@ -46,7 +46,7 @@ def _create_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     parser = _create_parser()
     args = parser.parse_args(argv)
 
