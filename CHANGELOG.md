@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.5] - 2026-07-25
+
+### Added
+- README updated to reflect new features: `query_subgraph`, `UpdateObject`, and partial merge with `resolutions`.
+
+---
+
 ## [1.10.4] - 2026-07-25
 
 ### Fixed
