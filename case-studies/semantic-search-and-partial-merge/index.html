@@ -11,28 +11,28 @@
       
       
       
-        <link rel="prev" href="../../">
+        <link rel="prev" href="../catching-fake-citations/">
       
       
-        <link rel="next" href="../../architecture/ARCH-001_Runtime_Architecture/">
+        <link rel="next" href="../../cks-core/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Charter - CKS Documentation</title>
+        <title>Semantic Search and Partial Merge - CKS Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cks-runtime-charter" class="md-skip">
+        <a href="#case-study-semantic-search-and-partial-merge" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="CKS Documentation" class="md-header__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
+    <a href="../.." title="CKS Documentation" class="md-header__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Charter
+              Semantic Search and Partial Merge
             
           </span>
         </div>
@@ -230,7 +230,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -249,7 +249,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../quickstart/" class="md-tabs__link">
+      <a href="../../quickstart/" class="md-tabs__link">
         
   
   
@@ -266,11 +266,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../case-studies/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -290,7 +292,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../cks-core/" class="md-tabs__link">
+        <a href="../../cks-core/" class="md-tabs__link">
           
   
   
@@ -306,13 +308,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../cks-runtime/" class="md-tabs__link">
           
   
   
@@ -332,7 +332,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../cks-mcp/" class="md-tabs__link">
+        <a href="../../cks-mcp/" class="md-tabs__link">
           
   
   
@@ -366,7 +366,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CKS Documentation" class="md-nav__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
+    <a href="../.." title="CKS Documentation" class="md-nav__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -396,7 +396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -423,7 +423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   
@@ -447,28 +447,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -486,7 +489,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -504,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../case-studies/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -532,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../case-studies/catching-fake-citations/" class="md-nav__link">
+      <a href="../catching-fake-citations/" class="md-nav__link">
         
   
   
@@ -557,10 +560,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../case-studies/semantic-search-and-partial-merge/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic Search and Partial Merge
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -576,6 +606,153 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools Used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Happened
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Happened">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-semantic-search-without-seed-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Semantic search without seed IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-in-place-object-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. In-place object update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-branching-and-divergent-edits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Branching and divergent edits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-partial-merge-with-resolutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Partial merge with resolutions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-compact-subgraph-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Compact subgraph extraction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-runtime-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Runtime metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduce-it-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduce It Yourself
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -649,7 +826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/" class="md-nav__link">
+      <a href="../../cks-core/" class="md-nav__link">
         
   
   
@@ -677,7 +854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/getting-started/" class="md-nav__link">
+      <a href="../../cks-core/getting-started/" class="md-nav__link">
         
   
   
@@ -705,7 +882,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/concepts/" class="md-nav__link">
+      <a href="../../cks-core/concepts/" class="md-nav__link">
         
   
   
@@ -733,7 +910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/architecture/" class="md-nav__link">
+      <a href="../../cks-core/architecture/" class="md-nav__link">
         
   
   
@@ -761,7 +938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/api/" class="md-nav__link">
+      <a href="../../cks-core/api/" class="md-nav__link">
         
   
   
@@ -789,7 +966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/plugins/" class="md-nav__link">
+      <a href="../../cks-core/plugins/" class="md-nav__link">
         
   
   
@@ -817,7 +994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/examples/" class="md-nav__link">
+      <a href="../../cks-core/examples/" class="md-nav__link">
         
   
   
@@ -845,7 +1022,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/contracts/" class="md-nav__link">
+      <a href="../../cks-core/contracts/" class="md-nav__link">
         
   
   
@@ -927,7 +1104,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/" class="md-nav__link">
+      <a href="../../cks-core/specifications/" class="md-nav__link">
         
   
   
@@ -955,7 +1132,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-000_Canonical_Foundations_and_Terminology/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-000_Canonical_Foundations_and_Terminology/" class="md-nav__link">
         
   
   
@@ -983,7 +1160,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-001_Core_Specification/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-001_Core_Specification/" class="md-nav__link">
         
   
   
@@ -1011,7 +1188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-002_Canonical_Construction_Specification/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-002_Canonical_Construction_Specification/" class="md-nav__link">
         
   
   
@@ -1039,7 +1216,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-003_Canonical_Serialization/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-003_Canonical_Serialization/" class="md-nav__link">
         
   
   
@@ -1067,7 +1244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-004_Canonical_Structure_Evolution/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-004_Canonical_Structure_Evolution/" class="md-nav__link">
         
   
   
@@ -1095,7 +1272,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-005_Validator_Specification/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-005_Validator_Specification/" class="md-nav__link">
         
   
   
@@ -1123,7 +1300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-006_Reference_Engine_Specification/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-006_Reference_Engine_Specification/" class="md-nav__link">
         
   
   
@@ -1151,7 +1328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-007_Canonical_Knowledge_Interface/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-007_Canonical_Knowledge_Interface/" class="md-nav__link">
         
   
   
@@ -1179,7 +1356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-008_Reference_Conformance_Specification/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-008_Reference_Conformance_Specification/" class="md-nav__link">
         
   
   
@@ -1207,7 +1384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-core/specifications/CKS-B001-PY_Python_Reference/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-B001-PY_Python_Reference/" class="md-nav__link">
         
   
   
@@ -1247,31 +1424,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -1289,7 +1463,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1307,7 +1481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
+      <a href="../../cks-runtime/" class="md-nav__link">
         
   
   
@@ -1332,19 +1506,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../cks-runtime/charter/CHARTER/" class="md-nav__link">
         
   
   
@@ -1360,7 +1525,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1373,7 +1537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/ARCH-001_Runtime_Architecture/" class="md-nav__link">
+      <a href="../../cks-runtime/architecture/ARCH-001_Runtime_Architecture/" class="md-nav__link">
         
   
   
@@ -1407,13 +1571,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -1422,7 +1583,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_4" >
         
           
-          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
             
   
   
@@ -1458,7 +1619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analysis/ANALYSIS-001_Runtime_Dependencies_on_CKS_Core/" class="md-nav__link">
+      <a href="../../cks-runtime/analysis/ANALYSIS-001_Runtime_Dependencies_on_CKS_Core/" class="md-nav__link">
         
   
   
@@ -1500,13 +1661,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -1515,7 +1673,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_5" >
         
           
-          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
             
   
   
@@ -1551,7 +1709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-001%20Runtime%20Layering/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-001%20Runtime%20Layering/" class="md-nav__link">
         
   
   
@@ -1579,7 +1737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-002%20Session%20Ownership/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-002%20Session%20Ownership/" class="md-nav__link">
         
   
   
@@ -1607,7 +1765,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-003%20Transaction%20Model/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-003%20Transaction%20Model/" class="md-nav__link">
         
   
   
@@ -1635,7 +1793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-004%20Storage%20Abstraction/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-004%20Storage%20Abstraction/" class="md-nav__link">
         
   
   
@@ -1663,7 +1821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-005%20Version%20History/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-005%20Version%20History/" class="md-nav__link">
         
   
   
@@ -1691,7 +1849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../adr/ADR-006%20Adapter%20Architecture/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-006%20Adapter%20Architecture/" class="md-nav__link">
         
   
   
@@ -1733,13 +1891,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -1748,7 +1903,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_6" >
         
           
-          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="0">
             
   
   
@@ -1784,7 +1939,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-001_Runtime_Overview/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-001_Runtime_Overview/" class="md-nav__link">
         
   
   
@@ -1812,7 +1967,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-002_Session_Model/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-002_Session_Model/" class="md-nav__link">
         
   
   
@@ -1840,7 +1995,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-003_Runtime_API/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-003_Runtime_API/" class="md-nav__link">
         
   
   
@@ -1868,7 +2023,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-004_Diagnostics/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-004_Diagnostics/" class="md-nav__link">
         
   
   
@@ -1896,7 +2051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-005_Transactions/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-005_Transactions/" class="md-nav__link">
         
   
   
@@ -1924,7 +2079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-006_Storage/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-006_Storage/" class="md-nav__link">
         
   
   
@@ -1952,7 +2107,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-007_Version_History/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-007_Version_History/" class="md-nav__link">
         
   
   
@@ -1980,7 +2135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../standards/runtime/SPEC-008_Conformance/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-008_Conformance/" class="md-nav__link">
         
   
   
@@ -2077,7 +2232,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-mcp/" class="md-nav__link">
+      <a href="../../cks-mcp/" class="md-nav__link">
         
   
   
@@ -2105,7 +2260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-mcp/ARCHITECTURE/" class="md-nav__link">
+      <a href="../../cks-mcp/ARCHITECTURE/" class="md-nav__link">
         
   
   
@@ -2153,6 +2308,141 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools Used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Happened
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Happened">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-semantic-search-without-seed-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Semantic search without seed IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-in-place-object-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. In-place object update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-branching-and-divergent-edits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Branching and divergent edits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-partial-merge-with-resolutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Partial merge with resolutions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-compact-subgraph-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Compact subgraph extraction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-runtime-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Runtime metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduce-it-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduce It Yourself
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2171,208 +2461,105 @@
   
 
 
-<h1 id="cks-runtime-charter">CKS Runtime Charter</h1>
-<p><strong>Status:</strong> Draft</p>
-<p><strong>Applies to:</strong> CKS Runtime Standard</p>
+<h1 id="case-study-semantic-search-and-partial-merge">Case Study: Semantic Search and Partial Merge</h1>
+<p><strong>Problem:</strong> Managing a knowledge graph with multiple contributors leads to
+conflicts — two people (or two LLM agents) editing the same concept
+simultaneously. Traditional tools force a manual resolution of every
+conflict, blocking the entire merge until all are resolved.</p>
+<p><strong>CKS solution:</strong> <code>merge_branch</code> now accepts a <code>resolutions</code> parameter,
+enabling partial three-way merges. The caller specifies per-object
+strategies (<code>"branch_a"</code>, <code>"branch_b"</code>, <code>None</code>, or a custom object),
+and the merge commits immediately, without manual intervention for the
+resolved identities. Combined with semantic search and in-place
+<code>update_object</code>, this enables a fully automated knowledge workflow.</p>
 <hr />
-<h1 id="1-mission">1. Mission</h1>
-<p>CKS Runtime provides the canonical operational environment for Canonical Knowledge Structures while preserving the semantic guarantees established by the CKS Core Standard.</p>
-<p>Runtime orchestrates the operational lifecycle of canonical knowledge.</p>
-<p>Core defines the semantics of canonical knowledge.</p>
+<h2 id="scenario">Scenario</h2>
+<p>We built a knowledge graph about machine learning with five concepts
+(Neural Networks, Backpropagation, Support Vector Machines, Training Data,
+GPU) and four relations (<code>trained_by</code>, <code>uses</code>, <code>accelerated_by</code>).
+We then:</p>
+<ol>
+<li>Used <code>search_semantic</code> to find "how to optimize neural network training"
+   without specifying any object IDs — the system returned relevant concepts
+   like Backpropagation and GPU.</li>
+<li>Updated GPU's description in place via <code>update_object</code> — no cascade
+   deletion of relations.</li>
+<li>Created a branch and made divergent edits to Neural Networks' description.</li>
+<li>Merged the branch back with <code>resolutions={"neural-networks": "branch_b"}</code> —
+   the merge succeeded in one call, no manual conflict resolution required.</li>
+<li>Extracted the final graph with <code>query_subgraph</code> in compact mode.</li>
+<li>Audited the runtime with <code>get_metrics</code>.</li>
+</ol>
 <hr />
-<h1 id="2-vision">2. Vision</h1>
-<p>The long-term vision of the CKS ecosystem is to establish a family of interoperable standards that collectively define the complete lifecycle of canonical knowledge.</p>
-<p>Within this ecosystem:</p>
+<h2 id="tools-used">Tools Used</h2>
 <ul>
-<li>CKS Core defines knowledge.</li>
-<li>CKS Runtime orchestrates the operational lifecycle of knowledge.</li>
-<li>Adapters expose knowledge.</li>
-<li>Applications consume knowledge.</li>
+<li><code>validate_knowledge</code> and <code>evolve_knowledge</code> (with <code>update_object</code>)</li>
+<li><code>search_semantic</code> (no seed IDs)</li>
+<li><code>create_branch</code>, <code>merge_branch</code> (with <code>resolutions</code>)</li>
+<li><code>query_subgraph</code> (compact mode)</li>
+<li><code>get_metrics</code></li>
 </ul>
-<p>Runtime is intended to become the canonical operational environment shared by every CKS-compatible implementation.</p>
-<p>The Runtime Standard establishes a common operational contract that enables interoperability between independent implementations.</p>
 <hr />
-<h1 id="3-scope">3. Scope</h1>
-<p>The Runtime Standard specifies operational services for Canonical Knowledge Structures.</p>
-<p>These include:</p>
-<ul>
-<li>session management;</li>
-<li>lifecycle management;</li>
-<li>transaction management;</li>
-<li>persistence orchestration;</li>
-<li>storage abstraction;</li>
-<li>version history;</li>
-<li>runtime diagnostics aggregation;</li>
-<li>explainability orchestration;</li>
-<li>runtime operational environment;</li>
-<li>runtime state management.</li>
-</ul>
-<p>Runtime does not define, modify or reinterpret the semantics of Canonical Knowledge Structures.</p>
-<hr />
-<h1 id="4-non-goals">4. Non-Goals</h1>
-<p>CKS Runtime shall not define or redefine:</p>
-<ul>
-<li>the canonical knowledge model;</li>
-<li>object semantics;</li>
-<li>relation semantics;</li>
-<li>canonical identities;</li>
-<li>canonical serialization;</li>
-<li>canonical parsing;</li>
-<li>canonical validation;</li>
-<li>canonical constraints;</li>
-<li>canonical diagnostics;</li>
-<li>semantic evolution rules.</li>
-</ul>
-<p>These responsibilities permanently belong to CKS Core.</p>
-<hr />
-<h1 id="5-principles">5. Principles</h1>
-<h2 id="51-core-first">5.1 Core First</h2>
-<p>CKS Core is the semantic foundation of the entire ecosystem.</p>
-<p>Runtime extends Core operationally but never semantically.</p>
-<hr />
-<h2 id="52-runtime-is-not-a-semantic-authority">5.2 Runtime Is Not a Semantic Authority</h2>
-<p>Runtime coordinates semantic services provided by CKS Core.</p>
-<p>Runtime shall never:</p>
-<ul>
-<li>implement semantic behaviour;</li>
-<li>duplicate semantic behaviour;</li>
-<li>redefine semantic behaviour;</li>
-<li>become an alternative semantic authority.</li>
-</ul>
-<p>The semantic authority of the CKS ecosystem permanently resides in CKS Core.</p>
-<hr />
-<h2 id="53-specification-before-implementation">5.3 Specification Before Implementation</h2>
-<p>Every architectural capability shall be specified before implementation.</p>
-<p>Implementation is a consequence of the specification, never its source.</p>
-<hr />
-<h2 id="54-determinism">5.4 Determinism</h2>
-<p>Runtime behaviour shall remain deterministic whenever required by:</p>
-<ul>
-<li>CKS Core semantics;</li>
-<li>Runtime specifications;</li>
-<li>conformance requirements.</li>
-</ul>
-<p>Operational services shall never introduce semantic ambiguity.</p>
-<hr />
-<h2 id="55-separation-of-concerns">5.5 Separation of Concerns</h2>
-<p>Each architectural layer owns exactly one category of responsibility.</p>
-<p>No layer shall redefine the responsibilities of another.</p>
-<hr />
-<h2 id="56-observable-behaviour">5.6 Observable Behaviour</h2>
-<p>The Runtime Standard defines requirements through externally observable behaviour.</p>
-<p>Conformance shall be evaluated solely through externally observable behaviour.</p>
-<hr />
-<h2 id="57-transport-independence">5.7 Transport Independence</h2>
-<p>Runtime shall remain independent of any communication protocol.</p>
-<p>MCP, CLI, HTTP and future transports are adapters rather than components of Runtime itself.</p>
-<hr />
-<h2 id="58-implementation-independence">5.8 Implementation Independence</h2>
-<p>The Runtime Standard does not prescribe implementation structure,
-technology choices or internal algorithms.</p>
-<p>Multiple independent implementations are expected.</p>
-<hr />
-<h2 id="59-backward-compatibility">5.9 Backward Compatibility</h2>
-<p>Runtime evolution shall preserve compatibility with supported versions
-of the CKS Core Standard.</p>
-<p>Breaking changes shall require explicit versioning.</p>
-<hr />
-<h1 id="6-architectural-position">6. Architectural Position</h1>
-<p>The CKS ecosystem is organized into independent architectural layers.</p>
-<div class="highlight"><pre><span></span><code>Applications
-        │
-        ▼
-Adapters
-        │
-        ▼
-CKS Runtime
-        │
-        ▼
-Public CKS Core API
-        │
-        ▼
-CKS Core
+<h2 id="what-happened">What Happened</h2>
+<h3 id="1-semantic-search-without-seed-ids">1. Semantic search without seed IDs</h3>
+<div class="highlight"><pre><span></span><code>search_semantic(query=&quot;how to optimize neural network training&quot;)
 </code></pre></div>
-<p>Runtime communicates with CKS Core exclusively through the public semantic API exposed by CKS Core.</p>
-<p>Operational dependencies flow downward.</p>
-<p>Operational authority resides within CKS Runtime.</p>
-<p>Semantic authority originates exclusively from CKS Core.</p>
-<hr />
-<h1 id="7-standardization-process">7. Standardization Process</h1>
-<p>Development of the Runtime Standard follows a specification-first methodology.</p>
-<p>The expected workflow is:</p>
-<div class="highlight"><pre><span></span><code>Charter
-    ↓
-Analysis
-    ↓
-Specifications
-    ↓
-Architecture Decision Records
-    ↓
-Reference Implementation
-    ↓
-Adapters
-    ↓
-RFC
+<p>Returned <code>neural-networks</code>, <code>backpropagation</code>, and <code>svm</code> as the top semantic
+matches. GPU appeared in the expanded subgraph via its <code>accelerated_by</code>
+relation, confirming the embedding model correctly associates GPU with
+neural network optimization even though it wasn't a top-3 seed.</p>
+<h3 id="2-in-place-object-update">2. In-place object update</h3>
+<div class="highlight"><pre><span></span><code>evolve_knowledge(operations=[{&quot;type&quot;: &quot;update_object&quot;, &quot;object_id&quot;: &quot;gpu&quot;,
+  &quot;structure_patch&quot;: {&quot;description&quot;: &quot;specialized hardware for parallel matrix
+  operations, essential for accelerating neural network training and optimization&quot;}}])
 </code></pre></div>
-<p>Every conforming implementation capability shall be preceded by its
-corresponding specification.</p>
+<p>GPU's description changed without cascading to its relations —
+<code>accelerated_by</code> remained intact, no manual relation reconstruction needed.</p>
+<h3 id="3-branching-and-divergent-edits">3. Branching and divergent edits</h3>
+<p>Branch A set Neural Networks to <em>"deep learning models with many hidden layers"</em>.
+The original session set it to <em>"computational graphs inspired by biological
+neurons, including both shallow and deep architectures"</em>. This is a genuine
+conflict: same object, same field, diverged from the same base version.</p>
+<h3 id="4-partial-merge-with-resolutions">4. Partial merge with resolutions</h3>
+<div class="highlight"><pre><span></span><code>merge_branch(target_session_id=..., source_session_id=...,
+  resolutions={&quot;neural-networks&quot;: &quot;branch_b&quot;})
+</code></pre></div>
+<p>The merge succeeded immediately with <code>"merged": true</code>. No <code>conflicts</code> array,
+no second call needed. The resolved object carried the branch's description,
+confirming <code>"branch_b"</code> was honored correctly.</p>
+<h3 id="5-compact-subgraph-extraction">5. Compact subgraph extraction</h3>
+<div class="highlight"><pre><span></span><code>query_subgraph(seed_ids=[&quot;neural-networks&quot;], depth=2, compact_mode=true)
+</code></pre></div>
+<p>Returned all 5 nodes and 4 edges in a flat <code>nodes</code>/<code>edges</code> format — ideal
+for LLM consumption, with no redundant canonical wrappers.</p>
+<h3 id="6-runtime-metrics">6. Runtime metrics</h3>
+<div class="highlight"><pre><span></span><code>get_metrics()
+</code></pre></div>
+<p>Reported 6 <code>evolve</code> calls, 2 <code>query_subgraph</code> calls, and 2 <code>merge</code> calls,
+with average execution times of 0.13 ms, 0.15 ms, and 0.09 ms respectively.</p>
 <hr />
-<h1 id="8-relationship-to-cks-core">8. Relationship to CKS Core</h1>
-<p>CKS Runtime depends upon CKS Core.</p>
-<p>CKS Core shall never depend upon Runtime.</p>
-<p>Runtime operates exclusively on Canonical Knowledge Structures defined by Core.</p>
-<p>Runtime shall treat the Core Standard as its normative semantic dependency.</p>
-<p>Runtime communicates with CKS Core exclusively through its public semantic API.</p>
-<p>Official Runtime implementations may integrate automatically with the official CKS Core package while preserving this architectural boundary.</p>
-<p>Runtime shall not introduce an alternative semantic authority.</p>
-<p>All semantic interpretation remains the responsibility of Core.</p>
-<p>Runtime provides operational capabilities without modifying semantic meaning.</p>
-<hr />
-<h2 id="9-long-term-roadmap">9. Long-Term Roadmap</h2>
-<p>The initial Runtime Standard comprises the following normative
-specifications:</p>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ul>
-<li>Runtime Overview (SPEC‑001)</li>
-<li>Session Model (SPEC‑002)</li>
-<li>Runtime API (SPEC‑003)</li>
-<li>Diagnostics (SPEC‑004)</li>
-<li>Transactions (SPEC‑005)</li>
-<li>Storage Abstraction (SPEC‑006)</li>
-<li>Version History (SPEC‑007)</li>
-<li>Conformance (SPEC‑008)</li>
+<li><strong>Semantic search works without explicit IDs.</strong> The embedding model correctly
+  associates concepts by meaning, not just keywords.</li>
+<li><strong><code>update_object</code> enables surgical edits.</strong> No need to remove and re-add
+  objects with cascading relation deletions.</li>
+<li><strong>Partial merge eliminates manual conflict resolution.</strong> With <code>resolutions</code>,
+  the merge commits in one call for all specified identities.</li>
+<li><strong>Compact mode reduces token usage.</strong> Flat <code>nodes</code>/<code>edges</code> arrays are
+  smaller and faster for LLMs to process than full canonical JSON.</li>
+<li><strong>Metrics provide observability.</strong> Invocation counts and execution times
+  are available for every operation type.</li>
 </ul>
-<p>Future specifications may extend Runtime while preserving the
-architectural principles established by this Charter.</p>
 <hr />
-<h1 id="10-long-term-ecosystem">10. Long-Term Ecosystem</h1>
-<p>The CKS initiative is intended to evolve into a family of interoperable standards.</p>
-<div class="highlight"><pre><span></span><code>CKS Standards
-
-Semantic Layer
-
-├── Core Standard
-
-Operational Layer
-
-├── Runtime Standard
-
-Exposure Layer
-
-├── MCP Adapter Standard
-├── CLI Adapter Standard
-└── HTTP Adapter Standard
-
-Verification Layer
-
-└── Conformance Suite
-</code></pre></div>
-<p>Each standard addresses a distinct architectural concern while remaining interoperable through the canonical semantics defined by CKS Core.</p>
-<hr />
-<h1 id="11-summary">11. Summary</h1>
-<p>CKS Runtime exists to operationalize canonical knowledge without redefining it.</p>
-<p>Runtime orchestrates semantic services provided by CKS Core while managing operational lifecycle, transactions, persistence and execution.</p>
-<p>The semantic authority of the CKS ecosystem permanently resides in CKS Core.</p>
-<p>This separation establishes a stable architectural foundation upon which independent Runtime implementations, adapter standards and future ecosystem specifications may evolve while preserving a single canonical definition of knowledge.</p>
+<h2 id="reproduce-it-yourself">Reproduce It Yourself</h2>
+<ol>
+<li>Install <code>cks-mcp</code> and connect it to Claude Desktop.</li>
+<li>Start a chat and say:<br />
+<code>Use cks-mcp to create a knowledge graph about machine learning with 5 concepts and 4 relations. Then branch, make divergent edits, and merge with resolutions.</code></li>
+<li>Observe the conflict being resolved automatically.</li>
+</ol>
+<p>No coding required.</p>
 
 
 
@@ -2428,10 +2615,10 @@ Verification Layer
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
