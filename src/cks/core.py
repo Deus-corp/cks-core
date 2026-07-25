@@ -429,6 +429,7 @@ class KnowledgeStructure:
         branch_b: "KnowledgeStructure",
         *,
         resolutions: Mapping[str, "MergeResolution"] | None = None,
+        dropped_relations: list[str] | None = None,
     ) -> "KnowledgeStructure":
         """
         Three-way merge. ``self`` is the common ancestor (base);
@@ -503,6 +504,16 @@ class KnowledgeStructure:
               (its ``identity.id`` must equal the key). This is how a
               caller reconciles two irreconcilable positions into a
               new, synthesized value rather than picking one side.
+        dropped_relations
+            Optional output list. When given, the ``identity.id`` of
+            every relation excluded from the result because one or
+            more of its participants didn't survive the merge (see
+            "Referential integrity" above) is appended to it. This
+            does not change what merge() returns -- referential
+            integrity is enforced either way -- it only makes an
+            otherwise-silent exclusion visible to the caller, e.g. to
+            report "relation X was not restored because node Y was
+            removed" back to whoever is resolving the conflict.
 
         Returns
         -------
@@ -617,14 +628,13 @@ class KnowledgeStructure:
                 merged[oid] = target
 
         surviving_ids = set(merged)
-        final_objects = [
-            obj
-            for obj in merged.values()
-            if not (
-                isinstance(obj, CanonicalRelation)
-                and not set(obj.participants) <= surviving_ids
-            )
-        ]
+        final_objects = []
+        for obj in merged.values():
+            if isinstance(obj, CanonicalRelation) and not set(obj.participants) <= surviving_ids:
+                if dropped_relations is not None:
+                    dropped_relations.append(obj.identity.id)
+                continue
+            final_objects.append(obj)
 
         return KnowledgeStructure(final_objects)
 

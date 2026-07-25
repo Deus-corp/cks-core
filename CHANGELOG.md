@@ -6,6 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.11.0] - 2026-07-25
+
+### Added
+- `KnowledgeStructure.merge()` now accepts an optional `dropped_relations` output parameter, recording IDs of relations silently excluded due to referential integrity.
+- Dedicated unit tests for `merge()` in `tests/test_merge.py`.
+
+### Fixed
+- Documented that relations with vanished participants are dropped during merge, and made this visible to callers.
+
+---
+
 ## [1.10.6] - 2026-07-25
 
 ### Fixed
