@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.3] - 2026-07-25
+
+### Fixed
+- CI: added auto-fix step for ruff before lint check, resolving version mismatch between local and CI environments.
+
+---
+
 ## [1.10.2] - 2026-07-25
 
 ### Fixed
