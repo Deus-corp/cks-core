@@ -39,7 +39,7 @@ class JsonLdToCksConverter:
 
         # 3. Convert relations
         for relation in self._iter_relations():
-            objects.append(relation)
+            objects = objects + [relation]
 
         return KnowledgeStructure(objects)
 

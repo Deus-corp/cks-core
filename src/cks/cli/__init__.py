@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from typing import Optional, Sequence
+from typing import Sequence
 
 from .commands import (
     validate,

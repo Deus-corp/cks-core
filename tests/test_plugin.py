@@ -74,7 +74,7 @@ def test_load_empty_plugin():
 
 def test_load_mixed_plugin():
     ep = _make_entrypoint("mixed", _factory_mixed)
-    with pytest.raises(RuntimeError, match="not a Constraint"):
+    with pytest.raises(TypeError, match="not a Constraint"):
         load_constraints_from_entry_point(ep)
 
 

@@ -180,7 +180,7 @@ class RemoveRelation(StructuralOperator):
             # unlike RemoveObject, which does cascade. That would leave
             # a dangling reference behind and violate the
             # "referential integrity is preserved" contract below.
-            raise ValueError(
+            raise TypeError(
                 f"'{self._relation_id}' is a KnowledgeObject, not a "
                 "CanonicalRelation; use RemoveObject instead (it will "
                 "also cascade-remove any relations that reference it)."
@@ -251,7 +251,7 @@ class UpdateObject(StructuralOperator):
         if target is None:
             raise ValueError(f"Object '{self._object_id}' does not exist.")
         if isinstance(target, CanonicalRelation):
-            raise ValueError(
+            raise TypeError(
                 f"'{self._object_id}' is a CanonicalRelation; "
                 "UpdateObject only updates plain KnowledgeObjects."
             )

@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.4] - 2026-07-25
+
+### Fixed
+- Final ruff lint compliance: replaced `ValueError`/`RuntimeError` with `TypeError` for type-checking operators, removed unused import, and optimized list operation.
+
+---
+
 ## [1.10.3] - 2026-07-25
 
 ### Fixed

@@ -148,7 +148,7 @@ def test_remove_relation_on_object_id_raises():
     """
     structure = _make_structure()
     op = RemoveRelation("obj-1")
-    with pytest.raises(ValueError, match="KnowledgeObject, not a"):
+    with pytest.raises(TypeError, match="KnowledgeObject, not a"):
         op.apply(structure)
     # Nothing should have been removed.
     assert structure.get("obj-1") is not None
@@ -228,7 +228,7 @@ def test_update_nonexistent_object_raises():
 def test_update_object_on_relation_id_raises():
     structure = _make_structure()
     op = UpdateObject("rel-1", {"relation_type": "x"})
-    with pytest.raises(ValueError, match="CanonicalRelation"):
+    with pytest.raises(TypeError, match="CanonicalRelation"):
         op.apply(structure)
 
 

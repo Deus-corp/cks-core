@@ -58,7 +58,7 @@ def load_constraints_from_entry_point(ep) -> List[Constraint]:
 
     for c in constraints:
         if not isinstance(c, Constraint):
-            raise RuntimeError(
+            raise TypeError(
                 f"Entry-point {ep.name!r} returned an object that is not "
                 f"a Constraint: {c!r}"
             )
