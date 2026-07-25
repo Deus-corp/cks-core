@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.6] - 2026-07-25
+
+### Fixed
+- `cks.merge()` wrapper now passes the `resolutions` keyword argument through to `KnowledgeStructure.merge()`, enabling partial merge support from the public API.
+
+---
+
 ## [1.10.5] - 2026-07-25
 
 ### Added

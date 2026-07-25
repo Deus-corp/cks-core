@@ -220,6 +220,8 @@ def merge(
     base: KnowledgeStructure,
     branch_a: KnowledgeStructure,
     branch_b: KnowledgeStructure,
+    *,
+    resolutions: Mapping[str, Any] | None = None,
 ) -> KnowledgeStructure:
     """
     Three-way merge of independently evolved Knowledge Structures.
@@ -229,9 +231,10 @@ def merge(
     merged result.
 
     Raises :class:`MergeConflictError` when the two branches changed
-    the same identity to different, irreconcilable results.
+    the same identity to different, irreconcilable results, and
+    ``resolutions`` (if given) does not cover that identity.
     """
-    return base.merge(branch_a, branch_b)
+    return base.merge(branch_a, branch_b, resolutions=resolutions)
 
 
 def query_subgraph(
