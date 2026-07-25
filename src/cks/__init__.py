@@ -29,6 +29,7 @@ from .core import (
     KnowledgeStructure,
     MergeConflict,
     MergeConflictError,
+    MergeResolution,
     ObjectIdentity,
     SubgraphResult,
 )
@@ -76,7 +77,7 @@ from .interface import (
 
 _EXTERNAL_COUNT = load_external_constraints()
 
-__version__ = "1.9.1"
+__version__ = "1.10.0"
 
 VERSION = tuple(
     int(part)
@@ -105,6 +106,7 @@ __all__ = [
     "KnowledgeStructure",
     "MergeConflict",
     "MergeConflictError",
+    "MergeResolution",
     "SubgraphResult",
 
     # Evolution operators

@@ -7,7 +7,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Iterable, Iterator, Mapping
+from typing import Any, Iterable, Iterator, Literal, Mapping, Union
 
 
 def _freeze(value: Any) -> Any:
@@ -411,6 +411,8 @@ class KnowledgeStructure:
         self,
         branch_a: "KnowledgeStructure",
         branch_b: "KnowledgeStructure",
+        *,
+        resolutions: Mapping[str, "MergeResolution"] | None = None,
     ) -> "KnowledgeStructure":
         """
         Three-way merge. ``self`` is the common ancestor (base);
@@ -446,7 +448,10 @@ class KnowledgeStructure:
         the same contract :class:`~cks.evolution.RemoveObject` itself
         enforces via cascade deletion, applied here defensively so
         ``merge()`` never depends on both inputs having been built
-        through operators that already cascade correctly.
+        through operators that already cascade correctly. This
+        includes relations introduced by a ``resolutions`` override:
+        a custom resolution whose participants don't all survive the
+        merge is dropped the same way.
 
         Parameters
         ----------
@@ -457,27 +462,74 @@ class KnowledgeStructure:
             ancestor; merging unrelated structures will simply treat
             every identity present in one but not ``self`` as an
             addition).
+        resolutions
+            Optional per-identity conflict resolutions, keyed by
+            object id. This turns ``merge`` into a *partial* merge:
+            every non-conflicting identity is still merged
+            automatically as usual, and any conflicting identity
+            present in ``resolutions`` is resolved using the supplied
+            value instead of blocking the merge. Only identities that
+            conflict AND have no entry in ``resolutions`` still raise
+            ``MergeConflictError`` -- with a conflict list narrowed to
+            just those remaining identities, so a caller can supply
+            resolutions incrementally across retries. Each value is
+            one of:
+
+            - ``"branch_a"`` -- take ``branch_a``'s value for this id
+              (removing it from the result if ``branch_a`` removed it).
+            - ``"branch_b"`` -- take ``branch_b``'s value for this id,
+              symmetrically.
+            - ``None`` -- resolve by deliberately dropping the
+              identity from the merged result, regardless of what
+              either branch did.
+            - a ``KnowledgeObject``/``CanonicalRelation`` instance --
+              use this exact object as the merged content for that id
+              (its ``identity.id`` must equal the key). This is how a
+              caller reconciles two irreconcilable positions into a
+              new, synthesized value rather than picking one side.
 
         Returns
         -------
         KnowledgeStructure
             The merged result: every identity either branch added,
             removed, or modified is reflected; identities neither
-            branch touched are carried over from ``self`` unchanged.
+            branch touched are carried over from ``self`` unchanged;
+            resolved conflicts reflect their resolution.
 
         Raises
         ------
         MergeConflictError
-            Both branches changed the same identity to different,
-            irreconcilable results. ``error.conflicts`` lists every
-            such identity together with its value in ``self``,
-            ``branch_a``, and ``branch_b`` (``None`` meaning "absent
-            in that structure") so the caller can present or resolve
-            each one.
+            One or more identities were changed by both branches to
+            different, irreconcilable results, and (if ``resolutions``
+            was given) still have no entry there. ``error.conflicts``
+            lists every such identity together with its value in
+            ``self``, ``branch_a``, and ``branch_b`` (``None`` meaning
+            "absent in that structure") so the caller can present or
+            resolve each one.
+        ValueError
+            A ``resolutions`` entry names an id that isn't actually in
+            conflict, uses an unrecognized string value, or supplies
+            an object whose ``identity.id`` doesn't match its key.
         """
         base_ids = set(self._index)
         a_ids = set(branch_a._index)
         b_ids = set(branch_b._index)
+        resolutions = resolutions or {}
+
+        for oid, value in resolutions.items():
+            if isinstance(value, (KnowledgeObject, CanonicalRelation)):
+                if value.identity.id != oid:
+                    raise ValueError(
+                        f"resolutions['{oid}']: resolution object's "
+                        f"identity.id ('{value.identity.id}') must "
+                        f"equal the key."
+                    )
+            elif value not in ("branch_a", "branch_b", None):
+                raise ValueError(
+                    f"resolutions['{oid}']: expected 'branch_a', "
+                    f"'branch_b', None, or a KnowledgeObject/"
+                    f"CanonicalRelation instance; got {value!r}."
+                )
 
         def touched_ids(ids: set, index: Mapping[str, KnowledgeObject]) -> set:
             added = ids - base_ids
@@ -492,12 +544,17 @@ class KnowledgeStructure:
         b_touched = touched_ids(b_ids, branch_b._index)
 
         conflicts: list[MergeConflict] = []
+        resolved: dict[str, "MergeResolution"] = {}
         for oid in sorted(a_touched & b_touched):
             a_obj = branch_a._index.get(oid)
             b_obj = branch_b._index.get(oid)
             a_hash = a_obj._hash if a_obj is not None else None
             b_hash = b_obj._hash if b_obj is not None else None
-            if a_hash != b_hash:
+            if a_hash == b_hash:
+                continue
+            if oid in resolutions:
+                resolved[oid] = resolutions[oid]
+            else:
                 conflicts.append(
                     MergeConflict(
                         object_id=oid,
@@ -506,6 +563,13 @@ class KnowledgeStructure:
                         branch_b=b_obj,
                     )
                 )
+
+        unused = set(resolutions) - (a_touched & b_touched)
+        if unused:
+            raise ValueError(
+                "resolutions given for identities that are not "
+                f"actually in conflict: {', '.join(sorted(unused))}."
+            )
 
         if conflicts:
             raise MergeConflictError(conflicts)
@@ -521,6 +585,19 @@ class KnowledgeStructure:
                 merged[oid] = branch_b._index[oid]
             else:
                 merged.pop(oid, None)
+        for oid, value in resolved.items():
+            if value == "branch_a":
+                target = branch_a._index.get(oid)
+            elif value == "branch_b":
+                target = branch_b._index.get(oid)
+            elif value is None:
+                target = None
+            else:
+                target = value
+            if target is None:
+                merged.pop(oid, None)
+            else:
+                merged[oid] = target
 
         surviving_ids = set(merged)
         final_objects = [
@@ -769,6 +846,19 @@ class KnowledgeStructure:
 # ============================================================================
 # Three-Way Merge support types
 # ============================================================================
+
+
+MergeResolution = Union[
+    Literal["branch_a", "branch_b"],
+    "KnowledgeObject",
+    "CanonicalRelation",
+    None,
+]
+"""
+Per-identity conflict resolution accepted by
+:meth:`KnowledgeStructure.merge`'s ``resolutions`` parameter -- see
+its docstring for what each variant means.
+"""
 
 
 @dataclass(frozen=True, slots=True)

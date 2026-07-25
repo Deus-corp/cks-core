@@ -6,6 +6,19 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.10.0] - 2026-07-25
+
+### Added
+- `UpdateObject` structural operator — modify an existing KnowledgeObject's structure in-place without cascading deletion of relations. Supports `merge` and `replace` modes.
+- `resolutions` parameter for `KnowledgeStructure.merge()` — allows callers to specify per-object conflict resolutions, enabling partial merges.
+- `MergeResolution` type alias for cleaner API.
+- 18 new tests covering `UpdateObject`, `resolutions`, and merge edge cases.
+
+### Fixed
+- `RemoveRelation` now validates that the target ID belongs to a `CanonicalRelation`, preventing silent referential integrity violations when misused.
+
+---
+
 ## [1.9.1] - 2026-07-22
 
 ### Fixed

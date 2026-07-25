@@ -173,9 +173,22 @@ class RemoveRelation(StructuralOperator):
         self._relation_id = relation_id
 
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        if self._relation_id not in structure:
+        target = structure.get(self._relation_id)
+        if target is None:
             raise ValueError(
                 f"Relation '{self._relation_id}' does not exist."
+            )
+        if not isinstance(target, CanonicalRelation):
+            # Without this check, RemoveRelation would silently accept
+            # a plain KnowledgeObject id and remove the object itself
+            # *without* cascading to relations that reference it --
+            # unlike RemoveObject, which does cascade. That would leave
+            # a dangling reference behind and violate the
+            # "referential integrity is preserved" contract below.
+            raise ValueError(
+                f"'{self._relation_id}' is a KnowledgeObject, not a "
+                "CanonicalRelation; use RemoveObject instead (it will "
+                "also cascade-remove any relations that reference it)."
             )
         new_objects = [
             obj
@@ -187,9 +200,106 @@ class RemoveRelation(StructuralOperator):
     def contract(self) -> OperatorContract:
         return OperatorContract(
             description=f"Remove CanonicalRelation '{self._relation_id}'.",
-            preconditions=("The relation must exist.",),
+            preconditions=(
+                "The relation must exist.",
+                "The identity must refer to a CanonicalRelation, not a "
+                "plain KnowledgeObject.",
+            ),
             postconditions=("The relation is absent.",),
             invariant_obligations=("Referential integrity is preserved.",),
+        )
+
+
+# ---------------------------------------------------------------------------
+# Metabolism – In-Place Update
+# ---------------------------------------------------------------------------
+
+class UpdateObject(StructuralOperator):
+    """
+    Update an existing KnowledgeObject's ``structure`` fields in place.
+
+    Unlike ``RemoveObject`` followed by ``AddObject`` -- previously the
+    only way to change a KnowledgeObject's content -- this operator
+    never touches the object's identity or the relations that
+    reference it: since ``identity.id`` is unchanged, every
+    ``CanonicalRelation`` with this object as a participant remains
+    valid with no cascade, and no relation has to be reconstructed by
+    the caller.
+
+    Two update modes are supported:
+
+    - ``"merge"`` (default): ``structure_patch`` is shallow-merged into
+      the object's existing ``structure`` dict. A key mapped to
+      ``None`` in the patch removes that key from ``structure``; every
+      other key is set/overwritten. Keys not mentioned in the patch
+      are left untouched.
+    - ``"replace"``: the object's ``structure`` dict is replaced
+      wholesale with ``structure_patch``.
+    """
+
+    def __init__(
+        self,
+        object_id: str,
+        structure_patch: dict,
+        *,
+        mode: str = "merge",
+    ) -> None:
+        if mode not in ("merge", "replace"):
+            raise ValueError(
+                f"Unknown update mode '{mode}'; expected 'merge' or 'replace'."
+            )
+        self._object_id = object_id
+        self._structure_patch = structure_patch
+        self._mode = mode
+
+    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
+        target = structure.get(self._object_id)
+        if target is None:
+            raise ValueError(f"Object '{self._object_id}' does not exist.")
+        if isinstance(target, CanonicalRelation):
+            raise ValueError(
+                f"'{self._object_id}' is a CanonicalRelation; "
+                "UpdateObject only updates plain KnowledgeObjects."
+            )
+
+        if self._mode == "replace":
+            new_structure_dict = dict(self._structure_patch)
+        else:
+            new_structure_dict = dict(target.structure)
+            for key, value in self._structure_patch.items():
+                if value is None:
+                    new_structure_dict.pop(key, None)
+                else:
+                    new_structure_dict[key] = value
+
+        updated = KnowledgeObject(
+            identity=target.identity,
+            structure=new_structure_dict,
+        )
+        new_objects = [
+            updated if obj.identity.id == self._object_id else obj
+            for obj in structure.objects
+        ]
+        return KnowledgeStructure(new_objects)
+
+    def contract(self) -> OperatorContract:
+        return OperatorContract(
+            description=(
+                f"Update KnowledgeObject '{self._object_id}' "
+                f"(mode={self._mode})."
+            ),
+            preconditions=(
+                "The object must exist.",
+                "The object must not be a CanonicalRelation.",
+            ),
+            postconditions=(
+                "The object's identity is unchanged.",
+                "The object's structure reflects the patch.",
+            ),
+            invariant_obligations=(
+                "Referential integrity is preserved (no relation is "
+                "touched, since the object's id does not change).",
+            ),
         )
 
 
@@ -213,7 +323,8 @@ def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
     ----------
     ops_data
         A sequence of dicts, each with a ``"type"`` field of
-        ``"add_object" | "add_relation" | "remove_object" | "remove_relation"``
+        ``"add_object" | "add_relation" | "remove_object" |
+        "remove_relation" | "update_object"``
         and the fields required by that operation.
 
     Raises
@@ -270,6 +381,21 @@ def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
                 raise ValueError(f"Operation #{i}: missing 'relation_id' field")
             operators.append(RemoveRelation(relation_id))
 
+        elif op_type == "update_object":
+            object_id = op.get("object_id")
+            if object_id is None:
+                raise ValueError(f"Operation #{i}: missing 'object_id' field")
+            structure_patch = op.get("structure_patch")
+            if structure_patch is None:
+                raise ValueError(
+                    f"Operation #{i}: missing 'structure_patch' field"
+                )
+            mode = op.get("mode", "merge")
+            try:
+                operators.append(UpdateObject(object_id, structure_patch, mode=mode))
+            except ValueError as exc:
+                raise ValueError(f"Operation #{i}: {exc}") from exc
+
         else:
             raise ValueError(f"Operation #{i}: unknown operation type '{op_type}'")
 
@@ -295,12 +421,13 @@ def compose(
 # ---------------------------------------------------------------------------
 
 __all__ = [
-    "StructuralOperator",
-    "OperatorContract",
     "AddObject",
     "AddRelation",
+    "OperatorContract",
     "RemoveObject",
     "RemoveRelation",
+    "StructuralOperator",
+    "UpdateObject",
     "compose",
     "parse_operations",
 ]
