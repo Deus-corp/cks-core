@@ -99,6 +99,30 @@ def test_add_duplicate_relation_raises():
         op.apply(structure)
 
 
+def test_parse_operations_rejects_string_participants():
+    """
+    Regression test for the exact dict-based path evolve_knowledge
+    routes through: cks.evolution.parse_operations had no participants
+    validation of its own for 'add_relation' (unlike
+    CanonicalDeserializer in serialization.py), relying entirely on
+    CanonicalRelation's constructor. A caller-supplied
+    'participants': 'earth' used to be silently accepted and turned
+    into a corrupted five-participant relation
+    ('e', 'a', 'r', 't', 'h') instead of raising.
+    """
+    from cks.evolution import parse_operations
+
+    with pytest.raises(ValueError, match="not a bare str"):
+        parse_operations([
+            {
+                "type": "add_relation",
+                "identity": {"id": "rel-x", "type": "Relation", "name": "r"},
+                "participants": "earth",
+                "relation_type": "orbits",
+            }
+        ])
+
+
 # ---------------------------------------------------------------------------
 # RemoveObject
 # ---------------------------------------------------------------------------

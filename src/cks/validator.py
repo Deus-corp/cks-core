@@ -181,10 +181,18 @@ class ReferenceValidator:
 
         diagnostics = tuple(sorted(diagnostics_raw, key=Diagnostic.sort_key))
         collection = DiagnosticCollection(diagnostics=diagnostics)
+        # Every diagnostic is checked against the threshold, INFORMATION
+        # included. min_severity=ERROR/WARNING are unaffected either way
+        # (INFORMATION's priority, 0, is already below both thresholds),
+        # but excluding INFORMATION unconditionally -- as a previous
+        # version of this line did -- made the CLI's documented
+        # `--min-severity information` (the strictest, most-inclusive
+        # setting) silently behave identically to 'warning': an
+        # INFORMATION diagnostic could never invalidate a structure no
+        # matter what min_severity was passed.
         valid = all(
             d.severity.priority < min_severity.priority
             for d in diagnostics
-            if d.severity != DiagnosticSeverity.INFORMATION
         )
         return ValidationResult(
             is_valid=valid,

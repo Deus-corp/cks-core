@@ -10,7 +10,9 @@ from cks.core import (
 )
 from cks.serialization import parse, serialize, SerializationError
 from cks.validator import validate
-from cks.diagnostics import DiagnosticSeverity
+from cks.diagnostics import DiagnosticSeverity, Diagnostic
+from cks.constraints.base import Constraint
+from cks.validation import ValidationStage
 
 
 def make_object(oid: str, otype: str = "Definition", name: str = "") -> KnowledgeObject:
@@ -289,3 +291,91 @@ def test_structural_semantic_constraint_validate_accept_extra_constraints():
     # previously stopped constraint_validate() from double-counting
     # structural/semantic diagnostics).
     assert not any(d.identity == "CKS-EXT-EMBEDDING-PROJECTION" for d in constraint_diagnostics)
+
+
+# ---------------------------------------------------------------------------
+# min_severity — INFORMATION-severity diagnostics must count at the
+# strictest threshold
+# ---------------------------------------------------------------------------
+#
+# Regression tests: ReferenceValidator.validate() used to exclude every
+# INFORMATION-severity diagnostic from the is_valid check unconditionally,
+# regardless of min_severity:
+#
+#     valid = all(
+#         d.severity.priority < min_severity.priority
+#         for d in diagnostics
+#         if d.severity != DiagnosticSeverity.INFORMATION
+#     )
+#
+# The CLI documents --min-severity information as the strictest,
+# most-inclusive setting ("Minimum severity to consider a structure
+# invalid"), but with that filter in place it was indistinguishable from
+# 'warning': an INFORMATION diagnostic could never invalidate a structure
+# no matter what min_severity was requested. No built-in constraint
+# currently emits INFORMATION severity, which is exactly why this gap
+# was invisible to the existing test suite -- these tests use a minimal
+# synthetic constraint to exercise it directly.
+
+class _InfoOnlyConstraint(Constraint):
+    """A Constraint stub that always emits exactly one INFORMATION
+    diagnostic, to exercise the min_severity threshold in isolation."""
+
+    identity = "TEST-INFO-ONLY"
+    stage = ValidationStage.SEMANTIC
+    description = "Always emits one INFORMATION diagnostic."
+
+    def evaluate(self, structure):
+        return [
+            Diagnostic(
+                identity=self.identity,
+                severity=DiagnosticSeverity.INFORMATION,
+                message="just a note",
+                location=None,
+            )
+        ]
+
+
+def test_min_severity_information_invalidates_on_information_diagnostic():
+    structure = KnowledgeStructure([make_object("a")])
+
+    result = validate(
+        structure,
+        min_severity=DiagnosticSeverity.INFORMATION,
+        extra_constraints=[_InfoOnlyConstraint()],
+    )
+
+    assert result.is_valid is False
+
+
+def test_min_severity_warning_and_error_unaffected_by_information_diagnostic():
+    """The fix must not change behaviour at the two thresholds that
+    already worked correctly -- INFORMATION's priority (0) is below
+    both WARNING (1) and ERROR (2) either way."""
+    structure = KnowledgeStructure([make_object("a")])
+
+    for min_severity in (DiagnosticSeverity.WARNING, DiagnosticSeverity.ERROR):
+        result = validate(
+            structure,
+            min_severity=min_severity,
+            extra_constraints=[_InfoOnlyConstraint()],
+        )
+        assert result.is_valid is True
+
+
+def test_min_severity_does_not_filter_which_diagnostics_are_reported():
+    """min_severity only gates is_valid -- the INFORMATION diagnostic
+    itself must still show up in the report at every threshold."""
+    structure = KnowledgeStructure([make_object("a")])
+
+    for min_severity in (
+        DiagnosticSeverity.ERROR,
+        DiagnosticSeverity.WARNING,
+        DiagnosticSeverity.INFORMATION,
+    ):
+        result = validate(
+            structure,
+            min_severity=min_severity,
+            extra_constraints=[_InfoOnlyConstraint()],
+        )
+        assert any(d.identity == "TEST-INFO-ONLY" for d in result.diagnostics)

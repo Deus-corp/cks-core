@@ -118,6 +118,49 @@ def test_relation_properties():
     assert relation.relation_type == "depends_on"
 
 
+def test_relation_rejects_bare_string_participants():
+    """
+    Regression test: participants is Iterable[str], and a bare str is
+    technically iterable-of-characters -- so tuple(participants) used
+    to silently accept "earth" and split it into
+    ('e', 'a', 'r', 't', 'h') instead of raising. This is almost never
+    what a caller who forgot to wrap a single id in a list intended,
+    and it produced a relation with five bogus one-character
+    "participants" with no error anywhere. cks.evolution.parse_operations
+    (the path evolve_knowledge routes through) had no independent check
+    of its own and relied entirely on this constructor.
+    """
+    with pytest.raises(ValueError, match="not a bare str"):
+        make_relation("rel", "earth", "orbits")  # type: ignore[arg-type]
+
+
+def test_relation_rejects_bare_bytes_participants():
+    with pytest.raises(ValueError, match="not a bare bytes"):
+        make_relation("rel", b"earth", "orbits")  # type: ignore[arg-type]
+
+
+def test_relation_rejects_fewer_than_two_participants():
+    with pytest.raises(ValueError, match="at least two participants"):
+        make_relation("rel", ["only-one"], "orbits")
+
+
+def test_relation_rejects_non_string_participant():
+    with pytest.raises(ValueError, match="must all be strings"):
+        make_relation("rel", ["earth", 42], "orbits")  # type: ignore[list-item]
+
+
+def test_relation_accepts_non_list_iterable_of_strings():
+    """A generator (not a list) of at least two strings is still
+    accepted -- the fix targets bare str/bytes specifically, not every
+    non-list iterable."""
+    relation = CanonicalRelation(
+        identity=ObjectIdentity(id="rel", type="Relation", name="rel"),
+        participants=(p for p in ["earth", "sun"]),
+        relation_type="orbits",
+    )
+    assert relation.participants == ("earth", "sun")
+
+
 # =============================================================================
 # KnowledgeStructure
 # =============================================================================

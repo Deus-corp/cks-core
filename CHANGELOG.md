@@ -6,6 +6,15 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.11.1] - 2026-07-26
+
+### Fixed
+- `CanonicalRelation.__init__` now rejects bare strings/bytes as `participants`, preventing silent corruption when a caller forgets to wrap a single ID in a list.
+- `min_severity=INFORMATION` now correctly invalidates structures with INFORMATION-severity diagnostics, matching the CLI's documented behavior.
+- Added 6 regression tests: 4 for relation participant validation, 2 for `min_severity`.
+
+---
+
 ## [1.11.0] - 2026-07-25
 
 ### Added

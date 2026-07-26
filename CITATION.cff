@@ -19,7 +19,7 @@ url: "https://github.com/Deus-corp/cks-core"
 
 license: "MIT"
 
-version: "1.11.0"
+version: "1.11.1"
 
 date-released: "2026-07-14"
 
@@ -52,6 +52,6 @@ authors:
 - family-names: "Hruznov"
 given-names: "Vladyslav"
 title: "Canonical Knowledge Structure (CKS)"
-version: "1.11.0"
+version: "1.11.1"
 doi: "10.5281/zenodo.21332624"
 url: "https://github.com/Deus-corp/cks-core"

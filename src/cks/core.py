@@ -163,8 +163,34 @@ class CanonicalRelation(KnowledgeObject):
         relation_type: str,
         structure: Mapping[str, Any] | None = None,
     ) -> None:
-        struct = dict(structure or {})
+        # A bare str/bytes value is technically Iterable[str]-compatible
+        # (iterating one yields one-character strings), so tuple(...)
+        # below would otherwise silently succeed and split e.g. "earth"
+        # into ('e', 'a', 'r', 't', 'h') instead of raising -- almost
+        # certainly not what a caller who forgot to wrap a single id in
+        # a list intended. Checking here, in CanonicalRelation's own
+        # constructor, protects every caller (direct construction,
+        # cks.evolution.parse_operations, the CLI, or anywhere else),
+        # not just CanonicalDeserializer, which already guards against
+        # this independently in serialization.py.
+        if isinstance(participants, (str, bytes)):
+            raise ValueError(
+                "CanonicalRelation participants must be a list of object "
+                f"ids, not a bare {type(participants).__name__} "
+                f"({participants!r}). Did you mean to wrap it in a list?"
+            )
         frozen_participants = tuple(participants)
+        if len(frozen_participants) < 2:
+            raise ValueError(
+                "CanonicalRelation requires at least two participants, "
+                f"got {len(frozen_participants)}: {frozen_participants!r}."
+            )
+        if not all(isinstance(p, str) for p in frozen_participants):
+            raise ValueError(
+                "CanonicalRelation participants must all be strings, got "
+                f"{frozen_participants!r}."
+            )
+        struct = dict(structure or {})
         for key, expected in (
             ("participants", frozen_participants),
             ("relation_type", relation_type),
