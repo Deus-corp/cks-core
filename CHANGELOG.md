@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.11.2] - 2026-07-26
+
+### Fixed
+- `KnowledgeStructure.merge()` now correctly rejects `resolutions` for identities that both branches touched but converged to the same value, matching the documented contract.
+
+---
+
 ## [1.11.1] - 2026-07-26
 
 ### Fixed

@@ -599,6 +599,15 @@ class KnowledgeStructure:
 
         conflicts: list[MergeConflict] = []
         resolved: dict[str, "MergeResolution"] = {}
+        # Ids actually in conflict, i.e. touched by both branches AND
+        # ending up with different results -- narrower than
+        # `a_touched & b_touched`, which also contains ids both
+        # branches touched but converged on (same hash). Used below to
+        # validate `resolutions`: a resolution for a converged id is
+        # not "in conflict" even though it was touched by both
+        # branches, and must be rejected the same way a resolution for
+        # an untouched id would be.
+        actual_conflict_ids: set[str] = set()
         for oid in sorted(a_touched & b_touched):
             a_obj = branch_a._index.get(oid)
             b_obj = branch_b._index.get(oid)
@@ -606,6 +615,7 @@ class KnowledgeStructure:
             b_hash = b_obj._hash if b_obj is not None else None
             if a_hash == b_hash:
                 continue
+            actual_conflict_ids.add(oid)
             if oid in resolutions:
                 resolved[oid] = resolutions[oid]
             else:
@@ -618,7 +628,7 @@ class KnowledgeStructure:
                     )
                 )
 
-        unused = set(resolutions) - (a_touched & b_touched)
+        unused = set(resolutions) - actual_conflict_ids
         if unused:
             raise ValueError(
                 "resolutions given for identities that are not "
