@@ -174,7 +174,7 @@ class CanonicalRelation(KnowledgeObject):
         # not just CanonicalDeserializer, which already guards against
         # this independently in serialization.py.
         if isinstance(participants, (str, bytes)):
-            raise ValueError(
+            raise TypeError(
                 "CanonicalRelation participants must be a list of object "
                 f"ids, not a bare {type(participants).__name__} "
                 f"({participants!r}). Did you mean to wrap it in a list?"

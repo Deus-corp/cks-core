@@ -130,12 +130,12 @@ def test_relation_rejects_bare_string_participants():
     (the path evolve_knowledge routes through) had no independent check
     of its own and relied entirely on this constructor.
     """
-    with pytest.raises(ValueError, match="not a bare str"):
+    with pytest.raises(TypeError, match="not a bare str"):
         make_relation("rel", "earth", "orbits")  # type: ignore[arg-type]
 
 
 def test_relation_rejects_bare_bytes_participants():
-    with pytest.raises(ValueError, match="not a bare bytes"):
+    with pytest.raises(TypeError, match="not a bare bytes"):
         make_relation("rel", b"earth", "orbits")  # type: ignore[arg-type]
 
 

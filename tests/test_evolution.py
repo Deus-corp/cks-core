@@ -112,7 +112,7 @@ def test_parse_operations_rejects_string_participants():
     """
     from cks.evolution import parse_operations
 
-    with pytest.raises(ValueError, match="not a bare str"):
+    with pytest.raises(TypeError, match="not a bare str"):
         parse_operations([
             {
                 "type": "add_relation",
