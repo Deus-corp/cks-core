@@ -45,9 +45,35 @@ class OperatorContract:
 class StructuralOperator(ABC):
     """Abstract base class for all admissible structural evolutions."""
 
-    @abstractmethod
     def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
         """Apply the operator, returning a *new* KnowledgeStructure."""
+        objects = {obj.identity.id: obj for obj in structure.objects}
+        self._mutate(objects)
+        return KnowledgeStructure(objects.values())
+
+    @abstractmethod
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        """
+        Apply this operator's edit in place to a working ``{id: object}``
+        dict.
+
+        This is each operator's one true implementation: ``apply()``
+        above is a thin wrapper — build a dict from the structure,
+        mutate it, wrap the result back into a KnowledgeStructure.
+        ``compose()`` instead shares a single dict across a whole batch
+        of operators and only builds the final KnowledgeStructure once
+        at the end.
+
+        This matters because constructing a KnowledgeStructure is
+        O(n): it rebuilds the id index and rolls two sorted Merkle-
+        style hashes over every object. Calling ``apply()`` N times in
+        a row (the previous implementation of ``compose()``) paid that
+        O(n) cost on every single operator, making an N-operator batch
+        over an n-object structure cost O(n·N) even though most
+        operators only ever touch one or two objects. Routing through
+        this shared dict makes ``compose()`` itself O(n) overall,
+        independent of N.
+        """
         ...
 
     @abstractmethod
@@ -70,12 +96,10 @@ class AddObject(StructuralOperator):
     def __init__(self, obj: KnowledgeObject) -> None:
         self._obj = obj
 
-    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        if self._obj.identity.id in structure:
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        if self._obj.identity.id in objects:
             raise ValueError(f"Object '{self._obj.identity.id}' already exists.")
-        new_objects = list(structure.objects)
-        new_objects.append(self._obj)
-        return KnowledgeStructure(new_objects)
+        objects[self._obj.identity.id] = self._obj
 
     def contract(self) -> OperatorContract:
         return OperatorContract(
@@ -99,16 +123,14 @@ class AddRelation(StructuralOperator):
     def __init__(self, relation: CanonicalRelation) -> None:
         self._relation = relation
 
-    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        if self._relation.identity.id in structure:
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        if self._relation.identity.id in objects:
             raise ValueError(f"Relation '{self._relation.identity.id}' already exists.")
         # Ensure every participant exists
         for pid in self._relation.participants:
-            if pid not in structure:
+            if pid not in objects:
                 raise ValueError(f"Participant '{pid}' does not exist.")
-        new_objects = list(structure.objects)
-        new_objects.append(self._relation)
-        return KnowledgeStructure(new_objects)
+        objects[self._relation.identity.id] = self._relation
 
     def contract(self) -> OperatorContract:
         return OperatorContract(
@@ -133,23 +155,18 @@ class RemoveObject(StructuralOperator):
     def __init__(self, object_id: str) -> None:
         self._object_id = object_id
 
-    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        if self._object_id not in structure:
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        if self._object_id not in objects:
             raise ValueError(f"Object '{self._object_id}' does not exist.")
-        # Remove the object itself
-        new_objects = [
-            obj for obj in structure.objects if obj.identity.id != self._object_id
-        ]
-        # Remove any relation that referenced the object
-        new_objects = [
-            obj
-            for obj in new_objects
-            if not (
-                isinstance(obj, CanonicalRelation)
-                and self._object_id in obj.participants
-            )
-        ]
-        return KnowledgeStructure(new_objects)
+        del objects[self._object_id]
+        # Cascade: remove any relation that referenced the object.
+        for oid in [
+            oid
+            for oid, obj in objects.items()
+            if isinstance(obj, CanonicalRelation)
+            and self._object_id in obj.participants
+        ]:
+            del objects[oid]
 
     def contract(self) -> OperatorContract:
         return OperatorContract(
@@ -169,8 +186,8 @@ class RemoveRelation(StructuralOperator):
     def __init__(self, relation_id: str) -> None:
         self._relation_id = relation_id
 
-    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        target = structure.get(self._relation_id)
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        target = objects.get(self._relation_id)
         if target is None:
             raise ValueError(f"Relation '{self._relation_id}' does not exist.")
         if not isinstance(target, CanonicalRelation):
@@ -185,10 +202,7 @@ class RemoveRelation(StructuralOperator):
                 "CanonicalRelation; use RemoveObject instead (it will "
                 "also cascade-remove any relations that reference it)."
             )
-        new_objects = [
-            obj for obj in structure.objects if obj.identity.id != self._relation_id
-        ]
-        return KnowledgeStructure(new_objects)
+        del objects[self._relation_id]
 
     def contract(self) -> OperatorContract:
         return OperatorContract(
@@ -246,8 +260,8 @@ class UpdateObject(StructuralOperator):
         self._structure_patch = structure_patch
         self._mode = mode
 
-    def apply(self, structure: KnowledgeStructure) -> KnowledgeStructure:
-        target = structure.get(self._object_id)
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        target = objects.get(self._object_id)
         if target is None:
             raise ValueError(f"Object '{self._object_id}' does not exist.")
         if isinstance(target, CanonicalRelation):
@@ -266,15 +280,10 @@ class UpdateObject(StructuralOperator):
                 else:
                     new_structure_dict[key] = value
 
-        updated = KnowledgeObject(
+        objects[self._object_id] = KnowledgeObject(
             identity=target.identity,
             structure=new_structure_dict,
         )
-        new_objects = [
-            updated if obj.identity.id == self._object_id else obj
-            for obj in structure.objects
-        ]
-        return KnowledgeStructure(new_objects)
 
     def contract(self) -> OperatorContract:
         return OperatorContract(
@@ -403,10 +412,20 @@ def compose(
     structure: KnowledgeStructure,
     operators: Iterable[StructuralOperator],
 ) -> KnowledgeStructure:
-    """Apply a sequence of operators in order, returning the final structure."""
+    """
+    Apply a sequence of operators in order, returning the final structure.
+
+    Every operator is applied to one shared ``{id: object}`` dict via
+    its ``_mutate()`` method, and the (O(n)) KnowledgeStructure — id
+    index plus two sorted Merkle-style hashes — is built exactly once,
+    after the last operator, rather than once per operator. See
+    ``StructuralOperator._mutate`` for why that matters for batches of
+    more than a couple of operators.
+    """
+    objects = {obj.identity.id: obj for obj in structure.objects}
     for op in operators:
-        structure = op.apply(structure)
-    return structure
+        op._mutate(objects)
+    return KnowledgeStructure(objects.values())
 
 
 # ---------------------------------------------------------------------------

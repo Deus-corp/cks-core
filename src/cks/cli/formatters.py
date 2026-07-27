@@ -91,7 +91,7 @@ def format_html(result: ValidationResult) -> str:
 def format_markdown(result: ValidationResult) -> str:
     """Return a Markdown report."""
     lines = [
-        "## {'✅ Valid' if result.is_valid else '❌ Invalid'}",
+        f"## {'✅ Valid' if result.is_valid else '❌ Invalid'}",
         "",
         "| Severity | Identity | Message | Location |",
         "|----------|----------|---------|----------|",

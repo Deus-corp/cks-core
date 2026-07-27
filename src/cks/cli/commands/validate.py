@@ -4,6 +4,8 @@ CLI command: validate.
 
 from __future__ import annotations
 
+import html as html_lib
+import json
 import sys
 from pathlib import Path
 from typing import Optional
@@ -67,16 +69,89 @@ def handle(args):
         sys.exit(0 if result.is_valid else 1)
     else:
         results = validate_all(structures, min_severity=min_severity)
-        total = len(results)
         valid_count = sum(1 for r in results if r.is_valid)
-        print(f"Files validated: {total}")
-        print(f"Valid: {valid_count}")
-        print(f"Invalid: {total - valid_count}")
-        print()
-        for path, result in zip(args.input, results):
-            status = "✅ Valid" if result.is_valid else "❌ Invalid"
-            print(f"{path}: {status}")
-        sys.exit(0 if valid_count == total else 1)
+        output = _format_multi(args.format, args.input, results)
+        _write_output(output, args.output)
+        sys.exit(0 if valid_count == len(results) else 1)
+
+
+def _format_multi(fmt: str, paths: list[Path], results: list) -> str:
+    """Render a multi-file validation report in the requested --format.
+
+    Mirrors the single-file formatters in ``formatters.py`` but adds a
+    per-file breakdown plus an overall summary, so --format and
+    --output are honoured for multi-file runs the same way they are
+    for a single file.
+    """
+    total = len(results)
+    valid_count = sum(1 for r in results if r.is_valid)
+
+    if fmt == "json":
+        data = {
+            "total": total,
+            "valid": valid_count,
+            "invalid": total - valid_count,
+            "files": [
+                {
+                    "path": str(path),
+                    "valid": result.is_valid,
+                    "error_count": result.error_count,
+                    "warning_count": result.warning_count,
+                    "information_count": result.information_count,
+                    "constraints_evaluated": list(result.evaluated_constraints),
+                    "diagnostics": [
+                        {
+                            "identity": d.identity,
+                            "severity": d.severity.value,
+                            "message": d.message,
+                            "location": d.location,
+                        }
+                        for d in result.diagnostics
+                    ],
+                }
+                for path, result in zip(paths, results)
+            ],
+        }
+        return json.dumps(data, indent=2, ensure_ascii=False)
+
+    if fmt == "html":
+        sections = "".join(
+            f"<h2>{html_lib.escape(str(path))}</h2>\n{format_html(result)}"
+            for path, result in zip(paths, results)
+        )
+        return (
+            "<!DOCTYPE html>\n<html>\n"
+            "<head><meta charset='utf-8'><title>CKS Validation Report</title></head>\n"
+            "<body>\n"
+            f"<h1>Files validated: {total} — Valid: {valid_count} — "
+            f"Invalid: {total - valid_count}</h1>\n"
+            f"{sections}\n"
+            "</body>\n</html>"
+        )
+
+    if fmt == "markdown":
+        sections = "\n\n".join(
+            f"## {path}\n\n{format_markdown(result)}"
+            for path, result in zip(paths, results)
+        )
+        header = (
+            f"# Validation Report\n\n"
+            f"Files validated: {total}  Valid: {valid_count}  "
+            f"Invalid: {total - valid_count}\n\n"
+        )
+        return header + sections
+
+    # "text" (default)
+    lines = [
+        f"Files validated: {total}",
+        f"Valid: {valid_count}",
+        f"Invalid: {total - valid_count}",
+        "",
+    ]
+    for path, result in zip(paths, results):
+        status = "✅ Valid" if result.is_valid else "❌ Invalid"
+        lines.append(f"{path}: {status}")
+    return "\n".join(lines)
 
 
 def _write_output(content: str, path: Optional[Path]) -> None:

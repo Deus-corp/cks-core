@@ -12,35 +12,21 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from types import MappingProxyType
 from typing import Any, Mapping, Optional
+
+from .core import _freeze_mapping
 
 
 # ============================================================================
 # Internal Helpers
 # ============================================================================
-
-
-def _freeze_mapping(
-    mapping: Mapping[str, Any],
-) -> Mapping[str, Any]:
-    """
-    Return an immutable shallow copy of a mapping.
-
-    Lists are converted to tuples.
-
-    The returned mapping cannot be modified.
-    """
-
-    frozen: dict[str, Any] = {}
-
-    for key, value in mapping.items():
-        if isinstance(value, list):
-            value = tuple(value)
-
-        frozen[key] = value
-
-    return MappingProxyType(frozen)
+#
+# _freeze_mapping used to be reimplemented here as a shallow freeze
+# (only top-level lists converted to tuples), which left nested dicts
+# inside metadata mutable despite Diagnostic's claimed immutability.
+# core.py already has a fully recursive version used to freeze
+# KnowledgeObject/CanonicalRelation structure; reuse that single
+# implementation here instead of maintaining a second, divergent one.
 
 
 # ============================================================================

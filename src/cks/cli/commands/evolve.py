@@ -13,9 +13,7 @@ from ...serialization import (
     serialize as cks_serialize,
     SerializationError,
 )
-from ...evolution import compose, AddObject, AddRelation, RemoveObject, RemoveRelation
-from ...core import KnowledgeObject, CanonicalRelation, ObjectIdentity
-from ...evolution import StructuralOperator
+from ...evolution import compose, parse_operations
 
 
 def add_parser(subparsers):
@@ -41,7 +39,7 @@ def handle(args):
 
     try:
         ops_data = json.loads(args.operations.read_text(encoding="utf-8"))
-        operators = _parse_operations(ops_data)
+        operators = parse_operations(ops_data)
     except json.JSONDecodeError as exc:
         print(f"Invalid JSON in operations file: {exc}", file=sys.stderr)
         sys.exit(1)
@@ -56,49 +54,3 @@ def handle(args):
         print(result)
     else:
         args.output.write_text(result, encoding="utf-8")
-
-
-def _parse_operations(ops_data: list[dict]) -> list:
-    operators: list[StructuralOperator] = []
-    for i, op in enumerate(ops_data):
-        op_type = op.get("type")
-        if op_type is None:
-            raise ValueError(f"Operation #{i}: missing 'type' field")
-        if op_type == "add_object":
-            identity_data = op.get("identity")
-            if identity_data is None:
-                raise ValueError(f"Operation #{i}: missing 'identity' field")
-            identity = ObjectIdentity(**identity_data)
-            obj = KnowledgeObject(identity=identity, structure=op.get("structure", {}))
-            operators.append(AddObject(obj))
-        elif op_type == "add_relation":
-            identity_data = op.get("identity")
-            if identity_data is None:
-                raise ValueError(f"Operation #{i}: missing 'identity' field")
-            identity = ObjectIdentity(**identity_data)
-            participants = op.get("participants")
-            if participants is None:
-                raise ValueError(f"Operation #{i}: missing 'participants' field")
-            relation_type = op.get("relation_type")
-            if relation_type is None:
-                raise ValueError(f"Operation #{i}: missing 'relation_type' field")
-            relation = CanonicalRelation(
-                identity=identity,
-                participants=participants,
-                relation_type=relation_type,
-                structure=op.get("structure", {}),
-            )
-            operators.append(AddRelation(relation))
-        elif op_type == "remove_object":
-            object_id = op.get("object_id")
-            if object_id is None:
-                raise ValueError(f"Operation #{i}: missing 'object_id' field")
-            operators.append(RemoveObject(object_id))
-        elif op_type == "remove_relation":
-            relation_id = op.get("relation_id")
-            if relation_id is None:
-                raise ValueError(f"Operation #{i}: missing 'relation_id' field")
-            operators.append(RemoveRelation(relation_id))
-        else:
-            raise ValueError(f"Operation #{i}: unknown operation type '{op_type}'")
-    return operators

@@ -6,6 +6,21 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.11.4] - 2026-07-27
+
+### Added
+- `UpdateObject` now exported from the top-level `cks` package (`from cks import UpdateObject` works).
+
+### Fixed
+- CLI `evolve` command now supports `update_object` operations via the canonical `parse_operations`, fixing a regression where the CLI's duplicated parser silently ignored `update_object`.
+- `DerivationCycleConstraint` rewritten iteratively to avoid `RecursionError` on long derivation chains (>1000 edges).
+- CLI `validate` with multiple files now respects `--format` and `--output` instead of always printing a plain-text summary.
+- `format_markdown` formatter now correctly interpolates the valid/invalid status (missing f‑string prefix).
+- `Diagnostic.metadata` now fully recursive‑frozen (via `core._freeze_mapping`), closing a gap where nested dicts remained mutable.
+- `compose()` now applies a list of operators in a single pass over a shared object dict, avoiding O(n·N) rebuilds of `KnowledgeStructure` — typical batch evolves are ~320× faster.
+
+---
+
 ## [1.11.3] - 2026-07-27
 
 ### Fixed
