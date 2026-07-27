@@ -77,6 +77,7 @@ nav:
           - CKS-006: cks-core/specifications/CKS-006_Reference_Engine_Specification.md
           - CKS-007: cks-core/specifications/CKS-007_Canonical_Knowledge_Interface.md
           - CKS-008: cks-core/specifications/CKS-008_Reference_Conformance_Specification.md
+          - CKS-009: cks-core/specifications/CKS-009_Reference_Knowledge_Corpus.md
           - CKS-B001-PY: cks-core/specifications/CKS-B001-PY_Python_Reference.md
 
   - cks-runtime:

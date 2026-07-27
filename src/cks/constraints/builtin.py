@@ -15,6 +15,7 @@ from .structural import UniqueIdentityConstraint, NoDanglingRelationConstraint
 from .semantic import DerivationArityConstraint, DerivationCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
 from .verification import VerificationRecordIntegrityConstraint
+from .ontology import TypeHierarchyCycleConstraint, RelationTypeConstraint
 
 
 # =============================================================================
@@ -57,6 +58,9 @@ OPTIONAL_CONSTRAINTS = (
     # --- Projection Domain (CKS-001 "Documents as Structural Projections") ---
     EmbeddingProjectionIntegrityConstraint(),
     VerificationRecordIntegrityConstraint(),
+    # --- Ontology Domain (declared type hierarchy + relation typing) ---
+    TypeHierarchyCycleConstraint(),
+    RelationTypeConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -66,4 +70,6 @@ OPTIONAL_CONSTRAINTS = (
 OPTIONAL_CONSTRAINTS_BY_NAME = {
     "embedding_projection": EmbeddingProjectionIntegrityConstraint(),
     "verification_record": VerificationRecordIntegrityConstraint(),
+    "type_hierarchy": TypeHierarchyCycleConstraint(),
+    "relation_type": RelationTypeConstraint(),
 }

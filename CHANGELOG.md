@@ -6,6 +6,16 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.12.0] - 2026-07-27
+
+### Added
+- **Ontology/type-hierarchy layer:** new optional constraints `type_hierarchy` and `relation_type` that validate objects against a declared `TypeDefinition` hierarchy (`is_a`) and restrict relations to allowed domain/range types.
+- New `TypeHierarchy`, `TypeHierarchyCycleConstraint`, and `RelationTypeConstraint` in `cks.constraints.ontology`.
+- **CKS-009 specification:** formal document describing the Reference Knowledge Corpus (`examples/corpus/`).
+- 20 new tests for the ontology constraint suite.
+
+---
+
 ## [1.11.4] - 2026-07-27
 
 ### Added
