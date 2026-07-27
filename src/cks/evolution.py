@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Iterable, Tuple
+from typing import Any, Iterable, Tuple
 
 from .core import (
     CanonicalRelation,
@@ -234,7 +234,7 @@ class UpdateObject(StructuralOperator):
     def __init__(
         self,
         object_id: str,
-        structure_patch: dict,
+        structure_patch: dict[str, Any],
         *,
         mode: str = "merge",
     ) -> None:
@@ -308,7 +308,7 @@ class UpdateObject(StructuralOperator):
 # same admissible operation set and the same error messages.
 
 
-def parse_operations(ops_data: Iterable[dict]) -> list[StructuralOperator]:
+def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOperator]:
     """
     Parse a JSON-compatible list of operation descriptors into
     StructuralOperators.

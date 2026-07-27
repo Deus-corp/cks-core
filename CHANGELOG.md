@@ -6,7 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
-## [1.11.2] - 2026-07-26
+## [1.11.3] - 2026-07-27
+
+### Fixed
+- `mypy.ini`'s `exclude` pattern had an indentation error that broke config parsing entirely — mypy silently fell back to scanning all 36 source files (including `cli/`, `adapters/`, and other modules meant to be excluded from strict checking) instead of the intended 16, and `ignore_missing_imports` wasn't being honored either, surfacing a spurious "stubs not installed" warning for `jsonschema`. Fixed the indentation so the config parses and applies as intended.
+- `KnowledgeStructure.diff()` constructed `AddRelation` from a statically-typed `KnowledgeObject` where a `CanonicalRelation` was required; the invariant held at runtime (ids are pre-filtered to relations), but wasn't visible to the type checker. Added an explicit `isinstance` assertion so a future refactor of that filtering can't silently break the invariant, and so it type-checks under strict mode.
+- Added missing generic type arguments (`tuple[...]`, `set[str]`, `dict[str, Any]`) in `core.py` and `evolution.py`, needed for `mypy --strict` to pass on the `cks.core`/`cks.constraints` modules per `mypy.ini`.
+
+### Added
+- `mypy` now runs in CI (`typecheck` job), per the ROADMAP item for this version line. `types-jsonschema` added to the `dev` extra so local runs get real stubs instead of relying solely on `ignore_missing_imports`.
+
+---
 
 ### Fixed
 - `KnowledgeStructure.merge()` now correctly rejects `resolutions` for identities that both branches touched but converged to the same value, matching the documented contract.

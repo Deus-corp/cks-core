@@ -294,7 +294,7 @@ class KnowledgeStructure:
         """Hex digest of the Merkle root, for external comparison/logging."""
         return self._root_hash.hex()
 
-    def _canonical_signature(self) -> tuple:
+    def _canonical_signature(self) -> tuple[tuple[str, str, str, Any], ...]:
         signature = []
         for obj in self._objects:
             structure = _normalize_structure(obj.structure)
@@ -441,7 +441,15 @@ class KnowledgeStructure:
         for oid in direct_add_objects:
             operators.append(AddObject(target._index[oid]))
         for rid in all_add_relations:
-            operators.append(AddRelation(target._index[rid]))
+            target_relation = target._index[rid]
+            # all_add_relations is built from is_relation(target, oid) checks
+            # above, so this always holds today -- asserted explicitly so a
+            # future refactor of that filtering can't silently construct
+            # AddRelation from a plain KnowledgeObject.
+            assert isinstance(target_relation, CanonicalRelation), (
+                f"'{rid}' was classified as a relation but is not a CanonicalRelation"
+            )
+            operators.append(AddRelation(target_relation))
 
         return operators
 
@@ -584,7 +592,7 @@ class KnowledgeStructure:
                     f"CanonicalRelation instance; got {value!r}."
                 )
 
-        def touched_ids(ids: set, index: Mapping[str, KnowledgeObject]) -> set:
+        def touched_ids(ids: set[str], index: Mapping[str, KnowledgeObject]) -> set[str]:
             added = ids - base_ids
             removed = base_ids - ids
             modified = {
