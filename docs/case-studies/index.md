@@ -7,3 +7,4 @@ tracks provenance, and gives LLMs a verifiable knowledge backbone.
 |------------|---------------|
 | [Catching Fake Citations](catching-fake-citations.md) | How CKS mechanically detects a fabricated source that an LLM would otherwise accept |
 | [Semantic Search and Partial Merge](semantic-search-and-partial-merge.md) | How CKS resolves merge conflicts automatically using semantic embeddings, in-place updates, and partial three-way merges |
+| [Ontology Validation and Graph Visualization](ontology-validation-and-visualization.md) | How CKS catches type errors with ontology constraints and debugs them with Mermaid visualization |
