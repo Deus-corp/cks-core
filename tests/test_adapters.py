@@ -1,8 +1,9 @@
 """Tests for CKS adapters."""
-import json
+
 from cks.adapters.jsonld_to_cks import JsonLdToCksConverter
 from cks.validator import validate
 
+from cks.adapters.rdf_to_cks import RdfToCksConverter
 from cks.adapters.cks_to_jsonld import CksToJsonLdConverter
 from cks.adapters.cks_to_rdf import CksToRdfConverter
 from cks.serialization import parse
@@ -22,32 +23,8 @@ def test_jsonld_conversion():
     }
     converter = JsonLdToCksConverter(jsonld)
     structure = converter.convert()
-    assert len(structure.objects) >= 4  # entities + relations
+    assert len(structure.objects) == 3  # 2 entities + 1 relation
 
-    result = validate(structure)
-    assert result.is_valid
-
-"""Tests for CKS adapters."""
-import json
-from cks.adapters.jsonld_to_cks import JsonLdToCksConverter
-from cks.adapters.rdf_to_cks import RdfToCksConverter
-from cks.validator import validate
-
-
-def test_jsonld_conversion():
-    jsonld = {
-        "@graph": [
-            {"@id": "urn:person:1", "@type": "Person", "name": "Alice"},
-            {"@id": "urn:person:2", "@type": "Person", "name": "Bob"},
-            {
-                "@id": "urn:person:1",
-                "knows": [{"@id": "urn:person:2"}],
-            },
-        ]
-    }
-    converter = JsonLdToCksConverter(jsonld)
-    structure = converter.convert()
-    assert len(structure.objects) == 3  # entities + types + relations
     result = validate(structure)
     assert result.is_valid
 

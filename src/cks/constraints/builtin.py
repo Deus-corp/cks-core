@@ -16,6 +16,7 @@ from .semantic import DerivationArityConstraint, DerivationCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
 from .verification import VerificationRecordIntegrityConstraint
 from .ontology import TypeHierarchyCycleConstraint, RelationTypeConstraint
+from .contradiction import MutualExclusionConstraint, FunctionalRelationConstraint
 
 
 # =============================================================================
@@ -61,6 +62,9 @@ OPTIONAL_CONSTRAINTS = (
     # --- Ontology Domain (declared type hierarchy + relation typing) ---
     TypeHierarchyCycleConstraint(),
     RelationTypeConstraint(),
+    # --- Contradiction Domain (declared mutual exclusion / functional relations) ---
+    MutualExclusionConstraint(),
+    FunctionalRelationConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -72,4 +76,6 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "verification_record": VerificationRecordIntegrityConstraint(),
     "type_hierarchy": TypeHierarchyCycleConstraint(),
     "relation_type": RelationTypeConstraint(),
+    "mutual_exclusion": MutualExclusionConstraint(),
+    "functional_relation": FunctionalRelationConstraint(),
 }

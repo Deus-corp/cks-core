@@ -1,6 +1,5 @@
 """Contract tests for the plugin system."""
 import logging
-import sys
 from importlib.metadata import EntryPoint
 
 import pytest
@@ -8,9 +7,7 @@ import pytest
 from cks.constraints.base import Constraint
 from cks.constraints.registry import ConstraintRegistry
 from cks.plugin import (
-    discover_entry_points,
     load_constraints_from_entry_point,
-    load_external_constraints,
 )
 
 

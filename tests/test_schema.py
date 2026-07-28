@@ -1,6 +1,5 @@
 """Tests for cks.schema JSON Schema validation."""
 
-import json
 import pytest
 from cks.schema import validate_json, SchemaValidationError
 

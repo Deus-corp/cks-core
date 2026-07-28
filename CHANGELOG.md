@@ -6,6 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.13.0] - 2026-07-28
+
+### Added
+- **Contradiction-detection layer:** two new optional constraints, `mutual_exclusion` and `functional_relation`, that validate a graph against declared contradiction rules the same way `type_hierarchy`/`relation_type` validate against a declared type ontology.
+  - `MutualExclusionRule` objects declare two relation_types that must never both connect the same ordered (source, target) pair (e.g. `supports` and `contradicts`).
+  - `FunctionalRelationRule` objects declare a relation_type as single-valued per source (e.g. a planet may only `orbit` one star).
+- New `MutualExclusionConstraint` and `FunctionalRelationConstraint` in `cks.constraints.contradiction`.
+- 17 new tests for the contradiction constraint suite.
+
+---
+
 ## [1.12.1] - 2026-07-28
 
 ### Fixed

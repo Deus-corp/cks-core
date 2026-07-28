@@ -3,7 +3,6 @@ Tests for the optional ontology constraints (type hierarchy and
 relation type checking).
 """
 
-import pytest
 from cks.core import KnowledgeObject, KnowledgeStructure, ObjectIdentity
 from cks.constraints.ontology import (
     TypeHierarchy,
@@ -12,7 +11,6 @@ from cks.constraints.ontology import (
     TYPE_DEFINITION_TYPE,
     TYPE_RULE_TYPE,
 )
-from cks.constraints.base import Constraint
 
 
 def make_object(oid: str, otype: str, name: str = "", structure: dict | None = None) -> KnowledgeObject:

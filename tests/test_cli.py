@@ -7,10 +7,8 @@ observable behaviour using the reference corpus under `examples/corpus`.
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
-import pytest
 
 # ---------------------------------------------------------------------------
 # Paths

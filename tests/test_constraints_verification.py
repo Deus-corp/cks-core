@@ -10,7 +10,6 @@ from cks.core import (
 )
 from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS_BY_NAME
 from cks.constraints.verification import (
-    VerificationRecordIntegrityConstraint,
     VERIFICATION_RECORD_TYPE,
     VERIFIED_BY_RELATION,
 )
