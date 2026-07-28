@@ -57,6 +57,7 @@ nav:
       - Catching Fake Citations: case-studies/catching-fake-citations.md
       - Semantic Search and Partial Merge: case-studies/semantic-search-and-partial-merge.md
       - Ontology Validation and Visualization: case-studies/ontology-validation-and-visualization.md
+      - Contradiction Detection and Sandbox: case-studies/contradiction-detection-and-sandbox.md
 
   - cks-core:
       - Overview: cks-core/index.md
