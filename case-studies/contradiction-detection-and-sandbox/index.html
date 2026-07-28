@@ -11,28 +11,28 @@
       
       
       
-        <link rel="prev" href="../CKS-007_Canonical_Knowledge_Interface/">
+        <link rel="prev" href="../ontology-validation-and-visualization/">
       
       
-        <link rel="next" href="../CKS-009_Reference_Knowledge_Corpus/">
+        <link rel="next" href="../../cks-core/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>CKS-008 - CKS Documentation</title>
+        <title>Contradiction Detection and Sandbox - CKS Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#introduction" class="md-skip">
+        <a href="#case-study-contradiction-detection-and-hypothesis-sandboxing" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="CKS Documentation" class="md-header__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
+    <a href="../.." title="CKS Documentation" class="md-header__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CKS-008
+              Contradiction Detection and Sandbox
             
           </span>
         </div>
@@ -230,7 +230,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -249,7 +249,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../quickstart/" class="md-tabs__link">
+      <a href="../../quickstart/" class="md-tabs__link">
         
   
   
@@ -266,11 +266,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../case-studies/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -286,13 +288,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../cks-core/" class="md-tabs__link">
           
   
   
@@ -312,7 +312,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../cks-runtime/" class="md-tabs__link">
+        <a href="../../cks-runtime/" class="md-tabs__link">
           
   
   
@@ -332,7 +332,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../cks-mcp/" class="md-tabs__link">
+        <a href="../../cks-mcp/" class="md-tabs__link">
           
   
   
@@ -366,7 +366,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CKS Documentation" class="md-nav__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
+    <a href="../.." title="CKS Documentation" class="md-nav__button md-logo" aria-label="CKS Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -396,7 +396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -423,7 +423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   
@@ -447,28 +447,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -486,497 +489,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
     Case Studies
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../case-studies/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../case-studies/catching-fake-citations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Catching Fake Citations
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../case-studies/semantic-search-and-partial-merge/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Semantic Search and Partial Merge
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../case-studies/ontology-validation-and-visualization/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Ontology Validation and Visualization
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../case-studies/contradiction-detection-and-sandbox/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Contradiction Detection and Sandbox
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cks-core
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    cks-core
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Getting Started
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../concepts/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Concepts
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../architecture/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../plugins/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Plugin Development
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Examples
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../contracts/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Contracts
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Specifications
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Specifications
   
 
           </label>
@@ -1017,14 +535,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../CKS-000_Canonical_Foundations_and_Terminology/" class="md-nav__link">
+      <a href="../catching-fake-citations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    CKS-000
+    Catching Fake Citations
   
 
     
@@ -1045,14 +563,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../CKS-001_Core_Specification/" class="md-nav__link">
+      <a href="../semantic-search-and-partial-merge/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    CKS-001
+    Semantic Search and Partial Merge
   
 
     
@@ -1073,154 +591,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../CKS-002_Canonical_Construction_Specification/" class="md-nav__link">
+      <a href="../ontology-validation-and-visualization/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    CKS-002
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CKS-003_Canonical_Serialization/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CKS-003
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CKS-004_Canonical_Structure_Evolution/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CKS-004
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CKS-005_Validator_Specification/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CKS-005
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CKS-006_Reference_Engine_Specification/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CKS-006
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CKS-007_Canonical_Knowledge_Interface/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CKS-007
+    Ontology Validation and Visualization
   
 
     
@@ -1257,7 +635,7 @@
   <span class="md-ellipsis">
     
   
-    CKS-008
+    Contradiction Detection and Sandbox
   
 
     
@@ -1275,7 +653,7 @@
   <span class="md-ellipsis">
     
   
-    CKS-008
+    Contradiction Detection and Sandbox
   
 
     
@@ -1301,10 +679,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
+  <a href="#scenario" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Purpose
+        Scenario
       
     </span>
   </a>
@@ -1312,10 +690,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scope" class="md-nav__link">
+  <a href="#tools-used" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Scope
+        Tools Used
       
     </span>
   </a>
@@ -1323,10 +701,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#position-within-cks" class="md-nav__link">
+  <a href="#what-happened" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Position within CKS
+        What Happened
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Happened">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-contradiction-detection-mutual-exclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Contradiction detection — mutual exclusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-contradiction-detection-functional-relation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Contradiction detection — functional relation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-sandbox-fix-with-fork_sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sandbox fix with fork_sandbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-preview-mode-with-suggest_evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Preview mode with suggest_evolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-error-handling-in-the-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Error handling in the sandbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-ontology-validation-still-works-alongside-contradictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ontology validation still works alongside contradictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
       
     </span>
   </a>
@@ -1334,10 +795,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conformance-principle" class="md-nav__link">
+  <a href="#reproduce-it-yourself" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Conformance Principle
+        Reproduce It Yourself
       
     </span>
   </a>
@@ -1353,6 +814,67 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cks-core
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cks-core
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1360,7 +882,565 @@
   
   
     <li class="md-nav__item">
-      <a href="../CKS-009_Reference_Knowledge_Corpus/" class="md-nav__link">
+      <a href="../../cks-core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specifications
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specifications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-000_Canonical_Foundations_and_Terminology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-000
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-001_Core_Specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-001
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-002_Canonical_Construction_Specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-003_Canonical_Serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-004_Canonical_Structure_Evolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-004
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-005_Validator_Specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-005
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-006_Reference_Engine_Specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-006
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-007_Canonical_Knowledge_Interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-007
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-008_Reference_Conformance_Specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CKS-008
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-core/specifications/CKS-009_Reference_Knowledge_Corpus/" class="md-nav__link">
         
   
   
@@ -1388,7 +1468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../CKS-B001-PY_Python_Reference/" class="md-nav__link">
+      <a href="../../cks-core/specifications/CKS-B001-PY_Python_Reference/" class="md-nav__link">
         
   
   
@@ -1485,7 +1565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/" class="md-nav__link">
+      <a href="../../cks-runtime/" class="md-nav__link">
         
   
   
@@ -1513,7 +1593,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/charter/CHARTER/" class="md-nav__link">
+      <a href="../../cks-runtime/charter/CHARTER/" class="md-nav__link">
         
   
   
@@ -1541,7 +1621,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/architecture/ARCH-001_Runtime_Architecture/" class="md-nav__link">
+      <a href="../../cks-runtime/architecture/ARCH-001_Runtime_Architecture/" class="md-nav__link">
         
   
   
@@ -1623,7 +1703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/analysis/ANALYSIS-001_Runtime_Dependencies_on_CKS_Core/" class="md-nav__link">
+      <a href="../../cks-runtime/analysis/ANALYSIS-001_Runtime_Dependencies_on_CKS_Core/" class="md-nav__link">
         
   
   
@@ -1713,7 +1793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-001%20Runtime%20Layering/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-001%20Runtime%20Layering/" class="md-nav__link">
         
   
   
@@ -1741,7 +1821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-002%20Session%20Ownership/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-002%20Session%20Ownership/" class="md-nav__link">
         
   
   
@@ -1769,7 +1849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-003%20Transaction%20Model/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-003%20Transaction%20Model/" class="md-nav__link">
         
   
   
@@ -1797,7 +1877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-004%20Storage%20Abstraction/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-004%20Storage%20Abstraction/" class="md-nav__link">
         
   
   
@@ -1825,7 +1905,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-005%20Version%20History/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-005%20Version%20History/" class="md-nav__link">
         
   
   
@@ -1853,7 +1933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/adr/ADR-006%20Adapter%20Architecture/" class="md-nav__link">
+      <a href="../../cks-runtime/adr/ADR-006%20Adapter%20Architecture/" class="md-nav__link">
         
   
   
@@ -1943,7 +2023,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-001_Runtime_Overview/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-001_Runtime_Overview/" class="md-nav__link">
         
   
   
@@ -1971,7 +2051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-002_Session_Model/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-002_Session_Model/" class="md-nav__link">
         
   
   
@@ -1999,7 +2079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-003_Runtime_API/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-003_Runtime_API/" class="md-nav__link">
         
   
   
@@ -2027,7 +2107,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-004_Diagnostics/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-004_Diagnostics/" class="md-nav__link">
         
   
   
@@ -2055,7 +2135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-005_Transactions/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-005_Transactions/" class="md-nav__link">
         
   
   
@@ -2083,7 +2163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-006_Storage/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-006_Storage/" class="md-nav__link">
         
   
   
@@ -2111,7 +2191,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-007_Version_History/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-007_Version_History/" class="md-nav__link">
         
   
   
@@ -2139,7 +2219,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-runtime/standards/runtime/SPEC-008_Conformance/" class="md-nav__link">
+      <a href="../../cks-runtime/standards/runtime/SPEC-008_Conformance/" class="md-nav__link">
         
   
   
@@ -2236,7 +2316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-mcp/" class="md-nav__link">
+      <a href="../../cks-mcp/" class="md-nav__link">
         
   
   
@@ -2264,7 +2344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cks-mcp/ARCHITECTURE/" class="md-nav__link">
+      <a href="../../cks-mcp/ARCHITECTURE/" class="md-nav__link">
         
   
   
@@ -2319,10 +2399,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
+  <a href="#scenario" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Purpose
+        Scenario
       
     </span>
   </a>
@@ -2330,10 +2410,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scope" class="md-nav__link">
+  <a href="#tools-used" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Scope
+        Tools Used
       
     </span>
   </a>
@@ -2341,10 +2421,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#position-within-cks" class="md-nav__link">
+  <a href="#what-happened" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Position within CKS
+        What Happened
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Happened">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-contradiction-detection-mutual-exclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Contradiction detection — mutual exclusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-contradiction-detection-functional-relation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Contradiction detection — functional relation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-sandbox-fix-with-fork_sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sandbox fix with fork_sandbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-preview-mode-with-suggest_evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Preview mode with suggest_evolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-error-handling-in-the-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Error handling in the sandbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-ontology-validation-still-works-alongside-contradictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ontology validation still works alongside contradictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
       
     </span>
   </a>
@@ -2352,10 +2515,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conformance-principle" class="md-nav__link">
+  <a href="#reproduce-it-yourself" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Conformance Principle
+        Reproduce It Yourself
       
     </span>
   </a>
@@ -2382,397 +2545,119 @@
   
 
 
-<h1 id="introduction">Introduction</h1>
-<h2 id="purpose">Purpose</h2>
-<p>The purpose of this specification is to define the unified conformance
-criteria for all components of the Canonical Knowledge Structure
-ecosystem.</p>
-<p>Where previous Core Specifications define:</p>
+<h1 id="case-study-contradiction-detection-and-hypothesis-sandboxing">Case Study: Contradiction Detection and Hypothesis Sandboxing</h1>
+<p><strong>Problem:</strong> A knowledge graph can accumulate logically inconsistent statements — for example, the same source–target pair might be linked by both <code>confirms</code> and <code>refutes</code> relations, or a planet might be asserted to orbit two different stars. Standard structural and even type‑level validation passes such graphs without complaint, because every individual edge looks well‑formed. The contradiction only becomes visible when multiple relations are read <em>together</em>.</p>
+<p><strong>CKS solution:</strong> The new <code>mutual_exclusion</code> and <code>functional_relation</code> extension constraints (introduced in <code>cks-core</code> 1.13.0) let a graph <em>declare</em> what counts as a contradiction, and the <code>detect_contradictions</code> tool surfaces those violations in a compact, machine‑readable form. The <code>fork_sandbox</code> tool provides an isolated “what‑if” branch — apply a hypothesis, see the diff, and keep or discard the result — without ever touching the parent session. Together with the existing <code>suggest_evolution</code> preview mode, these tools give LLMs a full <strong>explore–detect–fix–validate</strong> loop inside a single conversation.</p>
+<hr />
+<h2 id="scenario">Scenario</h2>
+<p>We built a small scientific graph about the exoplanet candidate <strong>Kepler‑22b</strong>:</p>
 <ul>
-<li>the canonical semantic model (CKS‑001),</li>
-<li>canonical construction (CKS‑002),</li>
-<li>canonical serialization (CKS‑003),</li>
-<li>canonical structure evolution (CKS‑004),</li>
-<li>canonical validation (CKS‑005),</li>
-<li>canonical computation (CKS‑006), and</li>
-<li>canonical interaction (CKS‑007),</li>
+<li><strong>Kepler‑22b</strong> (Planet) orbits <strong>Kepler‑22</strong> (Star).</li>
+<li>Two <strong>ConfirmationReport</strong> objects represent independent analyses of the planet.</li>
+<li>A <code>MutualExclusionRule</code> declares that <code>confirms</code> and <code>refutes</code> are mutually exclusive — a planet cannot be both confirmed and refuted by the <em>same</em> report.</li>
+<li>Deliberately, we added <strong>both</strong> a <code>confirms</code> and a <code>refutes</code> relation from Kepler‑22b to each report, creating exactly the kind of joint nonsense the rule exists to catch.</li>
 </ul>
-<p>this specification defines the normative conditions under which an
-implementation may be considered conformant to those specifications.</p>
-<p>Conformance is determined by observable canonical behaviour, not by
-implementation technology.</p>
+<p>We then used the new tools to detect the contradictions, fix one in a sandbox, preview an unrelated evolution, and verify that the parent session remained untouched.</p>
 <hr />
-<h2 id="scope">Scope</h2>
-<p>This specification defines:</p>
+<h2 id="tools-used">Tools Used</h2>
 <ul>
-<li>general conformance principles,</li>
-<li>validator conformance criteria,</li>
-<li>reference engine conformance criteria,</li>
-<li>CKI conformance criteria,</li>
-<li>conformance levels,</li>
-<li>the conformance verification procedure.</li>
+<li><code>validate_knowledge</code> — initial session creation</li>
+<li><code>evolve_knowledge</code> — graph construction</li>
+<li><code>detect_contradictions</code> — surface mutual‑exclusion and functional‑relation violations</li>
+<li><code>fork_sandbox</code> — isolated branch with hypothesis + diff from fork point</li>
+<li><code>suggest_evolution</code> (preview mode) — dry‑run candidate operations</li>
+<li><code>close_session</code> — discard the sandbox</li>
 </ul>
-<p>Implementation algorithms, performance benchmarks, and
-implementation-specific testing frameworks are outside the scope of
-this specification.</p>
 <hr />
-<h2 id="position-within-cks">Position within CKS</h2>
-<table>
-<thead>
-<tr>
-<th>Document</th>
-<th>Title</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CKS-000</td>
-<td>Canonical Foundations and Terminology</td>
-<td>Philosophical principles and unified terminology</td>
-</tr>
-<tr>
-<td>CKS-001</td>
-<td>Core Specification</td>
-<td>Formal semantic model</td>
-</tr>
-<tr>
-<td>CKS-002</td>
-<td>Canonical Construction Specification</td>
-<td>Construction methodology</td>
-</tr>
-<tr>
-<td>CKS-003</td>
-<td>Canonical Serialization</td>
-<td>Machine‑processable representation</td>
-</tr>
-<tr>
-<td>CKS-004</td>
-<td>Canonical Structure Evolution</td>
-<td>Admissible structural evolution</td>
-</tr>
-<tr>
-<td>CKS-005</td>
-<td>Validator Specification</td>
-<td>Formal model of canonical validation</td>
-</tr>
-<tr>
-<td>CKS-006</td>
-<td>Reference Engine Specification</td>
-<td>Computational engine architecture</td>
-</tr>
-<tr>
-<td>CKS-007</td>
-<td>Canonical Knowledge Interface (CKI)</td>
-<td>Canonical operations and interaction</td>
-</tr>
-<tr>
-<td><strong>CKS-008</strong></td>
-<td><strong>Reference Conformance Specification</strong></td>
-<td><strong>Unified conformance criteria</strong></td>
-</tr>
-</tbody>
-</table>
-<p>CKS‑008 is the final normative specification in the Core CKS series.
-It establishes the conditions that every conformant implementation
-shall satisfy.</p>
+<h2 id="what-happened">What Happened</h2>
+<h3 id="1-contradiction-detection-mutual-exclusion">1. Contradiction detection — mutual exclusion</h3>
+<p>With the <code>MutualExclusionRule</code> in place, calling <code>detect_contradictions</code> on the session returned:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;contradiction_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;contradictions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CKS-EXT-MUTUAL-EXCLUSION&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Relation &#39;…&#39; (type &#39;confirms&#39;) and relation &#39;…&#39; (type &#39;refutes&#39;) both connect &#39;kepler-22b&#39; to &#39;report-A&#39;, but a MutualExclusionRule declares these relation_types mutually exclusive.&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CKS-EXT-MUTUAL-EXCLUSION&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;… same for report-B …&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Two contradictions — one per report — exactly as expected.</p>
+<h3 id="2-contradiction-detection-functional-relation">2. Contradiction detection — functional relation</h3>
+<p>A separate test with a <code>FunctionalRelationRule</code> for <code>orbits</code> and two <code>orbits</code> edges from Earth to different stars also returned:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;contradiction_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;contradictions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CKS-EXT-FUNCTIONAL-RELATION&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Source &#39;earth&#39; has 2 distinct targets via functional relation_type &#39;orbits&#39; …&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-sandbox-fix-with-fork_sandbox">3. Sandbox fix with <code>fork_sandbox</code></h3>
+<p>We asked <code>fork_sandbox</code> to create a branch and remove the <code>refutes</code> relation to report‑A:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;sandbox_session_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;d42dcc57-…&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;operations_applied&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;diff_from_fork_point&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;added_objects&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;removed_objects&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;added_relations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;removed_relations&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;remove_relation&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;relation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rel-refutes-1&quot;</span><span class="p">}]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sandbox session &#39;…&#39; is an isolated fork … nothing here affects the parent.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Re‑running <code>detect_contradictions</code> inside the sandbox showed <strong>1</strong> contradiction (report‑B still conflicted), while the parent session still reported <strong>2</strong> — proving full isolation.</p>
+<h3 id="4-preview-mode-with-suggest_evolution">4. Preview mode with <code>suggest_evolution</code></h3>
+<p>Passing a candidate operation list (add a moon “Kepler‑22b‑I” + an <code>orbits</code> relation) to <code>suggest_evolution</code> in preview mode returned:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;would_apply&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;operations_previewed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>No version was created — the preview mode validated the structure without committing anything.</p>
+<h3 id="5-error-handling-in-the-sandbox">5. Error handling in the sandbox</h3>
+<p>When we attempted to add a duplicate object ID inside a sandbox, the tool immediately returned:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evolution_failed&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hypothesis could not be applied: Object &#39;obj-1&#39; already exists.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The sandbox was automatically discarded, leaving the parent session untouched.</p>
+<h3 id="6-ontology-validation-still-works-alongside-contradictions">6. Ontology validation still works alongside contradictions</h3>
+<p>As a regression check, we validated a graph where Earth orbits Pasta (type Food) with <code>type_hierarchy</code> and <code>relation_type</code> extensions enabled. The system correctly returned <code>valid: false</code> with diagnostic code <code>CKS-EXT-RELATION-TYPE</code>, confirming that the new contradiction layer composes cleanly with the existing ontology layer.</p>
 <hr />
-<h2 id="conformance-principle">Conformance Principle</h2>
-<blockquote>
-<p><strong>Conformance is determined by observable canonical behaviour, not
-by implementation technology.</strong></p>
-</blockquote>
-<p>Two implementations that produce identical canonical outputs for all
-admissible canonical inputs are equally conformant, regardless of
-differences in programming language, internal algorithms, data
-structures, or execution platform.</p>
-<hr />
-<h1 id="general-conformance-principles">General Conformance Principles</h1>
-<h2 id="semantic-equivalence">Semantic Equivalence</h2>
-<p>Conformance shall be evaluated by semantic equivalence of observable
-behaviour.  Implementation A and Implementation B are equally
-conformant if, for every admissible canonical input, they produce
-canonically equivalent outputs.</p>
-<h2 id="determinism">Determinism</h2>
-<p>Every conformant implementation shall be deterministic.  Identical
-canonical inputs shall always produce identical canonical outputs.
-Behaviour shall not depend on execution order, hardware platform, or
-implementation-specific state.</p>
-<h2 id="representation-independence">Representation Independence</h2>
-<p>Conformance shall be independent of serialization format, programming
-language, operating system, or communication protocol.  Only canonical
-semantics determine conformance.</p>
-<h2 id="observational-purity">Observational Purity</h2>
-<p>Conformant implementations shall not modify the canonical semantics of
-their inputs, unless the operation being implemented is explicitly
-defined as a structural transformation.  Validation, inspection, and
-serialization are observational operations.</p>
-<h2 id="completeness-of-constraint-evaluation">Completeness of Constraint Evaluation</h2>
-<p>Every conformant implementation shall evaluate every canonical
-constraint applicable to its domain.  Omission of a mandatory
-constraint constitutes non‑conformance.</p>
-<h2 id="contract-preservation">Contract Preservation</h2>
-<p>Every conformant implementation shall satisfy the canonical operation
-contracts defined by the relevant Core Specifications.  Preconditions,
-postconditions, and invariants shall be preserved.</p>
-<h2 id="traceability">Traceability</h2>
-<p>Every validation decision, diagnostic, and transformation shall be
-traceable to the specific canonical constraint or operation contract
-from which it derives.</p>
-<h2 id="conformance-closure">Conformance Closure</h2>
-<p>Conformance shall be preserved under admissible canonical operation composition.</p>
-<p>If every constituent Canonical Knowledge Operation satisfies the applicable conformance requirements,</p>
-<p>then every admissible composition of those operations shall likewise satisfy those requirements.</p>
-<p>Consequently,</p>
-<p>conformance is compositional.</p>
-<p>The correctness of a canonical workflow therefore follows from the correctness of its constituent operations together with admissible canonical composition.</p>
-<h2 id="semantic-and-behavioural-conformance">Semantic and Behavioural Conformance</h2>
-<p>Conformance consists of two complementary dimensions.</p>
-<h3 id="semantic-conformance">Semantic Conformance</h3>
-<p>Semantic Conformance requires preservation of canonical meaning.</p>
-<p>Equivalent canonical inputs shall produce canonically equivalent semantic outputs.</p>
-<p>Semantic equivalence is independent of implementation technology.</p>
-<hr />
-<h3 id="behavioural-conformance">Behavioural Conformance</h3>
-<p>Behavioural Conformance requires preservation of observable canonical behaviour.</p>
-<p>Observable behaviour includes:</p>
+<h2 id="key-takeaways">Key Takeaways</h2>
 <ul>
-<li>operation contracts;</li>
-<li>validation results;</li>
-<li>diagnostics;</li>
-<li>canonical interface objects;</li>
-<li>deterministic execution.</li>
+<li><strong>Contradictions are explicit, not guessed.</strong> <code>MutualExclusionRule</code> and <code>FunctionalRelationRule</code> objects define what counts as a contradiction, so the system never flags something the domain expert didn't declare.</li>
+<li><strong>Sandboxes are safe by construction.</strong> <code>fork_sandbox</code> never mutates the parent; a failed hypothesis automatically discards the branch.</li>
+<li><strong>Preview saves versions.</strong> <code>suggest_evolution</code> in preview mode validates candidate operations without committing — no wasted versions or sessions.</li>
+<li><strong>Isolation is guaranteed.</strong> The parent session's contradiction count did not change while the sandbox fixed its copy.</li>
+<li><strong>Composability.</strong> Contradiction detection works alongside the existing ontology, provenance, and structural validators — all opt‑in, all additive.</li>
 </ul>
-<p>Different implementations may internally differ while remaining behaviourally conformant.</p>
 <hr />
-<h1 id="validator-conformance">Validator Conformance</h1>
-<h2 id="reference-specification">Reference Specification</h2>
-<p>Validator implementations shall conform to CKS‑005 (Validator
-Specification).  All mandatory provisions of CKS‑005 apply.</p>
-<h2 id="mandatory-criteria">Mandatory Criteria</h2>
-<p>A conformant Validator shall:</p>
-<ul>
-<li><strong>(V‑1)</strong> Evaluate every Canonical Validation Constraint applicable
-  to the validated Canonical Knowledge Structure (CKS‑005, Section 5).</li>
-<li><strong>(V‑2)</strong> Produce exactly one Validation Result per validation
-  execution (CKS‑005, Section 7).</li>
-<li><strong>(V‑3)</strong> Produce a Validation Result that is deterministic and
-  semantically faithful to the canonical semantics of the input
-  structure (CKS‑005, Section 17).</li>
-<li><strong>(V‑4)</strong> Classify a Canonical Knowledge Structure as valid if and
-  only if it satisfies every applicable constraint (CKS‑005,
-  Section 16, Completeness Theorem).</li>
-<li><strong>(V‑5)</strong> Never classify an invalid structure as valid (CKS‑005,
-  Section 15, Soundness Theorem).</li>
-<li><strong>(V‑6)</strong> Operate observationally: validation shall not modify the
-  canonical identity, structure, relations, derivations, or semantics
-  of the validated structure (CKS‑005, Section 2.5).</li>
-<li><strong>(V‑7)</strong> Produce diagnostics that are deterministic, traceable to
-  specific constraints, and implementation‑independent in their
-  canonical meaning (CKS‑006, Section 8).</li>
-</ul>
-<h2 id="validation-pipeline">Validation Pipeline</h2>
-<p>If a conformant implementation realises the validation process through
-a pipeline (CKS‑006, Section 6), it shall preserve the canonical
-ordering of stages: Loading, Deserialization, Structural Validation,
-Semantic Validation, Constraint Evaluation, Diagnostic Generation, and
-Validation Result Construction.</p>
-<hr />
-<h1 id="reference-engine-conformance">Reference Engine Conformance</h1>
-<h2 id="reference-specification_1">Reference Specification</h2>
-<p>Reference Engine implementations shall conform to CKS‑006 (Reference
-Engine Specification).  All mandatory provisions of CKS‑006 apply.</p>
-<h2 id="mandatory-criteria_1">Mandatory Criteria</h2>
-<p>A conformant Reference Engine shall:</p>
-<ul>
-<li><strong>(RE‑1)</strong> Realise the canonical execution mapping
-  \(RE : CKS \to VR\) as a total, deterministic function over its
-  canonical domain (CKS‑006, Section 11).</li>
-<li><strong>(RE‑2)</strong> Preserve the canonical invariants established in CKS‑006,
-  Section 14: identity preservation, semantic preservation, structural
-  preservation, observational purity, determinism, and execution
-  closure.</li>
-<li><strong>(RE‑3)</strong> Execute the complete Canonical Validation Pipeline without
-  omitting any mandatory stage (CKS‑006, Section 6).</li>
-<li><strong>(RE‑4)</strong> Produce Validation Results that are structurally
-  equivalent to those produced by any other conformant Reference Engine
-  for identical inputs (CKS‑006, Section 16, Canonical Equivalence
-  Theorem).</li>
-<li><strong>(RE‑5)</strong> Compose correctly: if every execution function is correct,
-  the composed Reference Engine shall be correct (CKS‑006,
-  Section 15, Correctness Theorem).</li>
-</ul>
-<h2 id="internal-architecture">Internal Architecture</h2>
-<p>The Reference Engine may be implemented using any internal software
-architecture.  The canonical decomposition into Loader, Deserializer,
-Structural Validator, Semantic Validator, Constraint Evaluator,
-Diagnostic Engine, and Validation Result Generator (CKS‑006,
-Section 4) is normative with respect to responsibilities, not with
-respect to module boundaries.</p>
-<hr />
-<h1 id="cki-conformance">CKI Conformance</h1>
-<h2 id="reference-specification_2">Reference Specification</h2>
-<p>Canonical Knowledge Interface implementations shall conform to CKS‑007
-(Canonical Knowledge Interface).  All mandatory provisions of CKS‑007
-apply.</p>
-<h2 id="mandatory-criteria_2">Mandatory Criteria</h2>
-<p>A conformant CKI implementation shall:</p>
-<ul>
-<li><strong>(CKI‑1)</strong> Expose every mandatory canonical operation defined in
-  CKS‑007, Section 2.</li>
-<li><strong>(CKI‑2)</strong> Satisfy the canonical operation contract of every exposed
-  operation (CKS‑007, Section 3).</li>
-<li><strong>(CKI‑3)</strong> Preserve canonical semantics across every operation:
-  operations shall not modify canonical identity, structure, relations,
-  or derivations unless the operation is explicitly defined as a
-  structural transformation.</li>
-<li><strong>(CKI‑4)</strong> Produce deterministic outputs: identical canonical inputs
-  shall produce identical canonical outputs.</li>
-<li><strong>(CKI‑5)</strong> Accept and produce only Canonical Knowledge Objects and
-  Canonical Interface Objects as defined in CKS‑007, Sections 5–6.</li>
-<li><strong>(CKI‑6)</strong> Preserve canonical object identity across serialization
-  and deserialization cycles (CKS‑007, Section 5.4).</li>
-</ul>
-<h2 id="binding-conformance">Binding Conformance</h2>
-<p>Language‑specific bindings (Python, Rust, Java, etc.) shall preserve
-the canonical semantics of every operation they expose.  Syntactic
-conveniences shall not alter canonical behaviour.</p>
-<hr />
-<h1 id="conformance-levels">Conformance Levels</h1>
-<h2 id="purpose_1">Purpose</h2>
-<p>Conformance levels enable incremental adoption of the CKS
-specifications and provide a clear vocabulary for describing the
-capabilities of an implementation.</p>
-<h2 id="level-i-basic-compliance">Level I — Basic Compliance</h2>
-<p>The implementation:</p>
-<ul>
-<li>supports the canonical request/response model (CKS‑007),</li>
-<li>satisfies operation contracts for all mandatory operations,</li>
-<li>preserves invariant contracts,</li>
-<li>produces deterministic outputs.</li>
-</ul>
-<p>This level establishes basic interoperability.</p>
-<h2 id="level-ii-verified-compliance">Level II — Verified Compliance</h2>
-<p>In addition to Level I, the implementation:</p>
-<ul>
-<li>implements the complete Safety Architecture (where applicable),</li>
-<li>supports execution traceability,</li>
-<li>provides checkpoint awareness (where applicable),</li>
-<li>passes the conformance verification procedure defined in Section 7
-  for all mandatory test cases.</li>
-</ul>
-<p>This level guarantees verified canonical execution.</p>
-<h2 id="level-iii-canonical-compliance">Level III — Canonical Compliance</h2>
-<p>In addition to Level II, the implementation:</p>
-<ul>
-<li>implements the complete Canonical Architecture as specified,</li>
-<li>guarantees semantic equivalence with the Reference Engine,</li>
-<li>supports all canonical operations defined in CKS‑007,</li>
-<li>passes the full conformance verification procedure, including
-  optional and edge‑case tests.</li>
-</ul>
-<p>This level represents complete conformance with the Core CKS
-specifications.</p>
-<hr />
-<h1 id="conformance-verification-procedure">Conformance Verification Procedure</h1>
-<h2 id="purpose_2">Purpose</h2>
-<p>The conformance verification procedure defines the process by which an
-implementation is evaluated against the criteria established in this
-specification.</p>
-<h2 id="reference-knowledge-structures">Reference Knowledge Structures</h2>
-<p>Verification shall use a fixed set of Reference Knowledge Structures.
-These structures shall include:</p>
-<ul>
-<li>valid Canonical Knowledge Structures,</li>
-<li>invalid Canonical Knowledge Structures (each violating exactly one
-  canonical constraint),</li>
-<li>edge‑case structures (empty, maximal, cyclic),</li>
-<li>structures exercising every mandatory canonical operation.</li>
-</ul>
-<p>The Reference Knowledge Structures are defined in CKS‑009 (Reference
-Knowledge Corpus).</p>
-<hr />
-<h2 id="canonical-equivalence-oracle">Canonical Equivalence Oracle</h2>
-<p>Every Conformance Verification Procedure shall compare implementation outputs against the canonical semantic model rather than against implementation-specific representations.</p>
-<p>The Canonical Equivalence Oracle determines whether produced outputs are canonically equivalent to the expected Reference Knowledge Structures.</p>
-<p>Observable equivalence,</p>
-<p>rather than implementation identity,</p>
-<p>constitutes the normative criterion for successful verification.</p>
-<hr />
-<h2 id="verification-steps">Verification Steps</h2>
+<h2 id="reproduce-it-yourself">Reproduce It Yourself</h2>
 <ol>
-<li><strong>Architecture Review.</strong> Confirm that the implementation exposes the
-   required components and operations.</li>
-<li><strong>DSV/Structure Verification.</strong> Confirm that the implementation
-   correctly represents canonical state.</li>
-<li><strong>Operation Verification.</strong> For each mandatory operation, execute it
-   against the Reference Knowledge Structures and compare the output
-   against the expected canonical output.</li>
-<li><strong>Constraint Evaluation Verification.</strong> Confirm that every mandatory
-   constraint is evaluated and that the set of evaluated constraints
-   matches the canonical constraint set.</li>
-<li><strong>Determinism Verification.</strong> Execute each operation multiple times
-   on identical inputs and confirm identical outputs.</li>
-<li><strong>Round‑Trip Verification.</strong> For serialization operations, confirm
-   that \(Deserialize(Serialize(S)) \equiv S\).</li>
-<li><strong>Conformance Decision.</strong> If all steps pass, the implementation is
-   conformant at the level corresponding to the satisfied criteria.</li>
-<li>Canonical Equivalence Verification. Confirm that the complete observable behaviour of the implementation is canonically equivalent to the Reference Model. Equivalent observable behaviour constitutes the final criterion of conformance.</li>
+<li>Install <code>cks‑mcp</code> (v1.12.1+) and connect it to Claude Desktop.</li>
+<li>Start a chat and say:</li>
 </ol>
-<h2 id="conformance-report">Conformance Report</h2>
-<p>Every conformance verification shall produce a Conformance Report
-containing:</p>
-<ul>
-<li>implementation identifier,</li>
-<li>achieved conformance level,</li>
-<li>verified operations,</li>
-<li>evaluated constraints,</li>
-<li>detected deviations (if any),</li>
-<li>verification date.</li>
-</ul>
-<p>The Conformance Report constitutes a Canonical Interface Object.</p>
-<p>Accordingly,</p>
-<p>it may be serialized,</p>
-<p>transmitted,</p>
-<p>archived,</p>
-<p>digitally signed,</p>
-<p>and independently verified while preserving its canonical semantics.</p>
-<hr />
-<h1 id="nonconformance">Non‑Conformance</h1>
-<h2 id="definition">Definition</h2>
-<p>An implementation is non‑conformant if it fails to satisfy any
-mandatory criterion established in Sections 3–5 of this specification.</p>
-<h2 id="deviation-classes">Deviation Classes</h2>
-<p><strong>Minor Deviation.</strong> The implementation differs internally while
-preserving canonical semantics.  Conformance is retained.</p>
-<p><strong>Major Deviation.</strong> Mandatory behaviour differs from the
-specification.  Conformance is suspended until corrected.</p>
-<p><strong>Critical Deviation.</strong> Canonical guarantees are violated.
-Conformance is denied.</p>
-<hr />
-<h1 id="relationship-to-future-specifications">Relationship to Future Specifications</h1>
-<p>Future specifications may extend the conformance criteria defined
-herein to cover additional components (e.g., distributed Reference
-Engines, probabilistic validators, domain‑specific Knowledge Spaces).
-Such extensions shall preserve the criteria established in this
-specification for all existing components.</p>
-<p>Future specifications shall extend conformance exclusively through the introduction of additional criteria.</p>
-<p>Previously established conformance criteria shall never be weakened,</p>
-<p>reinterpreted,</p>
-<p>or redefined.</p>
-<p>Conformance therefore evolves through extension rather than revision.</p>
-<hr />
-<h1 id="normative-references">Normative References</h1>
-<p>[CKS-000] Canonical Knowledge Structure — Canonical Foundations and Terminology.</p>
-<p>[CKS-001] Canonical Knowledge Structure — Core Specification.</p>
-<p>[CKS-002] Canonical Knowledge Structure — Canonical Construction Specification.</p>
-<p>[CKS-003] Canonical Knowledge Structure — Canonical Serialization.</p>
-<p>[CKS-004] Canonical Knowledge Structure — Canonical Structure Evolution.</p>
-<p>[CKS-005] Canonical Knowledge Structure — Validator Specification.</p>
-<p>[CKS-006] Canonical Knowledge Structure — Reference Engine Specification.</p>
-<p>[CKS-007] Canonical Knowledge Structure — Canonical Knowledge Interface (CKI).</p>
-<p>[CKS-008] Canonical Knowledge Structure — Reference Conformance Specification.</p>
-<hr />
+<blockquote>
+<p>Use cks‑mcp to build a small graph about an exoplanet candidate.<br />
+Include a MutualExclusionRule that declares “confirms” and “refutes” as mutually exclusive.<br />
+Link the planet to two ConfirmationReport objects using both relation types, then call <code>detect_contradictions</code> and show me the result.<br />
+Next, <code>fork_sandbox</code> to remove one conflicting relation and prove the parent session is untouched.<br />
+Finally, preview adding a new moon with <code>suggest_evolution</code>.</p>
+</blockquote>
+<ol>
+<li>Observe the contradiction count drop in the sandbox, the isolation from the parent, and the preview response — all without writing a single line of code.</li>
+</ol>
 
 
 
@@ -2828,10 +2713,10 @@ specification for all existing components.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
