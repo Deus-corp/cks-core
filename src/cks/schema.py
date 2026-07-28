@@ -54,6 +54,12 @@ def validate_json(
     """
     target = schema if schema is not None else _CANONICAL_SCHEMA
     try:
-        jsonschema_validate(instance=data, schema=target)
-    except jsonschema.ValidationError as exc:
+        jsonschema_validate(data, target)
+    except jsonschema.exceptions.ValidationError as exc:
         raise SchemaValidationError(str(exc)) from exc
+
+
+__all__ = [
+    "SchemaValidationError",
+    "validate_json",
+]

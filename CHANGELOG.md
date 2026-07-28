@@ -6,6 +6,14 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.12.1] - 2026-07-28
+
+### Fixed
+- `schema.py` restored after accidental truncation; the module was missing the tail of `validate_json()`, causing import failures. Re-added the missing lines and verified correctness.
+- Added `tests/test_schema.py` with 4 basic tests to prevent future regressions.
+
+---
+
 ## [1.12.0] - 2026-07-27
 
 ### Added
