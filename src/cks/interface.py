@@ -157,7 +157,10 @@ def project(
     """
     Project a subset of a KnowledgeStructure.
 
-    Missing identities are ignored.
+    Missing identities are ignored. A relation is included only if
+    all of its participants are also selected -- like
+    :func:`query_subgraph`, this never returns a structure containing
+    a dangling relation reference.
     """
     return _ENGINE.project(structure, identities)
 

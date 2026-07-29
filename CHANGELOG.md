@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.13.1] - 2026-07-29
+
+### Fixed
+- `ReferenceEngine.project()` (and the public `cks.project()`) now guarantees referential integrity: relations are included in the projection only if all their participants are present in the selected set, matching the behaviour of `query_subgraph`. Previously, a projection could contain dangling references.
+
+---
+
 ## [1.13.0] - 2026-07-28
 
 ### Added

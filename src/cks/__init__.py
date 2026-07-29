@@ -71,7 +71,7 @@ from .serialization import SerializationError
 
 _EXTERNAL_COUNT = load_external_constraints()
 
-__version__ = "1.13.0"
+__version__ = "1.13.1"
 
 VERSION = tuple(int(part) for part in __version__.split("."))
 

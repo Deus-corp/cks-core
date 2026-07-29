@@ -11,7 +11,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 from .constraints.base import Constraint
-from .core import KnowledgeObject, KnowledgeStructure
+from .core import CanonicalRelation, KnowledgeObject, KnowledgeStructure
 from .diagnostics import DiagnosticCollection
 from .evolution import StructuralOperator, compose
 from .result import ValidationResult
@@ -44,7 +44,7 @@ class ReferenceEngine:
         • implementation-independent
     """
 
-    VERSION: str = "1.13.0"
+    VERSION: str = "1.13.1"
 
     # ------------------------------------------------------------------
     # Construction & Serialization
@@ -194,13 +194,31 @@ class ReferenceEngine:
         Project a subset of a KnowledgeStructure.
 
         Missing identities are ignored.
+
+        Referential integrity: a CanonicalRelation is included only if
+        ALL of its participants are also present in the projected
+        result -- the same vertex-induced-subgraph rule
+        ``KnowledgeStructure.query_subgraph`` documents and enforces.
+        A relation whose participants aren't all selected is dropped
+        rather than carried over dangling, so ``project()`` -- like
+        every other operation in this module -- never returns a
+        structure containing a relation that references an id absent
+        from it.
         """
 
-        return KnowledgeStructure(
-            obj
+        selected = {
+            obj.identity.id: obj
             for identity in identities
             if (obj := structure.get(identity)) is not None
-        )
+        }
+        selected_ids = set(selected)
+        kept = [
+            obj
+            for obj in selected.values()
+            if not isinstance(obj, CanonicalRelation)
+            or set(obj.participants) <= selected_ids
+        ]
+        return KnowledgeStructure(kept)
 
     def evolve(
         self,
