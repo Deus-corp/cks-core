@@ -12,13 +12,11 @@ from __future__ import annotations
 
 from ..constraints.base import Constraint
 from ..core import KnowledgeStructure
-from ..validation import ValidationStage
-
 from ..diagnostics import (
     Diagnostic,
     DiagnosticSeverity,
 )
-
+from ..validation import ValidationStage
 
 # ============================================================================
 # Helpers
@@ -131,7 +129,7 @@ STRUCTURAL_CONSTRAINTS: tuple[Constraint, ...] = (
 # ============================================================================
 
 __all__ = [
-    "UniqueIdentityConstraint",
-    "NoDanglingRelationConstraint",
     "STRUCTURAL_CONSTRAINTS",
+    "NoDanglingRelationConstraint",
+    "UniqueIdentityConstraint",
 ]

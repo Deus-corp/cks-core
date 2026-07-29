@@ -2,19 +2,20 @@
 
 import pytest
 
+from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS_BY_NAME
+from cks.constraints.registry import ConstraintRegistry
+from cks.constraints.verification import (
+    VERIFICATION_RECORD_TYPE,
+    VERIFIED_BY_RELATION,
+)
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,
     KnowledgeStructure,
     ObjectIdentity,
 )
-from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS_BY_NAME
-from cks.constraints.verification import (
-    VERIFICATION_RECORD_TYPE,
-    VERIFIED_BY_RELATION,
-)
-from cks.constraints.registry import ConstraintRegistry
-from cks.validator import ReferenceValidator, validate as default_validate
+from cks.validator import ReferenceValidator
+from cks.validator import validate as default_validate
 
 
 def make_object(oid: str, otype: str = "Definition", structure: dict | None = None) -> KnowledgeObject:

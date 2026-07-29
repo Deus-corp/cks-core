@@ -9,7 +9,6 @@ import json
 import subprocess
 from pathlib import Path
 
-
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
@@ -24,6 +23,7 @@ def _run(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(
         ["cks", *args],
         capture_output=True,
+        check=False,
         text=True,
     )
 

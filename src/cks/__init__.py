@@ -33,15 +33,12 @@ from .core import (
     ObjectIdentity,
     SubgraphResult,
 )
-
 from .diagnostics import (
     Diagnostic,
     DiagnosticCollection,
     DiagnosticSeverity,
 )
-
 from .engine import ReferenceEngine
-
 from .evolution import (
     AddObject,
     AddRelation,
@@ -50,13 +47,6 @@ from .evolution import (
     UpdateObject,
     compose,
 )
-
-from .plugin import load_external_constraints
-
-from .result import ValidationResult
-
-from .serialization import SerializationError
-
 from .interface import (
     compare,
     construct,
@@ -71,6 +61,9 @@ from .interface import (
     serialize,
     validate,
 )
+from .plugin import load_external_constraints
+from .result import ValidationResult
+from .serialization import SerializationError
 
 # ---------------------------------------------------------------------------
 # Bootstrap external constraint plugins
@@ -83,46 +76,38 @@ __version__ = "1.13.0"
 VERSION = tuple(int(part) for part in __version__.split("."))
 
 __all__ = [
-    # Public API
-    "construct",
-    "parse",
-    "serialize",
-    "validate",
-    "diagnose",
-    "inspect",
-    "compare",
-    "extract",
-    "project",
-    "evolve",
-    "merge",
-    "query_subgraph",
-    # Core model
-    "ObjectIdentity",
-    "KnowledgeObject",
+    "VERSION",
+    "AddObject",
+    "AddRelation",
     "CanonicalRelation",
+    "Diagnostic",
+    "DiagnosticCollection",
+    "DiagnosticSeverity",
+    "KnowledgeObject",
     "KnowledgeStructure",
     "MergeConflict",
     "MergeConflictError",
     "MergeResolution",
-    "SubgraphResult",
-    # Evolution operators
-    "AddObject",
-    "AddRelation",
+    "ObjectIdentity",
+    "ReferenceEngine",
     "RemoveObject",
     "RemoveRelation",
-    "UpdateObject",
-    "compose",
-    # Diagnostics
-    "DiagnosticSeverity",
-    "Diagnostic",
-    "DiagnosticCollection",
-    # Validation
-    "ValidationResult",
-    # Engine
-    "ReferenceEngine",
-    # Exceptions
     "SerializationError",
-    # Package metadata
+    "SubgraphResult",
+    "UpdateObject",
+    "ValidationResult",
     "__version__",
-    "VERSION",
+    "compare",
+    "compose",
+    "construct",
+    "diagnose",
+    "evolve",
+    "extract",
+    "inspect",
+    "merge",
+    "parse",
+    "project",
+    "query_subgraph",
+    "serialize",
+    "validate",
 ]

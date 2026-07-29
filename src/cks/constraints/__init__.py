@@ -1,9 +1,9 @@
-from .registry import registry
 from .builtin import (
     BUILTIN_CONSTRAINTS,
     OPTIONAL_CONSTRAINTS,
     OPTIONAL_CONSTRAINTS_BY_NAME,
 )
+from .registry import registry
 
 for constraint in BUILTIN_CONSTRAINTS:
     registry.register(constraint)
@@ -14,8 +14,8 @@ for constraint in BUILTIN_CONSTRAINTS:
 # until a caller opts in explicitly (see builtin.py for how).
 
 __all__ = [
-    "registry",
     "BUILTIN_CONSTRAINTS",
     "OPTIONAL_CONSTRAINTS",
     "OPTIONAL_CONSTRAINTS_BY_NAME",
+    "registry",
 ]

@@ -162,7 +162,7 @@ class EmbeddingProjectionIntegrityConstraint(Constraint):
 
 
 __all__ = [
-    "EmbeddingProjectionIntegrityConstraint",
-    "REPRESENTS_RELATION",
     "EMBEDDING_PROJECTION_TYPE",
+    "REPRESENTS_RELATION",
+    "EmbeddingProjectionIntegrityConstraint",
 ]

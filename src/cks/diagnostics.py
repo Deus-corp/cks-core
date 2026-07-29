@@ -10,12 +10,12 @@ implementation-independent.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Mapping, Optional
+from typing import Any
 
 from .core import _freeze_mapping
-
 
 # ============================================================================
 # Internal Helpers
@@ -92,7 +92,7 @@ class Diagnostic:
 
     message: str
 
-    location: Optional[str] = None
+    location: str | None = None
 
     metadata: Mapping[str, Any] = field(default_factory=dict)
 
@@ -267,8 +267,8 @@ class DiagnosticCollection:
 
     def merge(
         self,
-        other: "DiagnosticCollection",
-    ) -> "DiagnosticCollection":
+        other: DiagnosticCollection,
+    ) -> DiagnosticCollection:
 
         return DiagnosticCollection(self.diagnostics + other.diagnostics)
 
@@ -277,7 +277,7 @@ class DiagnosticCollection:
     def extend(
         self,
         diagnostics: tuple[Diagnostic, ...],
-    ) -> "DiagnosticCollection":
+    ) -> DiagnosticCollection:
 
         return DiagnosticCollection(self.diagnostics + tuple(diagnostics))
 
@@ -362,10 +362,10 @@ def make_error(
 # ============================================================================
 
 __all__ = [
-    "DiagnosticSeverity",
     "Diagnostic",
     "DiagnosticCollection",
+    "DiagnosticSeverity",
+    "make_error",
     "make_information",
     "make_warning",
-    "make_error",
 ]

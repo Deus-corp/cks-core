@@ -30,7 +30,7 @@ def handle(args):
         print(f"Invalid JSON: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    from ...schema import validate_json, SchemaValidationError
+    from ...schema import SchemaValidationError, validate_json
 
     try:
         validate_json(data)

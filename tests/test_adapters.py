@@ -1,13 +1,13 @@
 """Tests for CKS adapters."""
 
-from cks.adapters.jsonld_to_cks import JsonLdToCksConverter
-from cks.validator import validate
+from pathlib import Path
 
-from cks.adapters.rdf_to_cks import RdfToCksConverter
 from cks.adapters.cks_to_jsonld import CksToJsonLdConverter
 from cks.adapters.cks_to_rdf import CksToRdfConverter
+from cks.adapters.jsonld_to_cks import JsonLdToCksConverter
+from cks.adapters.rdf_to_cks import RdfToCksConverter
 from cks.serialization import parse
-from pathlib import Path
+from cks.validator import validate
 
 
 def test_jsonld_conversion():

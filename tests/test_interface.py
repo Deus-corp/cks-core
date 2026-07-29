@@ -11,15 +11,13 @@ Only the public package namespace (`import cks`) is used here.
 from __future__ import annotations
 
 import cks
-from cks.evolution import AddObject
-
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,
     KnowledgeStructure,
     ObjectIdentity,
 )
-
+from cks.evolution import AddObject
 
 # =============================================================================
 # Helper factories

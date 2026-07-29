@@ -6,7 +6,7 @@ Converts a JSON‑LD document into a Canonical Knowledge Structure.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..core import (
     CanonicalRelation,
@@ -19,7 +19,7 @@ from ..core import (
 class JsonLdToCksConverter:
     """Transform a JSON‑LD document into a KnowledgeStructure."""
 
-    def __init__(self, jsonld_data: Dict[str, Any]) -> None:
+    def __init__(self, jsonld_data: dict[str, Any]) -> None:
         self._data = jsonld_data
 
     # ------------------------------------------------------------------
@@ -28,7 +28,7 @@ class JsonLdToCksConverter:
 
     def convert(self) -> KnowledgeStructure:
         """Run the conversion and return a KnowledgeStructure."""
-        objects: List[KnowledgeObject] = []
+        objects: list[KnowledgeObject] = []
 
         # 1. Merge entities with the same @id
         merged_entities = self._merge_entities()
@@ -47,9 +47,9 @@ class JsonLdToCksConverter:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _merge_entities(self) -> Dict[str, Dict[str, Any]]:
+    def _merge_entities(self) -> dict[str, dict[str, Any]]:
         """Merge all nodes that share the same @id."""
-        merged: Dict[str, Dict[str, Any]] = {}
+        merged: dict[str, dict[str, Any]] = {}
         for entity in self._iter_entities():
             oid = entity.get("@id", "unknown")
             if oid not in merged:
@@ -59,7 +59,7 @@ class JsonLdToCksConverter:
                 merged[oid].update(entity)
         return merged
 
-    def _iter_entities(self) -> List[Dict[str, Any]]:
+    def _iter_entities(self) -> list[dict[str, Any]]:
         """Yield every entity described in the JSON‑LD document."""
         graph = self._data.get("@graph")
         if isinstance(graph, list):
@@ -68,7 +68,7 @@ class JsonLdToCksConverter:
             return [self._data]
         return []
 
-    def _entity_to_ko(self, entity: Dict[str, Any]) -> KnowledgeObject:
+    def _entity_to_ko(self, entity: dict[str, Any]) -> KnowledgeObject:
         oid = entity.get("@id", "unknown")
         otype = self._pick_type(entity)
         name = entity.get("name", entity.get("rdfs:label", oid))
@@ -78,7 +78,7 @@ class JsonLdToCksConverter:
         return KnowledgeObject(identity=identity, structure=structure)
 
     @staticmethod
-    def _pick_type(entity: Dict[str, Any]) -> str:
+    def _pick_type(entity: dict[str, Any]) -> str:
         types = entity.get("@type", [])
         if isinstance(types, list) and types:
             return str(types[0])
@@ -86,8 +86,8 @@ class JsonLdToCksConverter:
             return types
         return "Entity"
 
-    def _iter_relations(self) -> List[CanonicalRelation]:
-        relations: List[CanonicalRelation] = []
+    def _iter_relations(self) -> list[CanonicalRelation]:
+        relations: list[CanonicalRelation] = []
         for entity in self._iter_entities():
             subject_id = entity.get("@id")
             if not subject_id:
@@ -120,7 +120,7 @@ class JsonLdToCksConverter:
         return relations
 
     @staticmethod
-    def _object_to_id(obj: Any) -> Optional[str]:
+    def _object_to_id(obj: Any) -> str | None:
         if isinstance(obj, str):
             return obj
         if isinstance(obj, dict):

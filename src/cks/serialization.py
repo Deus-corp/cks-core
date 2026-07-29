@@ -12,8 +12,8 @@ serialization and deserialization never modify their inputs.
 from __future__ import annotations
 
 import json
-from typing import Any
 from types import MappingProxyType
+from typing import Any
 
 from .core import (
     CanonicalRelation,
@@ -179,11 +179,10 @@ class CanonicalDeserializer:
 
         version = data.get(ROOT_VERSION_KEY)
 
-        if version is not None:
-            if version != CANONICAL_JSON_VERSION:
-                raise SerializationError(
-                    f"Unsupported serialization version {version!r}."
-                )
+        if version is not None and version != CANONICAL_JSON_VERSION:
+            raise SerializationError(
+                f"Unsupported serialization version {version!r}."
+            )
 
     # ---------------------------------------------------------------------
 
@@ -440,9 +439,9 @@ def serialize(structure: KnowledgeStructure) -> str:
 # ============================================================================
 
 __all__ = [
-    "SerializationError",
     "CanonicalDeserializer",
     "CanonicalSerializer",
+    "SerializationError",
     "parse",
     "serialize",
 ]

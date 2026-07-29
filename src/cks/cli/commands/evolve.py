@@ -8,12 +8,16 @@ import json
 import sys
 from pathlib import Path
 
+from ...evolution import compose, parse_operations
 from ...serialization import (
-    parse as cks_parse,
-    serialize as cks_serialize,
     SerializationError,
 )
-from ...evolution import compose, parse_operations
+from ...serialization import (
+    parse as cks_parse,
+)
+from ...serialization import (
+    serialize as cks_serialize,
+)
 
 
 def add_parser(subparsers):

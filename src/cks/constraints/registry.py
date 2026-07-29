@@ -9,10 +9,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .base import Constraint
 from ..core import KnowledgeStructure
 from ..diagnostics import Diagnostic
 from ..validation import ValidationStage
+from .base import Constraint
 
 
 @dataclass(slots=True)

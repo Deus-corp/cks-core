@@ -1,11 +1,11 @@
 import pytest
 
-from cks.result import ValidationResult
 from cks.diagnostics import (
     Diagnostic,
     DiagnosticCollection,
     DiagnosticSeverity,
 )
+from cks.result import ValidationResult
 
 
 def make_error() -> Diagnostic:

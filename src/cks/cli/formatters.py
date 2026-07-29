@@ -11,8 +11,8 @@ from __future__ import annotations
 import html
 import json
 
-from ..result import ValidationResult
 from ..diagnostics import DiagnosticSeverity
+from ..result import ValidationResult
 
 
 def format_json(result: ValidationResult, *, indent: int = 2) -> str:

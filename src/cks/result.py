@@ -7,12 +7,12 @@ CKS-005 (Section 7) and CKS-006 (Section 7).
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any
 
 from .diagnostics import DiagnosticCollection
-
 
 # ============================================================================
 # Validation Result
@@ -178,8 +178,8 @@ class ValidationResult:
 
     def merge(
         self,
-        other: "ValidationResult",
-    ) -> "ValidationResult":
+        other: ValidationResult,
+    ) -> ValidationResult:
         """
         Merge two ValidationResults.
 

@@ -47,7 +47,8 @@ and `VerificationRecordIntegrityConstraint` already have.
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from ..core import KnowledgeStructure
 from ..diagnostics import Diagnostic, DiagnosticSeverity
@@ -287,9 +288,9 @@ class RelationTypeConstraint(Constraint):
 
 
 __all__ = [
-    "TypeHierarchy",
-    "TypeHierarchyCycleConstraint",
-    "RelationTypeConstraint",
     "TYPE_DEFINITION_TYPE",
     "TYPE_RULE_TYPE",
+    "RelationTypeConstraint",
+    "TypeHierarchy",
+    "TypeHierarchyCycleConstraint",
 ]

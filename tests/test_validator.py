@@ -1,18 +1,20 @@
 """Unit tests for the CKS validation pipeline."""
 
 import json
+
 import pytest
+
+from cks.constraints.base import Constraint
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,
     KnowledgeStructure,
     ObjectIdentity,
 )
-from cks.serialization import parse, serialize, SerializationError
-from cks.validator import validate
-from cks.diagnostics import DiagnosticSeverity, Diagnostic
-from cks.constraints.base import Constraint
+from cks.diagnostics import Diagnostic, DiagnosticSeverity
+from cks.serialization import SerializationError, parse, serialize
 from cks.validation import ValidationStage
+from cks.validator import validate
 
 
 def make_object(oid: str, otype: str = "Definition", name: str = "") -> KnowledgeObject:
@@ -272,8 +274,12 @@ def test_extra_constraints_duplicate_identity_does_not_raise():
 
 
 def test_structural_semantic_constraint_validate_accept_extra_constraints():
-    from cks.validator import structural_validate, semantic_validate, evaluate_constraints
     from cks.constraints.builtin import OPTIONAL_CONSTRAINTS
+    from cks.validator import (
+        evaluate_constraints,
+        semantic_validate,
+        structural_validate,
+    )
 
     structure = KnowledgeStructure([
         make_object("proj-1", otype="EmbeddingProjection"),

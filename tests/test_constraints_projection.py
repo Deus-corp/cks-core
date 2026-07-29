@@ -9,20 +9,21 @@ inert unless a caller opts in.
 
 import pytest
 
+from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS
+from cks.constraints.projection import (
+    EMBEDDING_PROJECTION_TYPE,
+    REPRESENTS_RELATION,
+    EmbeddingProjectionIntegrityConstraint,
+)
+from cks.constraints.registry import ConstraintRegistry
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,
     KnowledgeStructure,
     ObjectIdentity,
 )
-from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS
-from cks.constraints.projection import (
-    EmbeddingProjectionIntegrityConstraint,
-    EMBEDDING_PROJECTION_TYPE,
-    REPRESENTS_RELATION,
-)
-from cks.constraints.registry import ConstraintRegistry
-from cks.validator import ReferenceValidator, validate as default_validate
+from cks.validator import ReferenceValidator
+from cks.validator import validate as default_validate
 
 
 def make_object(oid: str, otype: str = "Definition", structure: dict | None = None) -> KnowledgeObject:

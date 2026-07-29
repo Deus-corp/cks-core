@@ -3,6 +3,7 @@ Unit tests for the CKS evolution module (CKS‑004).
 """
 
 import pytest
+
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,
@@ -17,7 +18,6 @@ from cks.evolution import (
     UpdateObject,
     compose,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers

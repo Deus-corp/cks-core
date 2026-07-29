@@ -1,8 +1,8 @@
 """Tests for cks.schema JSON Schema validation."""
 
 import pytest
-from cks.schema import validate_json, SchemaValidationError
 
+from cks.schema import SchemaValidationError, validate_json
 
 # Minimal valid CKS document (just version + objects array with one object)
 _VALID_CKS = {

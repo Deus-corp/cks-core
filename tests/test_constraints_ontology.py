@@ -3,14 +3,14 @@ Tests for the optional ontology constraints (type hierarchy and
 relation type checking).
 """
 
-from cks.core import KnowledgeObject, KnowledgeStructure, ObjectIdentity
 from cks.constraints.ontology import (
-    TypeHierarchy,
-    TypeHierarchyCycleConstraint,
-    RelationTypeConstraint,
     TYPE_DEFINITION_TYPE,
     TYPE_RULE_TYPE,
+    RelationTypeConstraint,
+    TypeHierarchy,
+    TypeHierarchyCycleConstraint,
 )
+from cks.core import KnowledgeObject, KnowledgeStructure, ObjectIdentity
 
 
 def make_object(oid: str, otype: str, name: str = "", structure: dict | None = None) -> KnowledgeObject:
@@ -212,8 +212,8 @@ def test_constraints_are_inert_without_opt_in():
 
 def test_constraints_fire_when_opted_in():
     """При опт-ине ограничения должны срабатывать."""
-    from cks.validator import validate
     from cks.constraints.builtin import OPTIONAL_CONSTRAINTS_BY_NAME
+    from cks.validator import validate
     structure = KnowledgeStructure([
         make_object("a", "A"),
         make_object("b", "B"),

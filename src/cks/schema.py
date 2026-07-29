@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 from importlib import resources
-from typing import Any, Dict, Optional
+from typing import Any
 
 import jsonschema
 from jsonschema import validate as jsonschema_validate
@@ -27,7 +27,7 @@ with (
     .joinpath(_SCHEMA_FILENAME)
     .open("r", encoding="utf-8") as _fh
 ):
-    _CANONICAL_SCHEMA: Dict[str, Any] = json.load(_fh)
+    _CANONICAL_SCHEMA: dict[str, Any] = json.load(_fh)
 
 
 class SchemaValidationError(Exception):
@@ -35,7 +35,7 @@ class SchemaValidationError(Exception):
 
 
 def validate_json(
-    data: Dict[str, Any], *, schema: Optional[Dict[str, Any]] = None
+    data: dict[str, Any], *, schema: dict[str, Any] | None = None
 ) -> None:
     """Validate *data* against the canonical CKS JSON Schema.
 

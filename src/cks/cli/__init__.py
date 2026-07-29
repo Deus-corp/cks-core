@@ -8,17 +8,17 @@ from __future__ import annotations
 
 import argparse
 import sys
-from typing import Sequence
+from collections.abc import Sequence
 
 from .commands import (
-    validate,
-    parse,
-    inspect,
-    evolve,
     convert,
+    evolve,
     export,
-    schema,
+    inspect,
+    parse,
     plugin,
+    schema,
+    validate,
 )
 
 

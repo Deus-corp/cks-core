@@ -11,6 +11,7 @@ parameters that guarantee depends on.
 """
 
 import pytest
+
 from cks.core import (
     CanonicalRelation,
     KnowledgeObject,

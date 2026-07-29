@@ -7,18 +7,17 @@ exposes every canonical operation required by the Canonical Knowledge
 Interface (CKS-007).
 """
 
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
-from typing import Iterable, Mapping
 
+from .constraints.base import Constraint
 from .core import KnowledgeObject, KnowledgeStructure
 from .diagnostics import DiagnosticCollection
+from .evolution import StructuralOperator, compose
 from .result import ValidationResult
 from .serialization import parse as _parse
 from .serialization import serialize as _serialize
 from .validator import validate as _validate
-from .evolution import StructuralOperator, compose
-from .constraints.base import Constraint
-
 
 # =============================================================================
 # Reference Engine

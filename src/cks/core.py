@@ -5,9 +5,10 @@ CKS Core — Canonical Knowledge Objects.
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Iterable, Iterator, Literal, Mapping, Union
+from typing import Any, Literal, Union
 
 
 def _freeze(value: Any) -> Any:
@@ -96,7 +97,7 @@ def _canonical_hash(value: Any) -> bytes:
 
 
 def _compute_leaf_hash(
-    identity: "ObjectIdentity", structure: Mapping[str, Any]
+    identity: ObjectIdentity, structure: Mapping[str, Any]
 ) -> bytes:
     """Merkle leaf hash for one KnowledgeObject: its identity plus its
     (already-frozen) semantic structure."""
@@ -146,10 +147,10 @@ class KnowledgeObject:
     # safely return the same instance rather than attempting to clone
     # the internal MappingProxyType (which the stdlib copy module
     # cannot pickle-based deep-copy).
-    def __copy__(self) -> "KnowledgeObject":
+    def __copy__(self) -> KnowledgeObject:
         return self
 
-    def __deepcopy__(self, memo: dict[int, Any]) -> "KnowledgeObject":
+    def __deepcopy__(self, memo: dict[int, Any]) -> KnowledgeObject:
         memo[id(self)] = self
         return self
 
@@ -229,7 +230,7 @@ def _normalize_structure(
 
 
 class KnowledgeStructure:
-    __slots__ = ("_objects", "_index", "_relations", "_root_hash", "_identity_hash")
+    __slots__ = ("_identity_hash", "_index", "_objects", "_relations", "_root_hash")
 
     def __init__(self, objects: Iterable[KnowledgeObject]) -> None:
         object_list: list[KnowledgeObject] = []
@@ -344,10 +345,10 @@ class KnowledgeStructure:
     # ------------------------------------------------------------------
     # KnowledgeStructure is immutable by contract. Returning self
     # avoids deep-copying internal MappingProxyType-bearing objects.
-    def __copy__(self) -> "KnowledgeStructure":
+    def __copy__(self) -> KnowledgeStructure:
         return self
 
-    def __deepcopy__(self, memo: dict[int, Any]) -> "KnowledgeStructure":
+    def __deepcopy__(self, memo: dict[int, Any]) -> KnowledgeStructure:
         memo[id(self)] = self
         return self
 
@@ -355,7 +356,7 @@ class KnowledgeStructure:
     # Structural Diff
     # ------------------------------------------------------------------
 
-    def diff(self, target: "KnowledgeStructure") -> list[Any]:
+    def diff(self, target: KnowledgeStructure) -> list[Any]:
         """
         Compute the ordered list of StructuralOperators that, applied
         via cks.evolution.compose(self, ops), reconstruct `target`.
@@ -398,7 +399,7 @@ class KnowledgeStructure:
             if self._index[oid]._hash != target._index[oid]._hash
         }
 
-        def is_relation(structure: "KnowledgeStructure", oid: str) -> bool:
+        def is_relation(structure: KnowledgeStructure, oid: str) -> bool:
             return isinstance(structure._index[oid], CanonicalRelation)
 
         # Direct (non-cascade) changes, split into objects vs relations.
@@ -459,12 +460,12 @@ class KnowledgeStructure:
 
     def merge(
         self,
-        branch_a: "KnowledgeStructure",
-        branch_b: "KnowledgeStructure",
+        branch_a: KnowledgeStructure,
+        branch_b: KnowledgeStructure,
         *,
-        resolutions: Mapping[str, "MergeResolution"] | None = None,
+        resolutions: Mapping[str, MergeResolution] | None = None,
         dropped_relations: list[str] | None = None,
-    ) -> "KnowledgeStructure":
+    ) -> KnowledgeStructure:
         """
         Three-way merge. ``self`` is the common ancestor (base);
         ``branch_a`` and ``branch_b`` are two structures independently
@@ -606,7 +607,7 @@ class KnowledgeStructure:
         b_touched = touched_ids(b_ids, branch_b._index)
 
         conflicts: list[MergeConflict] = []
-        resolved: dict[str, "MergeResolution"] = {}
+        resolved: dict[str, MergeResolution] = {}
         # Ids actually in conflict, i.e. touched by both branches AND
         # ending up with different results -- narrower than
         # `a_touched & b_touched`, which also contains ids both
@@ -696,7 +697,7 @@ class KnowledgeStructure:
         max_tokens: int | None = None,
         max_objects: int | None = None,
         type_weights: dict[str, float] | None = None,
-    ) -> "SubgraphResult":
+    ) -> SubgraphResult:
         """
         Extract the local neighborhood around ``seed_ids`` out to
         ``depth`` hops, as a self-contained ``KnowledgeStructure`` with
@@ -958,9 +959,9 @@ class MergeConflict:
     """
 
     object_id: str
-    base: "KnowledgeObject | None"
-    branch_a: "KnowledgeObject | None"
-    branch_b: "KnowledgeObject | None"
+    base: KnowledgeObject | None
+    branch_a: KnowledgeObject | None
+    branch_b: KnowledgeObject | None
 
     def __repr__(self) -> str:
         return f"MergeConflict(object_id={self.object_id!r})"
@@ -973,7 +974,7 @@ class MergeConflictError(ValueError):
     different, irreconcilable results.
     """
 
-    def __init__(self, conflicts: list["MergeConflict"]) -> None:
+    def __init__(self, conflicts: list[MergeConflict]) -> None:
         self.conflicts = conflicts
         ids = ", ".join(c.object_id for c in conflicts)
         super().__init__(f"Merge conflict on identities: {ids}")
@@ -984,7 +985,7 @@ class MergeConflictError(ValueError):
 # ============================================================================
 
 
-def _estimate_subgraph_tokens(obj: "KnowledgeObject") -> int:
+def _estimate_subgraph_tokens(obj: KnowledgeObject) -> int:
     """
     Rough, fast token estimate for a KnowledgeObject (~1 token per 4
     chars of its identity+structure text), used only to budget
@@ -1013,7 +1014,7 @@ class SubgraphResult:
     """
 
     #: The extracted subgraph.
-    structure: "KnowledgeStructure"
+    structure: KnowledgeStructure
 
     #: Size of the full neighborhood discovered by BFS, before any
     #: ``max_tokens``/``max_objects`` budget was applied.

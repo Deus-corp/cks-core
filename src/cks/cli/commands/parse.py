@@ -7,7 +7,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from ...serialization import parse as cks_parse, SerializationError
+from ...serialization import SerializationError
+from ...serialization import parse as cks_parse
 
 
 def add_parser(subparsers):

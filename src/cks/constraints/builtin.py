@@ -11,13 +11,12 @@ etc.).
 
 from __future__ import annotations
 
-from .structural import UniqueIdentityConstraint, NoDanglingRelationConstraint
-from .semantic import DerivationArityConstraint, DerivationCycleConstraint
+from .contradiction import FunctionalRelationConstraint, MutualExclusionConstraint
+from .ontology import RelationTypeConstraint, TypeHierarchyCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
+from .semantic import DerivationArityConstraint, DerivationCycleConstraint
+from .structural import NoDanglingRelationConstraint, UniqueIdentityConstraint
 from .verification import VerificationRecordIntegrityConstraint
-from .ontology import TypeHierarchyCycleConstraint, RelationTypeConstraint
-from .contradiction import MutualExclusionConstraint, FunctionalRelationConstraint
-
 
 # =============================================================================
 # Built-in Constraint Set

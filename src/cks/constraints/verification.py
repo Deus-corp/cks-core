@@ -116,7 +116,7 @@ def _is_valid_iso8601(value: object) -> bool:
         return False
     try:
         # Accept the common "...Z" suffix alongside stdlib's native offset format.
-        datetime.fromisoformat(value.replace("Z", "+00:00"))
+        datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
         return True
     except ValueError:
         return False
@@ -267,7 +267,7 @@ class VerificationRecordIntegrityConstraint(Constraint):
 
 
 __all__ = [
-    "VerificationRecordIntegrityConstraint",
-    "VERIFIED_BY_RELATION",
     "VERIFICATION_RECORD_TYPE",
+    "VERIFIED_BY_RELATION",
+    "VerificationRecordIntegrityConstraint",
 ]

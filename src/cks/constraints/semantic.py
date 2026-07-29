@@ -16,7 +16,6 @@ from ..diagnostics import (
 from ..validation import ValidationStage
 from .base import Constraint
 
-
 # =============================================================================
 # Helpers
 # =============================================================================
@@ -169,7 +168,7 @@ SEMANTIC_CONSTRAINTS = (
 
 
 __all__ = [
+    "SEMANTIC_CONSTRAINTS",
     "DerivationArityConstraint",
     "DerivationCycleConstraint",
-    "SEMANTIC_CONSTRAINTS",
 ]

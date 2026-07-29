@@ -1,9 +1,10 @@
-#!/usr/bin/env python3
 """Pre-commit hook: validate CKS JSON files."""
 import json
 import sys
 from pathlib import Path
-from cks.serialization import parse as cks_parse, SerializationError
+
+from cks.serialization import SerializationError
+from cks.serialization import parse as cks_parse
 from cks.validator import validate as cks_validate
 
 FAILED = False

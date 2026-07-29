@@ -8,12 +8,13 @@ import html as html_lib
 import json
 import sys
 from pathlib import Path
-from typing import Optional
 
-from ...serialization import parse as cks_parse, SerializationError
-from ...validator import validate as cks_validate, validate_all
 from ...diagnostics import DiagnosticSeverity
-from ..formatters import format_json, format_text, format_html, format_markdown
+from ...serialization import SerializationError
+from ...serialization import parse as cks_parse
+from ...validator import validate as cks_validate
+from ...validator import validate_all
+from ..formatters import format_html, format_json, format_markdown, format_text
 
 
 def add_parser(subparsers):
@@ -154,7 +155,7 @@ def _format_multi(fmt: str, paths: list[Path], results: list) -> str:
     return "\n".join(lines)
 
 
-def _write_output(content: str, path: Optional[Path]) -> None:
+def _write_output(content: str, path: Path | None) -> None:
     if path is None:
         print(content)
     else:

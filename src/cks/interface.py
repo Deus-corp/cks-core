@@ -16,41 +16,36 @@ Every exported function is:
 
 from __future__ import annotations
 
-from typing import Iterable, Mapping, Any
+from collections.abc import Iterable, Mapping
+from typing import Any
 
+from .constraints.base import Constraint
 from .core import (
     KnowledgeObject,
     KnowledgeStructure,
     SubgraphResult,
 )
-
+from .diagnostics import DiagnosticCollection, DiagnosticSeverity
 from .engine import ReferenceEngine
 from .result import ValidationResult
 from .serialization import SerializationError
-from .diagnostics import DiagnosticCollection, DiagnosticSeverity
-
-from .validator import validate as _validate, validate_all as _validate_all
-from .constraints.base import Constraint
+from .validator import validate as _validate
+from .validator import validate_all as _validate_all
 
 __all__ = [
-    # Construction
-    "construct",
-    "parse",
-    "serialize",
-    # Validation
-    "validate",
-    "diagnose",
-    # Inspection
-    "inspect",
-    "compare",
-    "extract",
-    "project",
-    # Evolution
-    "evolve",
-    # Public classes
     "ReferenceEngine",
     "SerializationError",
+    "compare",
+    "construct",
+    "diagnose",
+    "evolve",
+    "extract",
+    "inspect",
     "merge",
+    "parse",
+    "project",
+    "serialize",
+    "validate",
 ]
 
 # Canonical shared ReferenceEngine.

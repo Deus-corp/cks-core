@@ -16,11 +16,11 @@ Loaded constraints are automatically registered in the canonical global
 from __future__ import annotations
 
 import logging
-from typing import Iterable, List
+from collections.abc import Iterable
 
+from .constraints import registry as _global_registry
 from .constraints.base import Constraint
 from .constraints.registry import ConstraintRegistry
-from .constraints import registry as _global_registry
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def discover_entry_points() -> Iterable:
     yield from eps
 
 
-def load_constraints_from_entry_point(ep) -> List[Constraint]:
+def load_constraints_from_entry_point(ep) -> list[Constraint]:
     """Call the entry-point and return the resulting constraints.
 
     Raises

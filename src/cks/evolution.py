@@ -13,8 +13,9 @@ required by CKS‑001 and CKS‑005.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable, Tuple
+from typing import Any
 
 from .core import (
     CanonicalRelation,
@@ -32,9 +33,9 @@ class OperatorContract:
     """Formal contract for a StructuralOperator (CKS‑004, Section 7)."""
 
     description: str
-    preconditions: Tuple[str, ...]
-    postconditions: Tuple[str, ...]
-    invariant_obligations: Tuple[str, ...]
+    preconditions: tuple[str, ...]
+    postconditions: tuple[str, ...]
+    invariant_obligations: tuple[str, ...]
 
 
 # ---------------------------------------------------------------------------
@@ -209,8 +210,10 @@ class RemoveRelation(StructuralOperator):
             description=f"Remove CanonicalRelation '{self._relation_id}'.",
             preconditions=(
                 "The relation must exist.",
-                "The identity must refer to a CanonicalRelation, not a "
-                "plain KnowledgeObject.",
+                (
+                    "The identity must refer to a CanonicalRelation, not a "
+                    "plain KnowledgeObject."
+                ),
             ),
             postconditions=("The relation is absent.",),
             invariant_obligations=("Referential integrity is preserved.",),
@@ -299,8 +302,10 @@ class UpdateObject(StructuralOperator):
                 "The object's structure reflects the patch.",
             ),
             invariant_obligations=(
-                "Referential integrity is preserved (no relation is "
-                "touched, since the object's id does not change).",
+                (
+                    "Referential integrity is preserved (no relation is "
+                    "touched, since the object's id does not change)."
+                ),
             ),
         )
 

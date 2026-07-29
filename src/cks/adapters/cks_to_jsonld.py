@@ -6,9 +6,9 @@ Converts a Canonical Knowledge Structure into a JSON‑LD document.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
-from ..core import KnowledgeStructure, CanonicalRelation
+from ..core import CanonicalRelation, KnowledgeStructure
 
 
 class CksToJsonLdConverter:
@@ -17,15 +17,15 @@ class CksToJsonLdConverter:
     def __init__(self, structure: KnowledgeStructure) -> None:
         self._structure = structure
 
-    def convert(self) -> Dict[str, Any]:
+    def convert(self) -> dict[str, Any]:
         """Run the conversion and return a JSON‑LD dictionary."""
-        graph: List[Dict[str, Any]] = []
+        graph: list[dict[str, Any]] = []
 
         # 1. Convert every KnowledgeObject to a JSON‑LD entity
         for obj in self._structure.objects:
             if isinstance(obj, CanonicalRelation):
                 continue  # handled separately
-            entity: Dict[str, Any] = {
+            entity: dict[str, Any] = {
                 "@id": obj.identity.id,
                 "@type": obj.identity.type,
                 "name": obj.identity.name,

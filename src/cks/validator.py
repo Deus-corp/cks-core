@@ -15,17 +15,18 @@ independent validation stages.
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from typing import Callable, Iterable
 
-from .core import KnowledgeStructure
-from .diagnostics import Diagnostic, DiagnosticSeverity, DiagnosticCollection
-from .result import ValidationResult
-from .validation import ValidationStage
-from .constraints.base import Constraint
-from .constraints.registry import ConstraintRegistry, registry as _registry
 import cks.constraints  # noqa: F401
 
+from .constraints.base import Constraint
+from .constraints.registry import ConstraintRegistry
+from .constraints.registry import registry as _registry
+from .core import KnowledgeStructure
+from .diagnostics import Diagnostic, DiagnosticCollection, DiagnosticSeverity
+from .result import ValidationResult
+from .validation import ValidationStage
 
 ConstraintEvaluator = Callable[[KnowledgeStructure], list[Diagnostic]] | Constraint
 
