@@ -15,6 +15,7 @@ from .commands import (
     evolve,
     export,
     inspect,
+    migrate,
     parse,
     plugin,
     schema,
@@ -42,6 +43,7 @@ def _create_parser() -> argparse.ArgumentParser:
     export.add_parser(sub)
     schema.add_parser(sub)
     plugin.add_parser(sub)
+    migrate.add_parser(sub)
 
     return parser
 
@@ -70,6 +72,8 @@ def main(argv: Sequence[str] | None = None) -> None:
         schema.handle(args)
     elif args.command == "plugin":
         plugin.handle(args)
+    elif args.command == "migrate":
+        migrate.handle(args)
     else:
         parser.print_help()
         sys.exit(1)

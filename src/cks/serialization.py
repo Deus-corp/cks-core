@@ -11,7 +11,9 @@ serialization and deserialization never modify their inputs.
 
 from __future__ import annotations
 
+import importlib.metadata
 import json
+from datetime import UTC, datetime
 from types import MappingProxyType
 from typing import Any
 
@@ -27,6 +29,18 @@ from .core import (
 # ============================================================================
 
 CANONICAL_JSON_VERSION = "1.0"
+
+# Format versioning (CKS-003 §7 — forward/backward compatibility).
+#
+# _CKS_FORMAT_VERSION  — bumped when the on-disk schema changes in a way that
+#                        older readers cannot silently ignore.
+# _CKS_MIN_READER_VERSION — oldest cks-core release that can correctly parse
+#                           a file produced by this version of the serializer.
+# _LEGACY_FORMAT_SENTINEL — value written by pre-1.14 serializers (they used
+#                           "version": "1.0" with no _cks_format_version key).
+_CKS_FORMAT_VERSION = "1.0"
+_CKS_MIN_READER_VERSION = "1.13.0"
+_LEGACY_FORMAT_SENTINEL = None  # absent key → legacy format
 
 ROOT_OBJECTS_KEY = "objects"
 ROOT_VERSION_KEY = "version"
@@ -93,6 +107,10 @@ def _jsonify(value: Any) -> Any:
 
 class SerializationError(Exception):
     """Raised when canonical serialization cannot be parsed."""
+
+
+class FormatVersionError(SerializationError):
+    """Raised when a file requires a newer or incompatible cks-core version."""
 
 
 # ============================================================================
@@ -183,6 +201,45 @@ class CanonicalDeserializer:
             raise SerializationError(
                 f"Unsupported serialization version {version!r}."
             )
+
+        # Format versioning check (added in cks-core 1.14.2).
+        # Files that pre-date this feature have no _cks_format_version key
+        # and are treated as "legacy" — parseable but flagged for migration.
+        self._check_reader_version(data)
+
+    # ---------------------------------------------------------------------
+
+    @staticmethod
+    def _check_reader_version(data: dict[str, Any]) -> None:
+        """Raise FormatVersionError when the current cks-core is too old."""
+        min_reader = data.get("_cks_min_reader_version")
+        if min_reader is None:
+            return  # legacy file or same-version file — no constraint
+
+        try:
+            current = importlib.metadata.version("cks-core")
+        except importlib.metadata.PackageNotFoundError:
+            current = "0.0.0"  # dev / editable install without metadata
+
+        def _parse(v: str) -> tuple[int, ...]:
+            try:
+                return tuple(int(x) for x in v.split("."))
+            except ValueError:
+                return (0,)
+
+        if _parse(current) < _parse(min_reader):
+            raise FormatVersionError(
+                f"This file requires cks-core >= {min_reader}, "
+                f"but the installed version is {current}. "
+                "Upgrade cks-core or use 'cks migrate' to downgrade the file."
+            )
+
+    # ---------------------------------------------------------------------
+
+    @staticmethod
+    def is_legacy_format(data: dict[str, Any]) -> bool:
+        """Return True when *data* was produced by a pre-1.14.2 serializer."""
+        return "_cks_format_version" not in data
 
     # ---------------------------------------------------------------------
 
@@ -347,8 +404,20 @@ class CanonicalSerializer:
         structure: KnowledgeStructure,
     ) -> dict[str, Any]:
 
+        try:
+            cks_version = importlib.metadata.version("cks-core")
+        except importlib.metadata.PackageNotFoundError:
+            cks_version = "dev"
+
         return {
             ROOT_VERSION_KEY: CANONICAL_JSON_VERSION,
+            # Format versioning fields (CKS-003 §7).
+            "_cks_format_version": _CKS_FORMAT_VERSION,
+            "_cks_min_reader_version": _CKS_MIN_READER_VERSION,
+            "_cks_metadata": {
+                "serialized_at": datetime.now(UTC).isoformat(),
+                "cks_core_version": cks_version,
+            },
             ROOT_OBJECTS_KEY: [self._encode_object(obj) for obj in structure.objects],
         }
 
@@ -441,6 +510,7 @@ def serialize(structure: KnowledgeStructure) -> str:
 __all__ = [
     "CanonicalDeserializer",
     "CanonicalSerializer",
+    "FormatVersionError",
     "SerializationError",
     "parse",
     "serialize",

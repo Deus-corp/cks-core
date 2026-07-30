@@ -247,12 +247,22 @@ def test_empty_structure_roundtrip():
 
 
 def test_serialization_is_deterministic():
+    # The canonical object graph must be identical across two serialize calls.
+    # We compare the parsed structure rather than the raw JSON string because
+    # _cks_metadata.serialized_at intentionally captures wall-clock time and
+    # may therefore differ between two calls within the same test.
+    import json as _json
+
     structure = make_structure()
 
-    first = serialize(structure)
-    second = serialize(structure)
+    first_data = _json.loads(serialize(structure))
+    second_data = _json.loads(serialize(structure))
 
-    assert first == second
+    # Strip the timestamp before comparing
+    for d in (first_data, second_data):
+        d.get("_cks_metadata", {}).pop("serialized_at", None)
+
+    assert first_data == second_data
 
 
 def test_parse_then_serialize_then_parse():

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cks-core"
-version = "1.14.0"
+version = "1.15.0"
 description = "Canonical Knowledge Structure — Reference Implementation"
 readme = "README.md"
 authors = [{name = "Vladyslav Hruznov"}]
@@ -40,6 +40,14 @@ where = ["src"]
 
 [project.scripts]
 cks = "cks.cli:main"
+
+# Third-party packages register custom constraints by adding entries here.
+# Each entry point must reference a zero-argument callable that returns
+# an iterable of cks.constraints.base.Constraint instances.
+# Example (in your package's pyproject.toml):
+#   [project.entry-points."cks.constraints"]
+#   my-plugin = "my_package.constraints:get_constraints"
+[project.entry-points."cks.constraints"]
 
 [project.optional-dependencies]
 dev = [

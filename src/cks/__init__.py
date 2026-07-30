@@ -63,7 +63,7 @@ from .interface import (
 )
 from .plugin import load_external_constraints
 from .result import ValidationResult
-from .serialization import SerializationError
+from .serialization import FormatVersionError, SerializationError
 
 # ---------------------------------------------------------------------------
 # Bootstrap external constraint plugins
@@ -71,7 +71,7 @@ from .serialization import SerializationError
 
 _EXTERNAL_COUNT = load_external_constraints()
 
-__version__ = "1.14.0"
+__version__ = "1.15.0"
 
 VERSION = tuple(int(part) for part in __version__.split("."))
 
@@ -83,6 +83,7 @@ __all__ = [
     "Diagnostic",
     "DiagnosticCollection",
     "DiagnosticSeverity",
+    "FormatVersionError",
     "KnowledgeObject",
     "KnowledgeStructure",
     "MergeConflict",

@@ -6,6 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.15.0] - 2026-07-30
+
+### Added
+- **Constraint entry points** – `[project.entry-points."cks.constraints"]` declared in `pyproject.toml`, completing the plugin contract so third-party packages can register custom constraints without manual registry calls.
+- **Format versioning (CKS-003 §7)** – `serialize` now writes `_cks_format_version`, `_cks_min_reader_version`, and `_cks_metadata` into every JSON output. `parse` validates that the installed `cks-core` meets the file's minimum version requirement and raises a clear `FormatVersionError` when it doesn't.
+- **`cks migrate` CLI command** – re-serializes legacy (pre‑v1.15.0) CKS JSON files into the current versioned format. Supports `--in-place` and `--check` flags.
+- **`is_legacy_format()`** on `CanonicalDeserializer` – lets callers detect files produced by older serializers.
+- **`FormatVersionError`** exported from `cks.serialization` and top‑level `cks`.
+
+---
+
 ## [1.14.0] - 2026-07-30
 
 ### Added
