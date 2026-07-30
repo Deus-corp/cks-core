@@ -6,6 +6,14 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.14.0] - 2026-07-30
+
+### Added
+- **`RenameObject` operator** – changes an object's `identity.name` without affecting its `id`, `type`, or any relations. Fully supported in `parse_operations`, `compose`, and the CLI.
+- Public properties for all structural operators (`AddObject.obj`, `RemoveObject.object_id`, `UpdateObject.object_id`, etc.) – allows safe, documented introspection of operators by external consumers (cks-runtime, cks-mcp).
+
+---
+
 ## [1.13.1] - 2026-07-29
 
 ### Fixed

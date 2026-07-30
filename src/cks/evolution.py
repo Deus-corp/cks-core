@@ -97,6 +97,11 @@ class AddObject(StructuralOperator):
     def __init__(self, obj: KnowledgeObject) -> None:
         self._obj = obj
 
+    @property
+    def obj(self) -> KnowledgeObject:
+        """The KnowledgeObject to be added."""
+        return self._obj
+
     def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
         if self._obj.identity.id in objects:
             raise ValueError(f"Object '{self._obj.identity.id}' already exists.")
@@ -123,6 +128,11 @@ class AddRelation(StructuralOperator):
 
     def __init__(self, relation: CanonicalRelation) -> None:
         self._relation = relation
+
+    @property
+    def relation(self) -> CanonicalRelation:
+        """The CanonicalRelation to be added."""
+        return self._relation
 
     def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
         if self._relation.identity.id in objects:
@@ -156,6 +166,11 @@ class RemoveObject(StructuralOperator):
     def __init__(self, object_id: str) -> None:
         self._object_id = object_id
 
+    @property
+    def object_id(self) -> str:
+        """The id of the object to remove."""
+        return self._object_id
+
     def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
         if self._object_id not in objects:
             raise ValueError(f"Object '{self._object_id}' does not exist.")
@@ -186,6 +201,11 @@ class RemoveRelation(StructuralOperator):
 
     def __init__(self, relation_id: str) -> None:
         self._relation_id = relation_id
+
+    @property
+    def relation_id(self) -> str:
+        """The id of the relation to remove."""
+        return self._relation_id
 
     def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
         target = objects.get(self._relation_id)
@@ -263,6 +283,21 @@ class UpdateObject(StructuralOperator):
         self._structure_patch = structure_patch
         self._mode = mode
 
+    @property
+    def object_id(self) -> str:
+        """The id of the object to update."""
+        return self._object_id
+
+    @property
+    def structure_patch(self) -> dict[str, Any]:
+        """The patch to apply to the object's structure."""
+        return dict(self._structure_patch)
+
+    @property
+    def mode(self) -> str:
+        """Update mode: 'merge' or 'replace'."""
+        return self._mode
+
     def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
         target = objects.get(self._object_id)
         if target is None:
@@ -300,6 +335,92 @@ class UpdateObject(StructuralOperator):
             postconditions=(
                 "The object's identity is unchanged.",
                 "The object's structure reflects the patch.",
+            ),
+            invariant_obligations=(
+                (
+                    "Referential integrity is preserved (no relation is "
+                    "touched, since the object's id does not change)."
+                ),
+            ),
+        )
+
+
+# ---------------------------------------------------------------------------
+# Rename – Identity Mutation
+# ---------------------------------------------------------------------------
+
+
+class RenameObject(StructuralOperator):
+    """
+    Rename an existing KnowledgeObject: change its ``identity.name``
+    while leaving ``identity.id`` and ``identity.type`` untouched.
+
+    This is strictly weaker than a full identity change: ``id`` is the
+    canonical reference key used by every ``CanonicalRelation``'s
+    ``participants`` list, so keeping it means no relation is invalidated
+    and no cascade is needed. Only the human-readable ``name`` field —
+    which carries no structural semantics inside the graph — is updated.
+
+    Use ``RemoveObject`` + ``AddObject`` if you need to change the ``id``
+    or ``type`` of an object (at the cost of cascade-removing all
+    referencing relations first).
+    """
+
+    def __init__(self, object_id: str, new_name: str) -> None:
+        if not new_name or not new_name.strip():
+            raise ValueError("new_name must be a non-empty string.")
+        self._object_id = object_id
+        self._new_name = new_name
+
+    @property
+    def object_id(self) -> str:
+        """The id of the object to rename."""
+        return self._object_id
+
+    @property
+    def new_name(self) -> str:
+        """The new human-readable name for the object."""
+        return self._new_name
+
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        target = objects.get(self._object_id)
+        if target is None:
+            raise ValueError(f"Object '{self._object_id}' does not exist.")
+
+        from .core import ObjectIdentity
+
+        new_identity = ObjectIdentity(
+            id=target.identity.id,
+            type=target.identity.type,
+            name=self._new_name,
+        )
+        if isinstance(target, CanonicalRelation):
+            objects[self._object_id] = CanonicalRelation(
+                identity=new_identity,
+                participants=list(target.participants),
+                relation_type=target.relation_type,
+                structure={
+                    k: v
+                    for k, v in target.structure.items()
+                    if k not in ("participants", "relation_type")
+                },
+            )
+        else:
+            objects[self._object_id] = KnowledgeObject(
+                identity=new_identity,
+                structure=dict(target.structure),
+            )
+
+    def contract(self) -> OperatorContract:
+        return OperatorContract(
+            description=(
+                f"Rename KnowledgeObject '{self._object_id}' "
+                f"to '{self._new_name}'."
+            ),
+            preconditions=("The object must exist.",),
+            postconditions=(
+                "The object's identity.name is updated to the new value.",
+                "The object's identity.id and identity.type are unchanged.",
             ),
             invariant_obligations=(
                 (
@@ -402,6 +523,18 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
             except ValueError as exc:
                 raise ValueError(f"Operation #{i}: {exc}") from exc
 
+        elif op_type == "rename_object":
+            object_id = op.get("object_id")
+            if object_id is None:
+                raise ValueError(f"Operation #{i}: missing 'object_id' field")
+            new_name = op.get("new_name")
+            if new_name is None:
+                raise ValueError(f"Operation #{i}: missing 'new_name' field")
+            try:
+                operators.append(RenameObject(object_id, new_name))
+            except ValueError as exc:
+                raise ValueError(f"Operation #{i}: {exc}") from exc
+
         else:
             raise ValueError(f"Operation #{i}: unknown operation type '{op_type}'")
 
@@ -443,6 +576,7 @@ __all__ = [
     "OperatorContract",
     "RemoveObject",
     "RemoveRelation",
+    "RenameObject",
     "StructuralOperator",
     "UpdateObject",
     "compose",
