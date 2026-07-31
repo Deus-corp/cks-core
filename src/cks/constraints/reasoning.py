@@ -54,8 +54,23 @@ Three constraints are provided, each independently opt-in:
     same ``conclusion`` -- otherwise a revision chain could silently
     point at an unrelated or nonexistent object.
 
+``InferenceConfidenceConflictConstraint``
+    ADR-001 names this the natural next step for `detect_contradictions`:
+    unlike `contradiction.py`, which flags two relations that are
+    jointly nonsensical, this flags two *agreeing* `InferenceStep`s --
+    same ``conclusion`` -- whose ``confidence`` values disagree. This
+    is deliberately a WARNING, not an ERROR: two independent inference
+    paths reaching the same conclusion with different confidence is a
+    resolvable belief conflict to surface for review, not a structural
+    invalidity like a dangling reference or an out-of-range confidence
+    value. Only *active* steps are compared -- a step named by another
+    step's ``superseded_by`` has already been explicitly revised, so it
+    no longer represents a live, disagreeing belief and is excluded
+    from the comparison (that relationship is `SupersessionChainConstraint`'s
+    concern, not this one's).
+
 A structure with no ``InferenceStep`` objects is entirely unaffected
-by any of the three, matching every other extension's convention in
+by any of the four, matching every other extension's convention in
 this package.
 """
 
@@ -247,9 +262,84 @@ class SupersessionChainConstraint(Constraint):
         return diagnostics
 
 
+class InferenceConfidenceConflictConstraint(Constraint):
+    """Two or more *active* (non-superseded) InferenceSteps that share
+    a ``conclusion`` shall not carry disagreeing ``confidence`` values.
+
+    A WARNING, not an ERROR (see module docstring): this is a
+    resolvable belief conflict between agreeing inference paths, not a
+    structural invalidity.
+    """
+
+    identity = "CKS-EXT-INFERENCE-CONFIDENCE-CONFLICT"
+    stage = ValidationStage.SEMANTIC
+    description = (
+        "Active InferenceSteps sharing a conclusion must not carry "
+        "disagreeing confidence values."
+    )
+
+    def evaluate(self, structure: KnowledgeStructure) -> list[Diagnostic]:
+        # conclusion_id -> confidence_value -> [step_id, ...]
+        by_conclusion: dict[str, dict[float, list[str]]] = {}
+
+        for step in _inference_steps(structure):
+            # A step already named by another step's superseded_by has
+            # been explicitly revised -- it no longer represents a
+            # live belief, so it is excluded from this comparison.
+            if step.structure.get(_SUPERSEDED_BY_KEY):
+                continue
+
+            conclusion = step.structure.get(_CONCLUSION_KEY)
+            if conclusion is None:
+                continue
+
+            confidence = step.structure.get(_CONFIDENCE_KEY)
+            # Non-numeric/out-of-range confidence is
+            # ConfidenceBoundsConstraint's concern, not this one's --
+            # only compare values that are themselves valid.
+            if isinstance(confidence, bool) or not isinstance(confidence, Real):
+                continue
+            if not (0.0 <= float(confidence) <= 1.0):
+                continue
+
+            by_conclusion.setdefault(conclusion, {}).setdefault(
+                float(confidence), []
+            ).append(step.identity.id)
+
+        diagnostics: list[Diagnostic] = []
+        for conclusion in sorted(by_conclusion):
+            values = by_conclusion[conclusion]
+            if len(values) <= 1:
+                continue  # every active step agrees on confidence
+
+            all_step_ids = sorted(
+                step_id for ids in values.values() for step_id in ids
+            )
+            breakdown = ", ".join(
+                f"{value!r}: {sorted(ids)}" for value, ids in sorted(values.items())
+            )
+            diagnostics.append(
+                Diagnostic(
+                    identity=self.identity,
+                    severity=DiagnosticSeverity.WARNING,
+                    message=(
+                        f"{len(all_step_ids)} active InferenceStep(s) reach "
+                        f"conclusion '{conclusion}' with disagreeing "
+                        f"confidence values ({breakdown}). This is a "
+                        f"resolvable belief conflict, not a structural "
+                        f"error -- consider a RecordInference with "
+                        f"'superseded_by' to reconcile it."
+                    ),
+                    location=all_step_ids[0],
+                )
+            )
+        return diagnostics
+
+
 __all__ = [
     "INFERENCE_STEP_TYPE",
     "ConfidenceBoundsConstraint",
+    "InferenceConfidenceConflictConstraint",
     "InferenceReferentialIntegrityConstraint",
     "SupersessionChainConstraint",
 ]

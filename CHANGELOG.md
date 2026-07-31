@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.16.0] - 2026-07-31
+
+### Added
+- **`InferenceConfidenceConflictConstraint`** – new opt-in extension constraint in `cks.constraints.reasoning` (`cks.constraints.builtin.OPTIONAL_CONSTRAINTS_BY_NAME["inference_confidence_conflict"]`, identity `CKS-EXT-INFERENCE-CONFIDENCE-CONFLICT`). Flags two or more *active* (non-`superseded_by`) `InferenceStep` objects that share a `conclusion` but disagree on `confidence`. Reported at WARNING severity, not ERROR: this is a resolvable belief conflict between agreeing inference paths, distinct from the hard, ERROR-severity contradictions in `contradiction.py`. This is the `detect_contradictions` extension point ADR-001 named as its natural next step.
+
+---
+
 ## [1.15.2] - 2026-07-31
 
 ### Added

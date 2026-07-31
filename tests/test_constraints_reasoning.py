@@ -8,10 +8,12 @@ See ADR-001 ("Reasoning Objects").
 from cks.constraints.reasoning import (
     INFERENCE_STEP_TYPE,
     ConfidenceBoundsConstraint,
+    InferenceConfidenceConflictConstraint,
     InferenceReferentialIntegrityConstraint,
     SupersessionChainConstraint,
 )
 from cks.core import KnowledgeObject, KnowledgeStructure, ObjectIdentity
+from cks.diagnostics import DiagnosticSeverity
 
 
 def make_object(oid: str, otype: str, name: str = "", structure: dict | None = None) -> KnowledgeObject:
@@ -222,6 +224,117 @@ def test_supersession_flags_successor_with_different_conclusion():
 
 
 # ---------------------------------------------------------------------------
+# InferenceConfidenceConflictConstraint
+# ---------------------------------------------------------------------------
+
+
+def test_confidence_conflict_passes_without_any_inference_step():
+    structure = KnowledgeStructure([make_object("a", "Claim")])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_passes_with_single_step():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.6),
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_passes_when_confidences_agree():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.6),
+        make_inference_step("step-2", conclusion="c1", confidence=0.6),
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_flags_disagreeing_confidence_same_conclusion():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.9),
+        make_inference_step("step-2", conclusion="c1", confidence=0.2),
+    ])
+    diagnostics = InferenceConfidenceConflictConstraint().evaluate(structure)
+    assert len(diagnostics) == 1
+    assert diagnostics[0].identity == "CKS-EXT-INFERENCE-CONFIDENCE-CONFLICT"
+    assert diagnostics[0].severity == DiagnosticSeverity.WARNING
+    assert "step-1" in diagnostics[0].message
+    assert "step-2" in diagnostics[0].message
+
+
+def test_confidence_conflict_ignores_different_conclusions():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.9),
+        make_inference_step("step-2", conclusion="c2", confidence=0.2),
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_excludes_superseded_step_from_comparison():
+    """step-1 disagrees with step-2, but step-1 has been explicitly
+    revised by step-2 (same conclusion) -- that's a resolved revision,
+    not a live conflict, so only non-superseded steps are compared."""
+    structure = KnowledgeStructure([
+        make_inference_step(
+            "step-1", conclusion="c1", confidence=0.2, superseded_by="step-2"
+        ),
+        make_inference_step("step-2", conclusion="c1", confidence=0.9),
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_still_flags_among_remaining_active_steps():
+    """step-1 is superseded by step-2 and drops out, but step-3 (also
+    active, same conclusion) still disagrees with step-2."""
+    structure = KnowledgeStructure([
+        make_inference_step(
+            "step-1", conclusion="c1", confidence=0.1, superseded_by="step-2"
+        ),
+        make_inference_step("step-2", conclusion="c1", confidence=0.9),
+        make_inference_step("step-3", conclusion="c1", confidence=0.4),
+    ])
+    diagnostics = InferenceConfidenceConflictConstraint().evaluate(structure)
+    assert len(diagnostics) == 1
+    assert "step-1" not in diagnostics[0].message
+    assert "step-2" in diagnostics[0].message
+    assert "step-3" in diagnostics[0].message
+
+
+def test_confidence_conflict_ignores_steps_missing_confidence_or_conclusion():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1"),  # no confidence
+        make_inference_step("step-2", confidence=0.5),  # no conclusion
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_ignores_invalid_confidence_values():
+    """Out-of-range/non-numeric confidence is ConfidenceBoundsConstraint's
+    concern; this constraint only compares already-valid values."""
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.5),
+        make_object(
+            "step-2",
+            INFERENCE_STEP_TYPE,
+            structure={"conclusion": "c1", "confidence": "high"},
+        ),
+        make_inference_step("step-3", conclusion="c1", confidence=1.7),
+    ])
+    assert InferenceConfidenceConflictConstraint().evaluate(structure) == []
+
+
+def test_confidence_conflict_groups_more_than_two_distinct_values():
+    structure = KnowledgeStructure([
+        make_inference_step("step-1", conclusion="c1", confidence=0.9),
+        make_inference_step("step-2", conclusion="c1", confidence=0.5),
+        make_inference_step("step-3", conclusion="c1", confidence=0.1),
+    ])
+    diagnostics = InferenceConfidenceConflictConstraint().evaluate(structure)
+    assert len(diagnostics) == 1
+    for step_id in ("step-1", "step-2", "step-3"):
+        assert step_id in diagnostics[0].message
+
+
+# ---------------------------------------------------------------------------
 # Opt-in behaviour via the full validator
 # ---------------------------------------------------------------------------
 
@@ -252,7 +365,7 @@ def test_reasoning_constraints_fire_when_opted_in():
     )
 
 
-def test_all_three_reasoning_constraints_registered_as_optional():
+def test_all_four_reasoning_constraints_registered_as_optional():
     from cks.constraints.builtin import BUILTIN_CONSTRAINTS, OPTIONAL_CONSTRAINTS
 
     builtin_identities = [c.identity for c in BUILTIN_CONSTRAINTS]
@@ -262,6 +375,7 @@ def test_all_three_reasoning_constraints_registered_as_optional():
         "CKS-EXT-INFERENCE-REFERENTIAL-INTEGRITY",
         "CKS-EXT-CONFIDENCE-BOUNDS",
         "CKS-EXT-SUPERSESSION-CHAIN",
+        "CKS-EXT-INFERENCE-CONFIDENCE-CONFLICT",
     ):
         assert identity not in builtin_identities
         assert identity in optional_identities

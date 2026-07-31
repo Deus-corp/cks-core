@@ -16,6 +16,7 @@ from .ontology import RelationTypeConstraint, TypeHierarchyCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
 from .reasoning import (
     ConfidenceBoundsConstraint,
+    InferenceConfidenceConflictConstraint,
     InferenceReferentialIntegrityConstraint,
     SupersessionChainConstraint,
 )
@@ -73,6 +74,7 @@ OPTIONAL_CONSTRAINTS = (
     InferenceReferentialIntegrityConstraint(),
     ConfidenceBoundsConstraint(),
     SupersessionChainConstraint(),
+    InferenceConfidenceConflictConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -89,4 +91,5 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "inference_referential_integrity": InferenceReferentialIntegrityConstraint(),
     "confidence_bounds": ConfidenceBoundsConstraint(),
     "supersession_chain": SupersessionChainConstraint(),
+    "inference_confidence_conflict": InferenceConfidenceConflictConstraint(),
 }
