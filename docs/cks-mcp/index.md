@@ -67,7 +67,7 @@ for the full picture.
 | [Security Model](security.md) | SSRF protection, provenance signing, defense in depth |
 | [Extension Model](extensions.md) | The opt-in `extensions` parameter and what each of the six checks |
 | [MCP Resources](protocol/resources.md) & [Prompts](protocol/prompts.md) | The two MCP-native features the server exposes beyond its 24 tools |
-| [ADRs](adr/) | Why specific architectural decisions were made — thin translator, provenance signing, middleware, extension model |
+| [ADRs](adr/ADR-001%20Thin%20Translator.md) | Why specific architectural decisions were made — thin translator, provenance signing, middleware, extension model |
 
 ## Learning Path
 
@@ -80,7 +80,7 @@ for the full picture.
    [Request Lifecycle](architecture/request-lifecycle.md) for the
    component layout, [Security Model](security.md) and
    [Extension Model](extensions.md) for the guarantees it enforces, and
-   the [ADRs](adr/) for why specific decisions were made.
+   the [ADRs](adr/ADR-001%20Thin%20Translator.md) for why specific decisions were made.
 
 ## Current Status
 
