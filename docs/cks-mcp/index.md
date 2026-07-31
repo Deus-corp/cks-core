@@ -67,7 +67,7 @@ for the full picture.
 | [Security Model](security.md) | SSRF protection, provenance signing, defense in depth |
 | [Extension Model](extensions.md) | The opt-in `extensions` parameter and what each of the six checks |
 | [MCP Resources](protocol/resources.md) & [Prompts](protocol/prompts.md) | The two MCP-native features the server exposes beyond its 24 tools |
-| [ADRs](adr/) | Why specific architectural decisions were made — thin translator, provenance signing, middleware, extension model |
+| [ADRs](/adr) | Why specific architectural decisions were made — thin translator, provenance signing, middleware, extension model |
 
 ## Learning Path
 
@@ -80,16 +80,16 @@ for the full picture.
    [Request Lifecycle](architecture/request-lifecycle.md) for the
    component layout, [Security Model](security.md) and
    [Extension Model](extensions.md) for the guarantees it enforces, and
-   the [ADRs](adr/) for why specific decisions were made.
+   the [ADRs](/adr) for why specific decisions were made.
 
 ## Current Status
 
 The project is in active development (`v1.16.x` — see
-[CHANGELOG](/CHANGELOG.md) for the exact history and
-[ROADMAP](/ROADMAP.md) for what's next). It ships with a persistent
+[CHANGELOG](https://github.com/Deus-corp/cks-mcp/blob/main/CHANGELOG.md) for the exact history and
+[ROADMAP](https://github.com/Deus-corp/cks-mcp/blob/main/ROADMAP.md) for what's next). It ships with a persistent
 SQLite-backed runtime, real HuggingFace-embedding semantic search, and a
 test suite covering core functionality, security, and integrations.
 
 ## License
 
-MIT — see [LICENSE](/LICENSE).
+MIT — see [LICENSE](https://github.com/Deus-corp/cks-mcp/blob/main/LICENSE).
