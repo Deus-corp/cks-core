@@ -14,6 +14,11 @@ from __future__ import annotations
 from .contradiction import FunctionalRelationConstraint, MutualExclusionConstraint
 from .ontology import RelationTypeConstraint, TypeHierarchyCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
+from .reasoning import (
+    ConfidenceBoundsConstraint,
+    InferenceReferentialIntegrityConstraint,
+    SupersessionChainConstraint,
+)
 from .semantic import DerivationArityConstraint, DerivationCycleConstraint
 from .structural import NoDanglingRelationConstraint, UniqueIdentityConstraint
 from .verification import VerificationRecordIntegrityConstraint
@@ -64,6 +69,10 @@ OPTIONAL_CONSTRAINTS = (
     # --- Contradiction Domain (declared mutual exclusion / functional relations) ---
     MutualExclusionConstraint(),
     FunctionalRelationConstraint(),
+    # --- Reasoning Domain (InferenceStep provenance, see ADR-001) ---
+    InferenceReferentialIntegrityConstraint(),
+    ConfidenceBoundsConstraint(),
+    SupersessionChainConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -77,4 +86,7 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "relation_type": RelationTypeConstraint(),
     "mutual_exclusion": MutualExclusionConstraint(),
     "functional_relation": FunctionalRelationConstraint(),
+    "inference_referential_integrity": InferenceReferentialIntegrityConstraint(),
+    "confidence_bounds": ConfidenceBoundsConstraint(),
+    "supersession_chain": SupersessionChainConstraint(),
 }

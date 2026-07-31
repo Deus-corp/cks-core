@@ -432,6 +432,72 @@ class RenameObject(StructuralOperator):
 
 
 # ---------------------------------------------------------------------------
+# Reasoning – Inference Recording (ADR-001)
+# ---------------------------------------------------------------------------
+
+
+class RecordInference(StructuralOperator):
+    """
+    Record an InferenceStep: the reified account of an inference an
+    agent already performed (premises, conclusion, confidence,
+    justification -- see ADR-001, "Reasoning Objects").
+
+    An InferenceStep is an ordinary KnowledgeObject whose
+    ``identity.type`` is ``cks.constraints.reasoning.INFERENCE_STEP_TYPE``
+    -- adding it is mechanically identical to ``AddObject``. This
+    operator exists alongside ``AddObject`` only to give the
+    premises/conclusion existence check the same *eager*, apply-time
+    treatment ``AddRelation`` already gives its participants, rather
+    than deferring the check entirely to the opt-in
+    ``cks.constraints.reasoning`` extension at validation time.
+    """
+
+    def __init__(self, obj: KnowledgeObject) -> None:
+        # Imported lazily to avoid cks.evolution depending on the
+        # cks.constraints package at module-import time -- evolution.py
+        # otherwise only ever imports from .core.
+        from .constraints.reasoning import INFERENCE_STEP_TYPE
+
+        if obj.identity.type != INFERENCE_STEP_TYPE:
+            raise ValueError(
+                f"RecordInference requires identity.type == "
+                f"'{INFERENCE_STEP_TYPE}', got '{obj.identity.type}'."
+            )
+        if "conclusion" not in obj.structure or not obj.structure["conclusion"]:
+            raise ValueError("InferenceStep requires a non-empty 'conclusion' field.")
+        self._obj = obj
+
+    @property
+    def obj(self) -> KnowledgeObject:
+        """The InferenceStep KnowledgeObject to be recorded."""
+        return self._obj
+
+    def _mutate(self, objects: dict[str, KnowledgeObject]) -> None:
+        if self._obj.identity.id in objects:
+            raise ValueError(f"Object '{self._obj.identity.id}' already exists.")
+        for premise_id in self._obj.structure.get("premises") or ():
+            if premise_id not in objects:
+                raise ValueError(f"Premise '{premise_id}' does not exist.")
+        conclusion_id = self._obj.structure["conclusion"]
+        if conclusion_id not in objects:
+            raise ValueError(f"Conclusion '{conclusion_id}' does not exist.")
+        objects[self._obj.identity.id] = self._obj
+
+    def contract(self) -> OperatorContract:
+        return OperatorContract(
+            description=f"Record InferenceStep '{self._obj.identity.id}'.",
+            preconditions=(
+                "Every id in 'premises' must already exist in the structure.",
+                "The 'conclusion' id must already exist in the structure.",
+            ),
+            postconditions=("The InferenceStep object is present in the structure.",),
+            invariant_obligations=(
+                "Referential integrity of premises/conclusion is preserved.",
+            ),
+        )
+
+
+# ---------------------------------------------------------------------------
 # JSON Deserialization of Operators
 # ---------------------------------------------------------------------------
 #
@@ -453,7 +519,8 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
     ops_data
         A sequence of dicts, each with a ``"type"`` field of
         ``"add_object" | "add_relation" | "remove_object" |
-        "remove_relation" | "update_object"``
+        "remove_relation" | "update_object" | "rename_object" |
+        "record_inference"``
         and the fields required by that operation.
 
     Raises
@@ -555,6 +622,17 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
             except ValueError as exc:
                 raise ValueError(f"Operation #{i}: {exc}") from exc
 
+        elif op_type == "record_inference":
+            identity_data = op.get("identity")
+            if identity_data is None:
+                raise ValueError(f"Operation #{i}: missing 'identity' field")
+            identity = _build_identity(i, identity_data)
+            obj = KnowledgeObject(identity=identity, structure=op.get("structure", {}))
+            try:
+                operators.append(RecordInference(obj))
+            except ValueError as exc:
+                raise ValueError(f"Operation #{i}: {exc}") from exc
+
         else:
             raise ValueError(f"Operation #{i}: unknown operation type '{op_type}'")
 
@@ -594,6 +672,7 @@ __all__ = [
     "AddObject",
     "AddRelation",
     "OperatorContract",
+    "RecordInference",
     "RemoveObject",
     "RemoveRelation",
     "RenameObject",

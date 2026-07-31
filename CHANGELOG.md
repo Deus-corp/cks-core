@@ -6,6 +6,14 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.15.2] - 2026-07-31
+
+### Added
+- **Inference reasoning constraints** – new opt-in extension module `cks.constraints.reasoning` with `InferenceReferentialIntegrityConstraint`, `ConfidenceBoundsConstraint`, and `SupersessionChainConstraint`. Validates that `InferenceStep` objects reference existing premises/conclusions, carry numeric confidence scores in [0,1], and maintain valid supersession chains.
+- **`RecordInference` operator** – records a new `InferenceStep` object with explicit premise and conclusion references. Integrated into `parse_operations`, `compose`, and the CLI.
+
+---
+
 ## [1.15.1] - 2026-07-31
 
 ### Security
