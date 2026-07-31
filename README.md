@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://img.shields.io/badge/tests-288%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-288%20passed-brightgreen)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
 CKS is an open specification that defines how knowledge can be represented,
@@ -163,6 +163,8 @@ The current Python reference implementation provides:
 - Merkle‑tree based structural hashing for O(1) comparison and diff computation
 - Three‑way merge (base‑branch‑branch) with conflict detection and structured error reporting
 - In‑place object updates via `UpdateObject` (merge and replace modes)
+- **`RenameObject` operator** — changes an object's `identity.name` without invalidating relations or cascading deletions
+- **Public operator properties** — safe, documented introspection of structural operators (`.obj`, `.object_id`, `.relation_id`, `.structure_patch`, `.mode`, `.new_name`)
 - k‑hop subgraph extraction (`query_subgraph`) with optional budget and type‑weighted ranking
 - Partial three‑way merge with per‑identity conflict resolution (`resolutions` parameter)
 
@@ -209,7 +211,6 @@ Currently implemented:
 
 Planned:
 
-- Constraint Libraries (additional built‑in constraints)
 - Additional language implementations (Rust, TypeScript)
 
 ---
@@ -381,6 +382,8 @@ Current implementation status:
 | Merkle Hashing & Diff | ✅ Complete |
 | Three‑Way Merge | ✅ Complete |
 | Query Subgraph | ✅ Complete |
+| RenameObject Operator | ✅ Complete |
+| Public Operator Properties | ✅ Complete |
 | Partial Merge (Resolutions) | ✅ Complete |
 
 The current implementation serves as the reference implementation of the
