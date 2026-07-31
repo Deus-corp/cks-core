@@ -637,6 +637,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/local-embeddings.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offline Semantic Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3234,34 +3262,54 @@ developing against them directly.</p>
 </thead>
 <tbody>
 <tr>
+<td><code>CKS_EMBEDDING_PROVIDER</code></td>
+<td><code>search_semantic</code></td>
+<td><code>"fastembed"</code> (default) for local, token‑free embeddings; <code>"huggingface"</code> for the HuggingFace Inference API.</td>
+</tr>
+<tr>
 <td><code>HF_TOKEN</code></td>
 <td><code>search_semantic</code></td>
-<td>HuggingFace token for generating real embeddings. Without it, semantic search falls back to explicit <code>seed_ids</code>.</td>
+<td>Required only when <code>CKS_EMBEDDING_PROVIDER=huggingface</code>.</td>
+</tr>
+<tr>
+<td><code>CKS_LLM_PROVIDER</code></td>
+<td><code>construct_knowledge</code></td>
+<td><code>"auto"</code> (default — prefers a local Ollama server, falls back to Anthropic), <code>"ollama"</code>, or <code>"anthropic"</code>.</td>
 </tr>
 <tr>
 <td><code>ANTHROPIC_API_KEY</code></td>
 <td><code>construct_knowledge</code></td>
-<td>Required for LLM-assisted knowledge construction.</td>
+<td>Required only for the <code>"anthropic"</code> provider.</td>
 </tr>
 <tr>
 <td><code>CKS_LLM_MODEL</code></td>
 <td><code>construct_knowledge</code></td>
-<td>Overrides the default model (<code>claude-sonnet-4-6</code>).</td>
+<td>Overrides the Anthropic model (default <code>claude-sonnet-4-6</code>).</td>
+</tr>
+<tr>
+<td><code>CKS_OLLAMA_MODEL</code></td>
+<td><code>construct_knowledge</code></td>
+<td>Overrides the Ollama model (default <code>llama3.2</code>).</td>
+</tr>
+<tr>
+<td><code>CKS_OLLAMA_HOST</code></td>
+<td><code>construct_knowledge</code></td>
+<td>Ollama server URL (default <code>http://localhost:11434</code>).</td>
 </tr>
 <tr>
 <td><code>CKS_LLM_MAX_TOKENS</code></td>
 <td><code>construct_knowledge</code></td>
-<td>Overrides the default max-tokens (<code>4096</code>).</td>
+<td>Overrides max-tokens (default <code>4096</code>).</td>
 </tr>
 <tr>
 <td><code>CKS_MCP_DATA_DIR</code></td>
 <td>server startup</td>
-<td>Overrides the default data directory (<code>~/.cks-mcp</code>), where the SQLite database and provenance secret are stored.</td>
+<td>Overrides <code>~/.cks-mcp</code> (DB + provenance secret).</td>
 </tr>
 <tr>
 <td><code>CKS_MCP_SECRET</code></td>
 <td>provenance signing</td>
-<td>Overrides the auto-generated, auto-persisted HMAC secret used to sign <code>VerificationRecord</code>s. Accepts a raw string, hex, or a <code>base64:</code>-prefixed value.</td>
+<td>Overrides the auto‑generated HMAC secret.</td>
 </tr>
 </tbody>
 </table>
@@ -3338,6 +3386,14 @@ tools, grouped by what they're for, is in the
 <p><strong>In practice</strong>, you don't write raw <code>tools/call</code> JSON yourself — in Claude
 Desktop, just start a message with <strong>"Use cks-mcp to…"</strong> and the model
 picks the right tool and arguments for you.</p>
+<p><strong>To use semantic search without any API keys</strong> — which is now the
+default — leave <code>CKS_EMBEDDING_PROVIDER</code> unset (<code>fastembed</code>) and the
+server will download a small (~90 MB) sentence‑transformers model
+once on first use, then run fully offline from that point on.</p>
+<p><strong>To use <code>construct_knowledge</code> without any API keys</strong>, run
+<a href="https://ollama.com">Ollama</a> on <code>localhost</code> — <code>construct_knowledge</code>
+auto‑detects it and uses a local <code>llama3.2</code> model by default, no
+<code>ANTHROPIC_API_KEY</code> needed.</p>
 <h2 id="running-the-test-suite">Running the Test Suite</h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Deus-corp/cks-mcp.git
 <span class="nb">cd</span><span class="w"> </span>cks-mcp

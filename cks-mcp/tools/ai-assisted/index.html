@@ -637,6 +637,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../case-studies/local-embeddings.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offline Semantic Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3126,10 +3154,15 @@
 validated Knowledge Structure, and one that helps an LLM propose a correct
 <code>evolve_knowledge</code> call instead of guessing.</p>
 <h2 id="construct_knowledge"><code>construct_knowledge</code></h2>
-<p>Sends free-form text to an LLM (the Anthropic API), asks it to extract
-entities and relationships as CKS JSON, then parses and validates that
-output with <code>cks-core</code> before persisting it as a new session. <strong>Nothing is
-committed if the LLM's output fails validation.</strong></p>
+<p>Sends free‑form text to an LLM (a local Ollama model <strong>by default</strong>,
+or the Anthropic API if <code>CKS_LLM_PROVIDER=anthropic</code>), asks it to
+extract entities and relationships as CKS JSON, then parses and
+validates that output with <code>cks‑core</code> before persisting it as a new
+session. <strong>Nothing is committed if the LLM's output fails validation.</strong></p>
+<p><strong>No API key is needed</strong> when a local Ollama server is reachable
+(default) — <code>construct_knowledge</code> auto‑detects it and uses <code>llama3.2</code>.
+Set <code>CKS_LLM_PROVIDER=anthropic</code> and <code>ANTHROPIC_API_KEY</code> to use the
+Anthropic API instead.</p>
 <p><strong>Requires</strong> <code>ANTHROPIC_API_KEY</code> in the server's environment.</p>
 <p><strong>Parameters</strong></p>
 <table>
@@ -3158,7 +3191,7 @@ committed if the LLM's output fails validation.</strong></p>
 <td><code>model</code></td>
 <td>string</td>
 <td>no</td>
-<td>Anthropic model. Defaults to <code>CKS_LLM_MODEL</code> env var, or <code>claude-sonnet-4-6</code>.</td>
+<td>Model name for whichever provider is selected (e.g. an Ollama model tag, or an Anthropic model). Defaults to <code>CKS_OLLAMA_MODEL</code> / <code>CKS_LLM_MODEL</code> depending on provider.</td>
 </tr>
 <tr>
 <td><code>max_tokens</code></td>
