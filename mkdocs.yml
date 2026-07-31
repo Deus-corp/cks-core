@@ -58,6 +58,7 @@ nav:
       - Semantic Search and Partial Merge: case-studies/semantic-search-and-partial-merge.md
       - Ontology Validation and Visualization: case-studies/ontology-validation-and-visualization.md
       - Contradiction Detection and Sandbox: case-studies/contradiction-detection-and-sandbox.md
+      - Offline Semantic Search: case-studies/local-embeddings.md
 
   - cks-core:
       - Overview: cks-core/index.md
