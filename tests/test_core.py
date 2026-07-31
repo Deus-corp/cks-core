@@ -9,6 +9,7 @@ serialization and engine behaviour are tested separately.
 
 from __future__ import annotations
 
+import os
 from dataclasses import FrozenInstanceError
 
 import pytest
@@ -811,6 +812,59 @@ def test_query_subgraph_type_weights_prioritizes_candidates():
     # "vip" has the same degree as every leaf but a much higher type
     # weight, so it must win a slot over at least one leaf.
     assert "vip" in ids
+
+
+def test_query_subgraph_budget_ranking_is_deterministic_across_hash_seeds():
+    """
+    Regression test: candidates tied on rank score (same degree, type,
+    and distance -- exactly the case for the leaves in
+    `_make_star_structure`) used to be ranked in whatever order
+    `candidate_ids` (a set) happened to iterate in, which depends on
+    Python's per-process string hash randomization (PYTHONHASHSEED).
+    The exact same structure and query could therefore select a
+    different candidate set -- and report a different
+    `suggested_next_seed` -- across two runs of the very same program,
+    violating query_subgraph's own documented "deterministic,
+    observationally pure" contract. Ties must now be broken by object
+    id, which does not vary with the hash seed.
+
+    This can only be observed *across* processes (within one process
+    the hash seed, and therefore any tie-break bug, is fixed for the
+    whole run) -- hence the subprocess harness rather than an in-process
+    assertion.
+    """
+    import subprocess
+    import sys
+
+    script = (
+        "from cks.core import KnowledgeStructure, KnowledgeObject, "
+        "CanonicalRelation, ObjectIdentity\n"
+        "objs = [KnowledgeObject(identity=ObjectIdentity(id='hub', type='Hub', name='hub'))]\n"
+        "objs += [KnowledgeObject(identity=ObjectIdentity(id=f'leaf{i}', type='Definition', name=f'leaf{i}')) for i in range(10)]\n"
+        "rels = [CanonicalRelation(identity=ObjectIdentity(id=f'r{i}', type='Relation', name=f'r{i}'), "
+        "participants=['hub', f'leaf{i}'], relation_type='rel') for i in range(10)]\n"
+        "structure = KnowledgeStructure(objs + rels)\n"
+        "result = structure.query_subgraph('hub', depth=1, max_objects=5)\n"
+        "ids = sorted(o.identity.id for o in result.structure.objects if o.identity.id != 'hub')\n"
+        "print(ids, result.suggested_next_seed)\n"
+    )
+
+    outputs = set()
+    for seed in ("1", "42", "999", "123456"):
+        proc = subprocess.run(
+            [sys.executable, "-c", script],
+            capture_output=True,
+            text=True,
+            check=False,
+            env={**os.environ, "PYTHONHASHSEED": seed},
+        )
+        assert proc.returncode == 0, proc.stderr
+        outputs.add(proc.stdout.strip())
+
+    assert len(outputs) == 1, (
+        "query_subgraph's budget ranking depends on PYTHONHASHSEED: "
+        f"got {len(outputs)} distinct results across hash seeds: {outputs}"
+    )
 
 
 def test_query_subgraph_seeds_are_never_dropped_by_budget():

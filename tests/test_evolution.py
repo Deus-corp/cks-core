@@ -99,6 +99,51 @@ def test_add_duplicate_relation_raises():
         op.apply(structure)
 
 
+def test_parse_operations_missing_identity_field_raises_value_error():
+    """
+    Regression test: a JSON 'identity' object missing a required
+    subfield (e.g. 'name') used to propagate ObjectIdentity's raw,
+    unprefixed TypeError instead of the same ValueError-with-
+    operation-index message every other malformed-input check in
+    parse_operations raises -- and since the CLI's `evolve` command
+    only catches ValueError, that TypeError crashed it with a full
+    traceback instead of a clean error message.
+    """
+    from cks.evolution import parse_operations
+
+    with pytest.raises(ValueError, match=r"Operation #0.*identity"):
+        parse_operations([
+            {
+                "type": "add_object",
+                "identity": {"id": "x", "type": "Foo"},  # missing 'name'
+                "structure": {},
+            }
+        ])
+
+
+def test_parse_operations_unexpected_identity_field_raises_value_error():
+    from cks.evolution import parse_operations
+
+    with pytest.raises(ValueError, match=r"Operation #0.*identity"):
+        parse_operations([
+            {
+                "type": "add_relation",
+                "identity": {"id": "x", "type": "Foo", "name": "X", "bogus": 1},
+                "participants": ["a", "b"],
+                "relation_type": "rel",
+            }
+        ])
+
+
+def test_parse_operations_non_dict_identity_raises_value_error():
+    from cks.evolution import parse_operations
+
+    with pytest.raises(ValueError, match=r"Operation #0.*identity"):
+        parse_operations([
+            {"type": "add_object", "identity": "not-a-dict", "structure": {}}
+        ])
+
+
 def test_parse_operations_rejects_string_participants():
     """
     Regression test for the exact dict-based path evolve_knowledge

@@ -3,15 +3,14 @@ cff-version: 1.2.0
 title: "Canonical Knowledge Structure (CKS)"
 
 message: >
-If you use the Canonical Knowledge Structure (CKS) project,
-please cite it using the metadata provided in this file.
+  If you use the Canonical Knowledge Structure (CKS) project,
+  please cite it using the metadata provided in this file.
 
 type: software
 
 authors:
-
-* family-names: "Hruznov"
-  given-names: "Vladyslav"
+  - family-names: "Hruznov"
+    given-names: "Vladyslav"
 
 repository-code: "https://github.com/Deus-corp/cks-core"
 
@@ -19,39 +18,37 @@ url: "https://github.com/Deus-corp/cks-core"
 
 license: "MIT"
 
-version: "1.15.0"
+version: "1.15.1"
 
-date-released: "2026-07-14"
+date-released: "2026-07-31"
 
 doi: "10.5281/zenodo.21332624"
 
 abstract: >
-Canonical Knowledge Structure (CKS) is an open specification and
-reference implementation that defines a representation-independent
-semantic foundation for constructing, validating, serializing,
-comparing, and evolving knowledge.
+  Canonical Knowledge Structure (CKS) is an open specification and
+  reference implementation that defines a representation-independent
+  semantic foundation for constructing, validating, serializing,
+  comparing, and evolving knowledge.
 
 keywords:
-
-* knowledge representation
-* semantic model
-* canonical structure
-* ontology
-* knowledge graph
-* validation
-* serialization
-* artificial intelligence
-* interoperability
-* reference implementation
+  - knowledge representation
+  - semantic model
+  - canonical structure
+  - ontology
+  - knowledge graph
+  - validation
+  - serialization
+  - artificial intelligence
+  - interoperability
+  - reference implementation
 
 language: "en"
 
 preferred-citation:
-type: software
-authors:
-- family-names: "Hruznov"
-given-names: "Vladyslav"
-title: "Canonical Knowledge Structure (CKS)"
-version: "1.15.0"
-doi: "10.5281/zenodo.21332624"
-url: "https://github.com/Deus-corp/cks-core"
+  type: software
+  authors:
+    - family-names: "Hruznov"
+      given-names: "Vladyslav"
+  title: "Canonical Knowledge Structure (CKS)"
+  doi: "10.5281/zenodo.21332624"
+  url: "https://github.com/Deus-corp/cks-core"

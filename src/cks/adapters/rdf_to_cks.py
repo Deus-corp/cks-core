@@ -6,6 +6,8 @@ Converts an RDF graph (RDF/XML, Turtle, etc.) into a Canonical Knowledge Structu
 
 from __future__ import annotations
 
+import re
+
 import rdflib
 
 from ..core import (
@@ -15,13 +17,77 @@ from ..core import (
     ObjectIdentity,
 )
 
+# ============================================================================
+# XML entity-expansion ("billion laughs") hardening
+# ============================================================================
+#
+# rdflib's XML-based RDF formats (RDF/XML, TriX, ...) are parsed via
+# Python's stdlib ``xml.sax``, which resolves *internal* DTD general
+# entities during parsing. Python's expat backend already refuses to
+# fetch *external* entities (``SYSTEM "file://..."`` / ``"http://..."``),
+# so classic file-disclosure XXE is not reachable here -- but a DOCTYPE
+# whose internal subset defines entities that reference each other
+# exponentially is still expanded in full before any CKS-level
+# validation ever sees the result: a few hundred bytes of input can
+# balloon into gigabytes of text and exhaust memory/CPU.
+#
+# Legitimate RDF interchange has no need for a DOCTYPE with custom
+# entities, so rather than trying to allow "safe" DOCTYPEs, every
+# DOCTYPE is rejected outright for the RDF formats that are actually
+# XML underneath -- the same posture OWASP and ``defusedxml`` recommend
+# for untrusted XML.
+_XML_BASED_RDF_FORMATS = frozenset(
+    {
+        "xml",
+        "pretty-xml",
+        "application/rdf+xml",
+        "trix",
+        "application/trix",
+    }
+)
+
+_DOCTYPE_PATTERN = re.compile(r"<!DOCTYPE", re.IGNORECASE)
+
+
+class RdfConversionError(ValueError):
+    """Raised when RDF input cannot be safely or correctly converted to CKS."""
+
+
+def _reject_xml_dtd(rdf_data: str, format: str) -> None:
+    """Refuse a DOCTYPE declaration in an XML-based RDF serialization.
+
+    Only applies to formats rdflib parses via ``xml.sax`` (see
+    ``_XML_BASED_RDF_FORMATS``) -- Turtle/N-Triples/JSON-LD are not
+    XML and are left untouched, including any literal text that
+    happens to contain the substring ``<!DOCTYPE``.
+    """
+    if format not in _XML_BASED_RDF_FORMATS:
+        return
+
+    if _DOCTYPE_PATTERN.search(rdf_data):
+        raise RdfConversionError(
+            "Refusing to parse RDF/XML input containing a DOCTYPE "
+            "declaration: custom XML entities are not supported and "
+            "can be used to exhaust memory/CPU (the 'billion laughs' "
+            "attack). Remove the DOCTYPE and inline any entity values "
+            "directly."
+        )
+
 
 class RdfToCksConverter:
     """Transform an RDF graph into a KnowledgeStructure."""
 
     def __init__(self, rdf_data: str, format: str = "turtle") -> None:
+        _reject_xml_dtd(rdf_data, format)
         self._graph = rdflib.Graph()
-        self._graph.parse(data=rdf_data, format=format)
+        try:
+            self._graph.parse(data=rdf_data, format=format)
+        except RdfConversionError:
+            raise
+        except Exception as exc:
+            raise RdfConversionError(
+                f"Failed to parse RDF input as {format!r}: {exc}"
+            ) from exc
 
     def convert(self) -> KnowledgeStructure:
         """Run the conversion and return a KnowledgeStructure."""

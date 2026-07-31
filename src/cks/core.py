@@ -868,7 +868,20 @@ class KnowledgeStructure:
                 type_w = weights.get(obj.identity.type, 1.0)
                 return (deg * type_w) / (dist + 1.0)
 
-            ranked_candidates = sorted(candidate_ids, key=compute_score, reverse=True)
+            # Tie-break by id (ascending) rather than relying on
+            # sorted()'s stability over `candidate_ids`' set-iteration
+            # order: two candidates with an identical score would
+            # otherwise be ordered according to Python's per-process
+            # string hash randomization (PYTHONHASHSEED), silently
+            # breaking the "deterministic, observationally pure"
+            # guarantee this method (and every other operation in this
+            # class) documents -- the same candidate set could rank,
+            # and therefore truncate, differently across two runs of
+            # the exact same program on the exact same structure.
+            ranked_candidates = sorted(
+                candidate_ids,
+                key=lambda oid: (-compute_score(oid), oid),
+            )
 
             for oid in ranked_candidates:
                 if max_objects and len(selected_object_ids) >= max_objects:

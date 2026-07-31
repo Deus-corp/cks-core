@@ -75,6 +75,48 @@ def test_validate_output_file(tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# Convert
+# ---------------------------------------------------------------------------
+
+
+def test_convert_malformed_turtle_reports_clean_error(tmp_path):
+    """
+    Regression test: `cks convert` did not catch conversion errors, so
+    malformed input crashed with a raw Python traceback instead of a
+    clean CLI error message (unlike `validate`/`evolve`/`migrate`).
+    """
+    bad = tmp_path / "bad.ttl"
+    bad.write_text("not valid turtle {{{ ]]] ???")
+    result = _run("convert", str(bad), "--format", "turtle")
+    assert result.returncode == 1
+    assert "Traceback" not in result.stderr
+    assert "Conversion error" in result.stderr
+
+
+def test_convert_rdf_xml_rejects_doctype(tmp_path):
+    """`cks convert --format rdf-xml` refuses a DOCTYPE (billion-laughs
+    hardening) with a clean error instead of hanging or crashing."""
+    bad = tmp_path / "bomb.rdf"
+    bad.write_text(
+        '<?xml version="1.0"?>\n'
+        "<!DOCTYPE rdf:RDF [\n"
+        '  <!ENTITY a "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">\n'
+        '  <!ENTITY b "&a;&a;&a;&a;&a;&a;&a;&a;&a;&a;">\n'
+        "]>\n"
+        '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
+        '         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">\n'
+        '  <rdf:Description rdf:about="http://example.org/thing">\n'
+        "    <rdfs:label>&b;</rdfs:label>\n"
+        "  </rdf:Description>\n"
+        "</rdf:RDF>\n"
+    )
+    result = _run("convert", str(bad), "--format", "rdf-xml")
+    assert result.returncode == 1
+    assert "Traceback" not in result.stderr
+    assert "DOCTYPE" in result.stderr
+
+
+# ---------------------------------------------------------------------------
 # Parse
 # ---------------------------------------------------------------------------
 
@@ -126,6 +168,31 @@ def test_evolve_add(tmp_path):
     data = json.loads(result.stdout)
     ids = [o["identity"]["id"] for o in data["objects"]]
     assert "new" in ids
+
+
+def test_evolve_malformed_identity_reports_clean_error(tmp_path):
+    """
+    Regression test: an operations file with a malformed 'identity'
+    (missing a required subfield) used to crash `cks evolve` with a
+    raw Python traceback, since parse_operations raised an unprefixed
+    TypeError that the CLI's `except ValueError` didn't catch.
+    """
+    ops_file = tmp_path / "ops.json"
+    ops_file.write_text(
+        json.dumps(
+            [
+                {
+                    "type": "add_object",
+                    "identity": {"id": "x", "type": "Foo"},  # missing 'name'
+                    "structure": {},
+                }
+            ]
+        )
+    )
+    result = _run("evolve", str(VALID), str(ops_file))
+    assert result.returncode == 1
+    assert "Traceback" not in result.stderr
+    assert "Invalid operations" in result.stderr
 
 
 def test_evolve_output_file(tmp_path):

@@ -23,6 +23,10 @@ Only symbols defined here should normally be imported by user code.
 
 from __future__ import annotations
 
+# ---------------------------------------------------------------------------
+# Bootstrap external constraint plugins
+# ---------------------------------------------------------------------------
+from ._version import __version__
 from .core import (
     CanonicalRelation,
     KnowledgeObject,
@@ -65,13 +69,8 @@ from .plugin import load_external_constraints
 from .result import ValidationResult
 from .serialization import FormatVersionError, SerializationError
 
-# ---------------------------------------------------------------------------
-# Bootstrap external constraint plugins
-# ---------------------------------------------------------------------------
-
 _EXTERNAL_COUNT = load_external_constraints()
 
-__version__ = "1.15.0"
 
 VERSION = tuple(int(part) for part in __version__.split("."))
 
@@ -111,4 +110,5 @@ __all__ = [
     "query_subgraph",
     "serialize",
     "validate",
+    "validate_all",
 ]

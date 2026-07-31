@@ -108,6 +108,35 @@ def test_summary_invalid():
     assert "1 warning" in result.summary()
 
 
+def test_summary_invalid_exact_text_omits_zero_counts():
+    """
+    Regression test: summary() used to unconditionally append the
+    informational-message count even when it was zero, so a plain
+    "2 errors" result rendered as "Invalid (2 errors, 0 informational
+    messages)" instead of the "Invalid (2 errors)" shown in this
+    method's own docstring example.
+    """
+    result = ValidationResult(
+        is_valid=False,
+        diagnostics=DiagnosticCollection((make_error(),)),
+    )
+
+    assert result.summary() == "Invalid (1 error)"
+
+
+def test_summary_invalid_with_no_diagnostics_at_all():
+    """
+    is_valid=False with zero diagnostics of any severity is explicitly
+    permitted (see ValidationResult.__post_init__, reserved for future
+    implementation-defined failure states). summary() must still
+    produce a sensible string rather than "Invalid (0 informational
+    messages)".
+    """
+    result = ValidationResult(is_valid=False)
+
+    assert result.summary() == "Invalid"
+
+
 def test_repr():
     result = ValidationResult(
         is_valid=True,

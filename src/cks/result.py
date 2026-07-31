@@ -165,10 +165,20 @@ class ValidationResult:
                 f"{self.warning_count} warning{'' if self.warning_count == 1 else 's'}"
             )
 
-        parts.append(
-            f"{self.information_count} informational message"
-            f"{'' if self.information_count == 1 else 's'}"
-        )
+        if self.information_count:
+            parts.append(
+                f"{self.information_count} informational message"
+                f"{'' if self.information_count == 1 else 's'}"
+            )
+
+        if not parts:
+            # is_valid=False with zero diagnostics of any severity is
+            # explicitly permitted by __post_init__ (reserved for
+            # future implementation-defined failure states not tied
+            # to a Diagnostic) -- without this guard the line below
+            # would render the nonsensical "Invalid (0 informational
+            # messages)" instead of just "Invalid".
+            return "Invalid"
 
         return "Invalid (" + ", ".join(parts) + ")"
 

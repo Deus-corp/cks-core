@@ -79,7 +79,15 @@ def load_external_constraints(
         is used.
     strict : bool
         If True, raise RuntimeError on the first plugin failure
-        instead of logging a warning and continuing.
+        instead of logging a warning and continuing. This applies
+        both to a plugin that fails to load (see
+        `load_constraints_from_entry_point`) and to a plugin whose
+        constraint's `identity` collides with one already registered
+        (by a built-in constraint or an earlier plugin) -- a
+        registration conflict is a plugin failure in the same sense,
+        and is handled the same way rather than crashing `import cks`
+        for every consumer whenever *any* third-party plugin happens
+        to declare a colliding identity.
 
     Returns
     -------
@@ -102,7 +110,22 @@ def load_external_constraints(
             )
             continue
         for constraint in constraints:
-            target.register(constraint)
+            try:
+                target.register(constraint)
+            except ValueError as exc:
+                if strict:
+                    raise RuntimeError(
+                        f"Plugin {ep.name!r} ({ep.value!r}) could not "
+                        f"register constraint {constraint.identity!r}: {exc}"
+                    ) from exc
+                logger.warning(
+                    "Could not register constraint %r from plugin %r (%r): %s",
+                    constraint.identity,
+                    ep.name,
+                    ep.value,
+                    exc,
+                )
+                continue
             count += 1
     return count
 

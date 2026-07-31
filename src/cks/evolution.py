@@ -466,6 +466,26 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
 
     operators: list[StructuralOperator] = []
 
+    def _build_identity(i: int, identity_data: Any) -> ObjectIdentity:
+        """Construct an ObjectIdentity from a JSON-decoded operation
+        field, translating any malformed shape (missing/unexpected
+        subfield, wrong type) into the same ValueError-with-operation-
+        index style used for every other check in this function --
+        ObjectIdentity itself only raises a raw, less-specific
+        TypeError for these cases."""
+        if not isinstance(identity_data, dict):
+            # ValueError (not TypeError) is deliberate here: every other
+            # malformed-input check in this function raises ValueError,
+            # and callers (the CLI's `evolve` command) only catch that.
+            raise ValueError(  # noqa: TRY004
+                f"Operation #{i}: 'identity' must be an object, got "
+                f"{type(identity_data).__name__}"
+            )
+        try:
+            return ObjectIdentity(**identity_data)
+        except TypeError as exc:
+            raise ValueError(f"Operation #{i}: invalid 'identity': {exc}") from exc
+
     for i, op in enumerate(ops_data):
         op_type = op.get("type")
         if op_type is None:
@@ -475,7 +495,7 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
             identity_data = op.get("identity")
             if identity_data is None:
                 raise ValueError(f"Operation #{i}: missing 'identity' field")
-            identity = ObjectIdentity(**identity_data)
+            identity = _build_identity(i, identity_data)
             obj = KnowledgeObject(identity=identity, structure=op.get("structure", {}))
             operators.append(AddObject(obj))
 
@@ -483,7 +503,7 @@ def parse_operations(ops_data: Iterable[dict[str, Any]]) -> list[StructuralOpera
             identity_data = op.get("identity")
             if identity_data is None:
                 raise ValueError(f"Operation #{i}: missing 'identity' field")
-            identity = ObjectIdentity(**identity_data)
+            identity = _build_identity(i, identity_data)
             participants = op.get("participants")
             if participants is None:
                 raise ValueError(f"Operation #{i}: missing 'participants' field")

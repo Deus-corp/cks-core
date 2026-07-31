@@ -6,6 +6,24 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.15.1] - 2026-07-31
+
+### Security
+- **RDF/XML "billion laughs" hardening** – `RdfToCksConverter` now rejects any input containing a DOCTYPE declaration when parsing XML-based RDF formats, preventing exponential entity-expansion DoS attacks.
+
+### Fixed
+- **CLI `convert` and `evolve`** no longer crash with raw tracebacks on malformed input; they report clean error messages.
+- **`ValidationResult.summary()`** no longer appends "0 informational messages" for results that have no informational diagnostics.
+- **`query_subgraph()` determinism** – candidate ranking tie-breaker now uses object id instead of hash-dependent set ordering, eliminating cross-process variations.
+- **n-ary relation export** – `CksToJsonLdConverter` and `CksToRdfConverter` now raise a clear error for relations with 3+ participants instead of silently dropping data.
+- **Plugin constraint registration** – `load_external_constraints()` now handles duplicate identity collisions gracefully under `strict=False` (logs a warning instead of crashing `import cks`).
+- **`validate_all`** is now accessible as `cks.validate_all()` and is covered by tests.
+
+### Changed
+- **Single version source** – `pyproject.toml`, `cks.__version__`, and `ReferenceEngine.VERSION` all read from `src/cks/_version.py`.
+
+---
+
 ## [1.15.0] - 2026-07-30
 
 ### Added
