@@ -27,15 +27,17 @@ Your LLM (Claude Desktop, etc.)
 - **Ensure verification integrity** – cryptographic signing guarantees that source checks actually happened.
 - **Full audit trail** – every operation is captured in an immutable version history.
 - **Time-travel debugging** – list versions, compare them, and safely roll back to any previous state.
-- **LLM-friendly API** – native MCP server with 7 tools, fully compatible with Claude Desktop and other MCP clients.
+- **Branch, merge, and sandbox** – isolate an experiment from the main line, reconcile it with a three-way merge, or throw it away.
+- **Real semantic search** – find knowledge by meaning, not keywords, via HuggingFace embeddings.
+- **LLM-friendly API** – native MCP server with 24 tools, plus MCP Resources and Prompts, fully compatible with Claude Desktop and other MCP clients.
 
 ## Projects
 
 | Project | Description | Status |
 |---------|-------------|--------|
-| [cks-core](cks-core/index.md) | Semantic engine – immutable knowledge objects, validation, evolution | Stable v1.7.0 |
-| [cks-runtime](cks-runtime/index.md) | Operational environment – sessions, transactions, versioning, events | Stable v1.0.1 |
-| [cks-mcp](cks-mcp/index.md) | MCP server – exposes CKS to LLMs | Stable v1.0.4 |
+| [cks-core](cks-core/index.md) | Semantic engine – immutable knowledge objects, validation, evolution | v1.15.0 |
+| [cks-runtime](cks-runtime/index.md) | Operational environment – sessions, transactions, versioning, events | v1.24.0 |
+| [cks-mcp](cks-mcp/index.md) | MCP server – exposes CKS to LLMs via 24 tools | v1.16.2 |
 
 ## Get Started in 5 Minutes
 
@@ -44,6 +46,11 @@ pip install cks-core cks-runtime cks-mcp
 ```
 
 Then connect to Claude Desktop – see the [Quick Start guide](quickstart.md).
+
+For a deeper dive into the MCP server specifically: its
+[24 tools](cks-mcp/tools/index.md), [security model](cks-mcp/security.md),
+and [architecture](cks-mcp/architecture/ARCHITECTURE.md) each have their
+own page under [cks-mcp](cks-mcp/index.md).
 
 ---
 

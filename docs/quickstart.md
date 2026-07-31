@@ -33,9 +33,15 @@ Add `cks-mcp` to your MCP servers.
 }
 ```
 
+   If `cks-mcp` was installed into a virtual environment rather than your
+   global Python, use the absolute path to its executable instead (e.g.
+   `/path/to/venv/bin/cks-mcp`) — Claude Desktop launches the command
+   directly and won't have your shell's activated environment.
+
 3. Save and restart Claude Desktop (Cmd+Q, then reopen).
 
-After restart, a connector icon will appear — **cks-mcp** with seven tools is ready to use.
+After restart, a connector icon will appear — **cks-mcp** with 24 tools is
+ready to use.
 
 ---
 
@@ -51,9 +57,12 @@ Claude will call `validate_knowledge` and report back whether the structure is v
 
 ## What's Next
 
+- Browse the [Tools Reference](cks-mcp/tools/index.md) — all 24 tools,
+  grouped by what they're for, with request/response examples.
 - Explore the [cks-core](cks-core/index.md) semantic engine.
 - Learn about [cks-runtime](cks-runtime/index.md) sessions and version history.
-- Read the [Architecture](cks-mcp/ARCHITECTURE.md) of the MCP server.
+- Read the [Architecture](cks-mcp/architecture/ARCHITECTURE.md) and
+  [Security Model](cks-mcp/security.md) of the MCP server.
 
 ---
 

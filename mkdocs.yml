@@ -107,4 +107,26 @@ nav:
 
   - cks-mcp:
       - Overview: cks-mcp/index.md
-      - Architecture: cks-mcp/ARCHITECTURE.md
+      - Getting Started: cks-mcp/getting-started.md
+      - Tools Reference:
+          - Overview: cks-mcp/tools/index.md
+          - Knowledge Lifecycle: cks-mcp/tools/lifecycle.md
+          - Version Control: cks-mcp/tools/versioning.md
+          - Branching & Merging: cks-mcp/tools/branching.md
+          - Graph Exploration: cks-mcp/tools/search-and-graph.md
+          - Verification & Integrity: cks-mcp/tools/verification.md
+          - AI-Assisted & Ingestion: cks-mcp/tools/ai-assisted.md
+          - Export & Observability: cks-mcp/tools/export-and-audit.md
+      - Architecture:
+          - Overview: cks-mcp/architecture/ARCHITECTURE.md
+          - Request Lifecycle: cks-mcp/architecture/request-lifecycle.md
+      - Security Model: cks-mcp/security.md
+      - Extension Model: cks-mcp/extensions.md
+      - Protocol:
+          - Resources: cks-mcp/protocol/resources.md
+          - Prompts: cks-mcp/protocol/prompts.md
+      - ADR:
+          - ADR-001 Thin Translator: cks-mcp/adr/ADR-001 Thin Translator.md
+          - ADR-002 Provenance Signing: cks-mcp/adr/ADR-002 Provenance Signing.md
+          - ADR-003 Middleware Stack: cks-mcp/adr/ADR-003 Middleware Stack.md
+          - ADR-004 Extension Model: cks-mcp/adr/ADR-004 Extension Model.md
