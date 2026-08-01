@@ -6,6 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.17.0] - 2026-08-01
+
+### Added
+- **`StalePremiseConstraint`** – new opt-in extension constraint in `cks.constraints.reasoning` (`cks.constraints.builtin.OPTIONAL_CONSTRAINTS_BY_NAME["stale_premise"]`, identity `CKS-EXT-STALE-PREMISE`). Flags an *active* `InferenceStep` whose `premises` directly cite another `InferenceStep` id that has itself already been `superseded_by` a successor. Reported at WARNING severity: the cited step still exists and is still well-formed, so this is a meta-reasoning citation worth a second look, not a structural invalidity.
+- **`SupersessionChainConstraint` cycle detection** – the existing constraint now also rejects a `superseded_by` cycle (e.g. `A.superseded_by == B`, `B.superseded_by == A`), reported once per distinct cycle at the constraint's existing ERROR severity, regardless of which member is reached first.
+- **`rank_by_entrenchment(structure, conclusion_id)`** – new pure query function in `cks.constraints.reasoning`, not a `Constraint`. Ranks the active `InferenceStep`s sharing a conclusion by `confidence` (descending, structure order as tiebreak) for a caller resolving an `InferenceConfidenceConflictConstraint` WARNING. Produces no `Diagnostic` and never writes `superseded_by` — ranking, not automatic resolution.
+
+See ADR-002 ("Belief Revision Support") for the design rationale, including why a premise sharing a *conclusion* (rather than an id) with a fully-superseded step turns out to be unreachable on valid data and isn't what `StalePremiseConstraint` checks.
+
+---
+
 ## [1.16.0] - 2026-07-31
 
 ### Added

@@ -18,6 +18,7 @@ from .reasoning import (
     ConfidenceBoundsConstraint,
     InferenceConfidenceConflictConstraint,
     InferenceReferentialIntegrityConstraint,
+    StalePremiseConstraint,
     SupersessionChainConstraint,
 )
 from .semantic import DerivationArityConstraint, DerivationCycleConstraint
@@ -75,6 +76,8 @@ OPTIONAL_CONSTRAINTS = (
     ConfidenceBoundsConstraint(),
     SupersessionChainConstraint(),
     InferenceConfidenceConflictConstraint(),
+    # --- Belief Revision Domain (cascading staleness, see ADR-002) ---
+    StalePremiseConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -92,4 +95,5 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "confidence_bounds": ConfidenceBoundsConstraint(),
     "supersession_chain": SupersessionChainConstraint(),
     "inference_confidence_conflict": InferenceConfidenceConflictConstraint(),
+    "stale_premise": StalePremiseConstraint(),
 }

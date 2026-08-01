@@ -69,8 +69,45 @@ Three constraints are provided, each independently opt-in:
     from the comparison (that relationship is `SupersessionChainConstraint`'s
     concern, not this one's).
 
+See ADR-002 ("Belief Revision Support") for the two extensions below,
+built on top of ADR-001's vocabulary without changing any of the four
+constraints above:
+
+``StalePremiseConstraint``
+    Flags an *active* `InferenceStep` whose ``premises`` directly cite
+    the id of another `InferenceStep` that has itself already been
+    superseded -- a meta-reasoning citation left pointing at an
+    outdated derivation. A WARNING, matching
+    `InferenceConfidenceConflictConstraint`'s tier: the cited step
+    still exists and is still well-formed, so this is epistemically
+    suspect, not structurally invalid. (Checking whether a premise
+    shares a *conclusion*, rather than an id, with a superseded step
+    turns out to be unreachable on valid data --
+    `SupersessionChainConstraint` already guarantees every conclusion
+    keeps at least one live supporting step, so there is nothing
+    resembling a "fully retracted conclusion" to detect that way.)
+
+``SupersessionChainConstraint`` cycle detection
+    In addition to its three existing pairwise checks,
+    `SupersessionChainConstraint` now also rejects a ``superseded_by``
+    cycle (e.g. ``A.superseded_by == B``, ``B.superseded_by == A``),
+    which no individual pairwise check catches on its own. This stays
+    at the constraint's existing ERROR severity -- a cycle is a
+    structural defect (no step in it ever resolves to a live belief),
+    not a resolvable disagreement.
+
+``rank_by_entrenchment``
+    A pure query function, not a `Constraint` -- it produces no
+    `Diagnostic` and never mutates the structure. Ranks the active
+    `InferenceStep`s sharing a conclusion by confidence, for a caller
+    (e.g. `cks-mcp`'s `explain_knowledge`/`suggest_evolution`)
+    resolving an `InferenceConfidenceConflictConstraint` WARNING to
+    hand an agent a concrete starting point instead of re-deriving a
+    ranking from raw ``confidence`` values inline each time. Ranking
+    is not a decision: nothing here writes ``superseded_by``.
+
 A structure with no ``InferenceStep`` objects is entirely unaffected
-by any of the four, matching every other extension's convention in
+by any of the above, matching every other extension's convention in
 this package.
 """
 
@@ -107,6 +144,47 @@ def _inference_steps(structure: KnowledgeStructure) -> Iterator[KnowledgeObject]
     return (
         obj for obj in structure.objects if obj.identity.type == INFERENCE_STEP_TYPE
     )
+
+
+def _find_supersession_cycle(
+    structure: KnowledgeStructure, start: KnowledgeObject
+) -> list[str] | None:
+    """Walk ``start``'s ``superseded_by`` chain forward. Returns the
+    ids forming a cycle, in order, if ``start`` is reachable from
+    itself; otherwise ``None``.
+
+    Bounded by the number of InferenceStep objects in the structure,
+    so a dangling or wrong-type ``superseded_by`` -- already flagged
+    by this constraint's own pairwise checks -- simply stops the walk
+    (returns ``None``) rather than raising or looping unboundedly.
+    Only reports a cycle that ``start`` itself is part of; a step that
+    merely chains *into* a cycle without returning to itself is left
+    to be caught when the cycle's own members are visited.
+    """
+    max_hops = sum(1 for _ in _inference_steps(structure)) + 1
+    path = [start.identity.id]
+    current = start
+
+    for _ in range(max_hops):
+        successor_id = current.structure.get(_SUPERSEDED_BY_KEY)
+        if not successor_id:
+            return None
+        if successor_id == start.identity.id:
+            return [*path, successor_id]
+
+        successor = structure.get(successor_id)
+        if successor is None or successor.identity.type != INFERENCE_STEP_TYPE:
+            return None
+        if successor.identity.id in path:
+            # Walks into a cycle that doesn't include `start` -- that
+            # cycle is reported when one of its own members is visited
+            # as `start` by the caller's loop, not from here.
+            return None
+
+        path.append(successor.identity.id)
+        current = successor
+
+    return None
 
 
 class InferenceReferentialIntegrityConstraint(Constraint):
@@ -259,6 +337,34 @@ class SupersessionChainConstraint(Constraint):
                     )
                 )
 
+        diagnostics.extend(self._detect_cycles(structure))
+        return diagnostics
+
+    def _detect_cycles(self, structure: KnowledgeStructure) -> list[Diagnostic]:
+        """One ERROR per distinct superseded_by cycle (ADR-002), each
+        reported once regardless of which member of the cycle is
+        iterated to first."""
+        diagnostics: list[Diagnostic] = []
+        reported: set[str] = set()
+
+        for step in _inference_steps(structure):
+            if step.identity.id in reported:
+                continue
+            cycle = _find_supersession_cycle(structure, step)
+            if cycle is None:
+                continue
+            reported.update(cycle)
+            diagnostics.append(
+                _error(
+                    identity=self.identity,
+                    message=(
+                        "Supersession cycle detected: "
+                        f"{' -> '.join(cycle)}."
+                    ),
+                    location=step.identity.id,
+                )
+            )
+
         return diagnostics
 
 
@@ -336,10 +442,127 @@ class InferenceConfidenceConflictConstraint(Constraint):
         return diagnostics
 
 
+class StalePremiseConstraint(Constraint):
+    """An active InferenceStep's premises shall not directly cite
+    another InferenceStep that has itself already been superseded.
+
+    A WARNING, not an ERROR: the cited step still exists and is still
+    a well-formed InferenceStep -- it has simply been revised since,
+    so a step still listing it as a premise is citing an outdated
+    piece of reasoning and is worth a second look, not a structural
+    invalidity.
+
+    Note this checks a premise that is itself an InferenceStep id
+    (meta-reasoning: citing a specific derivation as support for a
+    further one), not a premise that merely shares a *conclusion*
+    with a superseded step. The latter can't actually happen on valid
+    data: ``SupersessionChainConstraint`` already requires a
+    successor to target the same conclusion, so any conclusion with
+    at least one InferenceStep always keeps at least one live
+    (non-superseded) step supporting it -- the chain has to terminate
+    somewhere, and cycles/dangling successors are already ERRORs of
+    their own. What *can* go stale on otherwise-valid data is a direct
+    citation of a step's own id, which is exactly what this checks.
+    """
+
+    identity = "CKS-EXT-STALE-PREMISE"
+    stage = ValidationStage.SEMANTIC
+    description = (
+        "An active InferenceStep's premises must not directly cite "
+        "another InferenceStep that has itself already been "
+        "superseded."
+    )
+
+    def evaluate(self, structure: KnowledgeStructure) -> list[Diagnostic]:
+        diagnostics: list[Diagnostic] = []
+
+        for step in _inference_steps(structure):
+            # A superseded step's own staleness is
+            # SupersessionChainConstraint's concern, not this one's --
+            # only active steps still depend on their premises going
+            # forward.
+            if step.structure.get(_SUPERSEDED_BY_KEY):
+                continue
+
+            premises = step.structure.get(_PREMISES_KEY) or ()
+            for premise_id in premises:
+                premise_obj = structure.get(premise_id)
+                if premise_obj is None or premise_obj.identity.type != INFERENCE_STEP_TYPE:
+                    continue  # not an InferenceStep citation -- out of scope
+
+                successor_id = premise_obj.structure.get(_SUPERSEDED_BY_KEY)
+                if not successor_id:
+                    continue  # cited step is still active
+
+                diagnostics.append(
+                    Diagnostic(
+                        identity=self.identity,
+                        severity=DiagnosticSeverity.WARNING,
+                        message=(
+                            f"InferenceStep '{step.identity.id}' cites "
+                            f"'{premise_id}' as a premise, but "
+                            f"'{premise_id}' has itself been "
+                            f"superseded_by '{successor_id}' -- "
+                            f"consider citing the current step instead."
+                        ),
+                        location=step.identity.id,
+                    )
+                )
+
+        return diagnostics
+
+
+def rank_by_entrenchment(
+    structure: KnowledgeStructure, conclusion_id: str
+) -> list[KnowledgeObject]:
+    """Active (non-superseded) InferenceSteps concluding
+    ``conclusion_id``, ordered highest-entrenchment first: confidence
+    descending, then declared structure order as a stable tiebreak.
+
+    A pure query, not a Constraint (see ADR-002) -- produces no
+    Diagnostic and never mutates the structure. Exists so a caller
+    resolving an ``InferenceConfidenceConflictConstraint`` WARNING has
+    a concrete starting point instead of re-deriving a ranking from
+    raw ``confidence`` values inline each time. Ranking is not a
+    decision: callers still choose which step, if any, to supersede
+    the others with -- nothing here writes ``superseded_by``.
+
+    Steps with a missing, non-numeric, or out-of-range ``confidence``
+    (``ConfidenceBoundsConstraint``'s concern) sort last, in structure
+    order among themselves, rather than being dropped -- silently
+    excluding them could otherwise hide a live belief from the
+    ranking entirely. Returns ``[]`` if fewer than one active step
+    concludes ``conclusion_id``.
+    """
+
+    def _valid_confidence(step: KnowledgeObject) -> float | None:
+        confidence = step.structure.get(_CONFIDENCE_KEY)
+        if isinstance(confidence, bool) or not isinstance(confidence, Real):
+            return None
+        value = float(confidence)
+        return value if 0.0 <= value <= 1.0 else None
+
+    def _sort_key(step: KnowledgeObject) -> tuple[int, float]:
+        confidence = _valid_confidence(step)
+        if confidence is None:
+            return (1, 0.0)
+        return (0, -confidence)
+
+    active = [
+        step
+        for step in _inference_steps(structure)
+        if step.structure.get(_CONCLUSION_KEY) == conclusion_id
+        and not step.structure.get(_SUPERSEDED_BY_KEY)
+    ]
+    return sorted(active, key=_sort_key)
+
+
 __all__ = [
     "INFERENCE_STEP_TYPE",
     "ConfidenceBoundsConstraint",
     "InferenceConfidenceConflictConstraint",
     "InferenceReferentialIntegrityConstraint",
+    "StalePremiseConstraint",
     "SupersessionChainConstraint",
+    "rank_by_entrenchment",
 ]
