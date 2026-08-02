@@ -106,6 +106,20 @@ constraints above:
     ranking from raw ``confidence`` values inline each time. Ranking
     is not a decision: nothing here writes ``superseded_by``.
 
+``explain_inference``
+    Answers ADR-001's Problem #3 head-on ("`explain_diff`/
+    `explain_knowledge` have no native 'why'"): given a conclusion's
+    object id, walks every active `InferenceStep` chain concluding it
+    back through each step's premises -- recursively, since a premise
+    can itself be the conclusion of another `InferenceStep` -- down to
+    base facts (premises with no recorded `InferenceStep` of their
+    own). Also reports the object's supersession history via
+    ``superseded_steps``, separately from its current active belief.
+    Like ``rank_by_entrenchment`` (which it reuses for ordering), a
+    pure query: no `Diagnostic`, no mutation. This is the function
+    `cks-mcp`'s `explain_knowledge` tool delegates to for its
+    ``object_id``-driven explanation mode.
+
 A structure with no ``InferenceStep`` objects is entirely unaffected
 by any of the above, matching every other extension's convention in
 this package.
@@ -115,6 +129,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from numbers import Real
+from typing import Any
 
 from ..core import KnowledgeObject, KnowledgeStructure
 from ..diagnostics import Diagnostic, DiagnosticSeverity
@@ -129,6 +144,9 @@ _PREMISES_KEY = "premises"
 _CONCLUSION_KEY = "conclusion"
 _CONFIDENCE_KEY = "confidence"
 _SUPERSEDED_BY_KEY = "superseded_by"
+_OPERATOR_KEY = "operator"
+_JUSTIFICATION_KEY = "justification"
+_ALTERNATIVES_KEY = "alternatives_considered"
 
 
 def _error(*, identity: str, message: str, location: str | None = None) -> Diagnostic:
@@ -557,6 +575,171 @@ def rank_by_entrenchment(
     return sorted(active, key=_sort_key)
 
 
+def _superseded_steps_for(
+    structure: KnowledgeStructure, conclusion_id: str
+) -> list[KnowledgeObject]:
+    """Steps that used to conclude ``conclusion_id`` but have since been
+    revised away -- the retracted half of ``rank_by_entrenchment``'s
+    active/superseded split, structure order.
+    """
+    return [
+        step
+        for step in _inference_steps(structure)
+        if step.structure.get(_CONCLUSION_KEY) == conclusion_id
+        and step.structure.get(_SUPERSEDED_BY_KEY)
+    ]
+
+
+def explain_inference(
+    structure: KnowledgeStructure,
+    object_id: str,
+    *,
+    max_depth: int = 25,
+) -> dict[str, Any]:
+    """Explain *why* ``object_id`` is currently believed.
+
+    Answers ADR-001's Problem #3 ("`explain_diff`/`explain_knowledge`
+    have no native 'why'"): walks every *active* `InferenceStep` chain
+    concluding ``object_id`` back through each step's ``premises``,
+    down to premises that carry no `InferenceStep` of their own (base
+    facts) or that have already been visited earlier on the same path
+    (a cycle -- `premises`/`conclusion` form an arbitrary directed
+    graph across distinct `InferenceStep`s, so nothing upstream of
+    this function rules one out the way `SupersessionChainConstraint`
+    rules out a `superseded_by` cycle).
+
+    A pure query, not a `Constraint` -- like `rank_by_entrenchment`
+    (which this reuses for tie-broken ordering), it produces no
+    `Diagnostic` and never mutates the structure.
+
+    Returns
+    -------
+    dict
+        ``{"object_id", "exists", "has_inference", "active_steps",
+        "superseded_steps"}``.
+
+        ``exists`` is whether ``object_id`` itself is present in
+        ``structure`` at all -- ``False`` doesn't stop the walk (a
+        dangling premise/conclusion id is
+        `InferenceReferentialIntegrityConstraint`'s concern, not this
+        one's); it just means there is nothing else to report beyond
+        ``has_inference: False``.
+
+        Each entry in ``active_steps`` is a *step node*::
+
+            {
+                "step_id", "operator", "confidence", "justification",
+                "alternatives_considered",
+                "premises": [<premise node>, ...],
+            }
+
+        ordered by `rank_by_entrenchment` (highest confidence first).
+        Each *premise node* is either:
+
+        - the same shape as this function's top-level return (minus
+          ``exists``, since a cited premise's existence is implied by
+          the citing step already passing
+          `InferenceReferentialIntegrityConstraint`), with an added
+          ``"truncated": None | "max_depth" | "cycle"`` so a caller
+          can distinguish a genuine base fact from an incomplete
+          branch; or
+        - ``{"object_id": <id>, "cites_step": True}`` when the
+          premise id directly names another `InferenceStep` (the
+          meta-reasoning citation `StalePremiseConstraint` also
+          checks) -- that step's own justification lives in its own
+          entry elsewhere in the walk if it is itself active, not by
+          re-deriving "what concluded this step" here, since steps
+          are not conclusions.
+
+        ``superseded_steps`` lists every step that once concluded
+        ``object_id`` and has since been revised away (structure
+        order): ``{"step_id", "operator", "confidence",
+        "justification", "superseded_by"}``, for a caller that wants
+        the belief's revision history, not just its current state.
+
+        `InferenceConfidenceConflictConstraint`'s WARNING condition
+        (two-plus active steps disagreeing on confidence) is visible
+        directly from ``len(active_steps) > 1`` with differing
+        ``confidence`` values -- not re-flagged separately here, to
+        keep this a single source of truth with that constraint
+        rather than a second copy of its threshold logic.
+    """
+
+    def _step_node(step: KnowledgeObject, path: frozenset[str], depth: int) -> dict[str, Any]:
+        premises = step.structure.get(_PREMISES_KEY) or ()
+        return {
+            "step_id": step.identity.id,
+            "operator": step.structure.get(_OPERATOR_KEY),
+            "confidence": step.structure.get(_CONFIDENCE_KEY),
+            "justification": step.structure.get(_JUSTIFICATION_KEY),
+            "alternatives_considered": list(
+                step.structure.get(_ALTERNATIVES_KEY) or ()
+            ),
+            "premises": [
+                _premise_node(premise_id, path, depth) for premise_id in premises
+            ],
+        }
+
+    def _premise_node(premise_id: str, path: frozenset[str], depth: int) -> dict[str, Any]:
+        premise_obj = structure.get(premise_id)
+        if (
+            premise_obj is not None
+            and premise_obj.identity.type == INFERENCE_STEP_TYPE
+        ):
+            # Meta-reasoning citation (see StalePremiseConstraint): the
+            # premise names a step, not a conclusion. That step's own
+            # entrenchment is reported wherever the walk reaches it as
+            # a conclusion elsewhere, not re-derived from here.
+            return {"object_id": premise_id, "cites_step": True}
+        return _explain(premise_id, path, depth)
+
+    def _explain(target_id: str, path: frozenset[str], depth: int) -> dict[str, Any]:
+        if target_id in path:
+            return {
+                "object_id": target_id,
+                "has_inference": None,
+                "active_steps": [],
+                "superseded_steps": [],
+                "truncated": "cycle",
+            }
+        if depth >= max_depth:
+            return {
+                "object_id": target_id,
+                "has_inference": None,
+                "active_steps": [],
+                "superseded_steps": [],
+                "truncated": "max_depth",
+            }
+
+        next_path = path | {target_id}
+        active = rank_by_entrenchment(structure, target_id)
+        superseded = _superseded_steps_for(structure, target_id)
+
+        return {
+            "object_id": target_id,
+            "has_inference": bool(active),
+            "active_steps": [
+                _step_node(step, next_path, depth + 1) for step in active
+            ],
+            "superseded_steps": [
+                {
+                    "step_id": step.identity.id,
+                    "operator": step.structure.get(_OPERATOR_KEY),
+                    "confidence": step.structure.get(_CONFIDENCE_KEY),
+                    "justification": step.structure.get(_JUSTIFICATION_KEY),
+                    "superseded_by": step.structure.get(_SUPERSEDED_BY_KEY),
+                }
+                for step in superseded
+            ],
+            "truncated": None,
+        }
+
+    result = _explain(object_id, frozenset(), 0)
+    result["exists"] = structure.get(object_id) is not None
+    del result["truncated"]  # top level is never itself a truncation stub
+    return result
+
+
 __all__ = [
     "INFERENCE_STEP_TYPE",
     "ConfidenceBoundsConstraint",
@@ -564,5 +747,6 @@ __all__ = [
     "InferenceReferentialIntegrityConstraint",
     "StalePremiseConstraint",
     "SupersessionChainConstraint",
+    "explain_inference",
     "rank_by_entrenchment",
 ]

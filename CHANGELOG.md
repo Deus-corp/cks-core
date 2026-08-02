@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.18.0] - 2026-08-02
+
+### Added
+- **`explain_inference(structure, object_id, *, max_depth=25)`** – new pure query function in `cks.constraints.reasoning`. Answers ADR-001's Problem #3 ("`explain_diff`/`explain_knowledge` have no native 'why'"): walks every active `InferenceStep` chain concluding `object_id` back through each step's `premises`, recursively, down to base facts. Reports `operator`/`confidence`/`justification`/`alternatives_considered` per step, distinguishes a meta-reasoning citation of another `InferenceStep` id from an ordinary premise, and separately reports `superseded_steps` (the belief's revision history). Guards against `premises`/`conclusion` cycles (which `SupersessionChainConstraint` cannot see, since it only tracks `superseded_by` chains) and unbounded depth via `max_depth`, marking incomplete branches `truncated: "cycle" | "max_depth"`. Produces no `Diagnostic` and never mutates the structure, matching `rank_by_entrenchment`'s convention (which it reuses for ordering active steps by entrenchment).
+
+---
+
 ## [1.17.0] - 2026-08-01
 
 ### Added
