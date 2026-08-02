@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.19.0] - 2026-08-02
+
+### Added
+- **`ResolveInferenceConflict`** – new `StructuralOperator` in `cks.evolution` (wire format: `{"type": "resolve_inference_conflict", "conclusion_id": ..., "winner_id": ...}`). The write-side counterpart to `InferenceConfidenceConflictConstraint`/`rank_by_entrenchment`/`explain_inference`, which only detect and rank a confidence conflict but never write `superseded_by`. Given a `conclusion_id` and the `winner_id` an arbiter (human or agent) has chosen, supersedes every *other* active `InferenceStep` concluding `conclusion_id` in favor of the winner as a single atomic evolution — instead of the caller hand-rolling one `UpdateObject` per losing step and risking missing one, mis-targeting the wrong conclusion, or superseding an already-retired step into a cycle. `winner_id` is checked eagerly (apply-time) to be an existing, active `InferenceStep` that actually concludes `conclusion_id`; an already-superseded step found concluding `conclusion_id` is left untouched, matching `InferenceConfidenceConflictConstraint`'s own exclusion of non-active steps from the conflict. A no-op if `winner_id` is already the only active step (the conflict was already resolved). Cannot itself introduce a `superseded_by` cycle, by construction.
+
+---
+
 ## [1.18.0] - 2026-08-02
 
 ### Added
