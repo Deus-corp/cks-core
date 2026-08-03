@@ -59,6 +59,7 @@ nav:
       - Ontology Validation and Visualization: case-studies/ontology-validation-and-visualization.md
       - Contradiction Detection and Sandbox: case-studies/contradiction-detection-and-sandbox.md
       - Offline Semantic Search: case-studies/local-embeddings.md
+      - Resolving a Reasoning Conflict with Inference Arbitration: case-studies/inference-conflict-resolution.md
 
   - cks-core:
       - Overview: cks-core/index.md
@@ -69,6 +70,9 @@ nav:
       - Plugin Development: cks-core/plugins.md
       - Examples: cks-core/examples.md
       - Contracts: cks-core/contracts.md
+      - ADR:
+          - ADR-001: cks-core/adr/ADR-001 Reasoning Objects.md
+          - ADR-002: cks-core/adr/ADR-002 Belief Revision Support.md
       - Specifications:
           - Overview: cks-core/specifications/index.md
           - CKS-000: cks-core/specifications/CKS-000_Canonical_Foundations_and_Terminology.md
@@ -96,6 +100,9 @@ nav:
           - ADR-004 Storage Abstraction: cks-runtime/adr/ADR-004 Storage Abstraction.md
           - ADR-005 Version History: cks-runtime/adr/ADR-005 Version History.md
           - ADR-006 Adapter Architecture: cks-runtime/adr/ADR-006 Adapter Architecture.md
+          - ADR-007 Conformance Model: cks-runtime/adr/ADR-007 Concurrent Multi-Agent Writes.md
+          - ADR-008 Reference Engine: cks-runtime/adr/ADR-008 Gossip Replication for Distributed Runtime Nodes.md
+          - ADR-009 Runtime API: cks-runtime/adr/ADR-009 Proactive Inference Staleness Detection.md
       - Specifications:
           - SPEC-001 Runtime Overview: cks-runtime/standards/runtime/SPEC-001_Runtime_Overview.md
           - SPEC-002 Session Model: cks-runtime/standards/runtime/SPEC-002_Session_Model.md
@@ -105,6 +112,7 @@ nav:
           - SPEC-006 Storage: cks-runtime/standards/runtime/SPEC-006_Storage.md
           - SPEC-007 Version History: cks-runtime/standards/runtime/SPEC-007_Version_History.md
           - SPEC-008 Conformance: cks-runtime/standards/runtime/SPEC-008_Conformance.md
+          - SPEC-009 Reference Engine: cks-runtime/standards/runtime/SPEC-009_Gossip_Replication.md
 
   - cks-mcp:
       - Overview: cks-mcp/index.md
@@ -118,6 +126,7 @@ nav:
           - Verification & Integrity: cks-mcp/tools/verification.md
           - AI-Assisted & Ingestion: cks-mcp/tools/ai-assisted.md
           - Export & Observability: cks-mcp/tools/export-and-audit.md
+          - Gossip & Conflict Resolution: cks-mcp/tools/gossip-and-conflicts.md
       - Architecture:
           - Overview: cks-mcp/architecture/ARCHITECTURE.md
           - Request Lifecycle: cks-mcp/architecture/request-lifecycle.md
@@ -131,3 +140,4 @@ nav:
           - ADR-002 Provenance Signing: cks-mcp/adr/ADR-002 Provenance Signing.md
           - ADR-003 Middleware Stack: cks-mcp/adr/ADR-003 Middleware Stack.md
           - ADR-004 Extension Model: cks-mcp/adr/ADR-004 Extension Model.md
+          - ADR-005 Gossip Integration (Multi-Instance Session Sync): cks-mcp/adr/ADR-005 Gossip Integration.md

@@ -21,17 +21,16 @@ The reference implementation evolves together with the formal CKS specifications
 
 ---
 
-# Current Status (July 2026)
+# Current Status (August 2026 — v1.19.0)
 
-The project has progressed significantly beyond the original roadmap.
-Key achievements since v1.3:
+The project has progressed well beyond the original version-by-version roadmap below. Verified against `CHANGELOG.md`:
 
-- v1.4–v1.6: MCP server (`cks-mcp`), event system, time-travel operations, delta version storage — **all completed**
-- v1.7: Merkle-tree hashing and structural diff — **completed**
-- v1.8: Three-way merge with conflict detection — **completed**
+- **MCP Server (`cks-mcp`):** implemented, shipped as an independent, actively maintained repository (currently v1.28.0) with 27 tools — **done**.
+- **Merge engine:** three-way merge with conflict detection (`KnowledgeStructure.merge()`) — **done** (v1.8.0).
+- **Belief revision / reasoning engine (ADR-001, ADR-002):** `InferenceStep` objects, the `inference_confidence_conflict` and `stale_premise` extension constraints, `rank_by_entrenchment`, `explain_inference`, and the `resolve_inference_conflict` evolution operator — **done** (v1.16.0–v1.19.0). This is the mechanism `cks-mcp` uses for its conflict-resolution tools.
+- **Event system, time-travel operations, delta version storage, Merkle-tree hashing/structural diff** — **done**.
 
-The sections below reflect the original roadmap and will be updated
-in a future documentation refresh.
+**Note on version numbering:** actual shipped releases (currently 1.19.0) no longer track the thematic `0.x`/`1.x` plan below 1:1 — work has shipped faster and in a different order than originally sequenced, and the section headers below (Version 1.4, 1.5, ...) should be read as *thematic milestones*, not as promises about which release number they'll land in. This document previously said Version 1.3 was current and described AI/LLM Integration (originally planned as "Version 1.4") as unstarted future work, while a separate summary paragraph in the same file claimed it was already done — an internal contradiction caused by this document not being updated as fast as the code. Both are corrected below.
 
 ---
 
@@ -150,29 +149,29 @@ in a future documentation refresh.
 
 ---
 
-# Version 1.3 — Contract Strengthening (current)
+# Version 1.3 — Contract Strengthening ✅ (completed)
 
 * Extract `_normalize_structure()` for explicit structural comparison.
-* Document the contract “specification → validator → tests → CLI → plugins”.
+* Document the contract "specification → validator → tests → CLI → plugins".
 * Add `mypy` type-checking to CI.
 * Write contract tests for the plugin system.
 * Create reference plugin examples.
 
 ---
 
-# Version 1.4 — AI/LLM Integration (MCP Server)
+# Version 1.4 — AI/LLM Integration (MCP Server) ✅ (completed)
 
-Planned work:
-
-* Implement CKS MCP Server.
-* Provide standard MCP tools: `construct_knowledge`, `validate_knowledge`, `query_relations`, `compare_structures`, `evolve_knowledge`.
+* Implement CKS MCP Server. *(shipped as the separate `cks-mcp` repository, now at v1.28.0)*
+* Provide standard MCP tools: `construct_knowledge`, `validate_knowledge`, `query_relations`/`query_subgraph`, `compare_structures`/`compare_versions`, `evolve_knowledge`, and 20+ more.
 * Publish the server as a separate package (`cks-mcp`).
+
+Also delivered as part of this phase, beyond the original scope: the belief-revision/reasoning engine (`InferenceStep`, `inference_confidence_conflict`, `resolve_inference_conflict`, `explain_inference`) that underpins `cks-mcp`'s conflict-resolution tools.
 
 ---
 
-# Version 1.5 — Semantic Tools
+# Version 1.5 — Semantic Tools (next up)
 
-Planned work:
+Planned work — verified **not yet started** (no matching implementation in `CHANGELOG.md` as of v1.19.0):
 
 * Build reasoning tools on top of CKS (pathfinding across relations, concept similarity).
 * Expose semantic tools via MCP and CLI.
@@ -203,6 +202,8 @@ Planned work:
 
 * Enable linking and synchronizing multiple Knowledge Structures across different sources.
 
+> Note: `cks-runtime`/`cks-mcp` have already shipped gossip-based replication between runtime nodes (ADR-008) — this item is about extending that to `cks-core`-level Knowledge Structure linking/synchronization specifically, which is distinct and still open.
+
 ---
 
 # Version 1.9 — Versioning and Merging
@@ -210,6 +211,8 @@ Planned work:
 Planned work:
 
 * Implement Git-like versioning, branching, and merging for Knowledge Structures.
+
+> Note: three-way merge (`KnowledgeStructure.merge()`) and branch/merge orchestration (`create_branch`/`merge_branch` in `cks-mcp`) already shipped. Remaining scope here, if any, should be re-scoped against what's already delivered before further planning.
 
 ---
 

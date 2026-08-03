@@ -2,11 +2,94 @@
 
 # Gossip Replication for Distributed Runtime Nodes: Persistent Replica Identity and Operation-Log Exchange
 
-**Status:** Proposed
+**Status:** Partially Implemented
 
 **Date:** 2026-08-01
 
 **Category:** Architecture Decision Record
+
+---
+
+**Status (2026-08-01):** Storage-layer portion implemented in
+`cks-runtime` v1.26.0: `RuntimeStorage.get_or_create_replica_id`,
+`RuntimeStorage.fetch_operations_since`, and the
+`GossipConflictDetected` event exist and are wired through `SQLiteStorage`,
+`InMemoryStorage`, and `PostgresStorage`.
+
+**Revision (2026-08-01, v1.26.1):** The Decision section below (point
+2, "Fetch on gap" / "Apply through the existing fast path") described
+reconstructing a remote Knowledge Structure by replaying raw
+`RuntimeFieldOperation` rows. That cannot work as specified: per
+`RuntimeFieldOperation`'s own contract, an `"add_object"`/
+`"add_relation"` entry carries no payload at all -- it only marks that
+an identity appeared, so a genuinely new object can never be
+reconstructed from the operation log alone. `GossipAdapter` was
+rewritten around this: it exchanges whole `RuntimeSession` snapshots
+(which already carry a complete `knowledge_structure`) for a session
+both replicas track, and reconciles them through the same two-phase
+probe-then-commit sequence `cks-mcp`'s `merge_branch` tool already
+uses -- `executor.execute(MergeOperation(...))` to detect a conflict
+with no persisted side effects, then, only on success,
+`begin_transaction`/`commit_transaction`. This is the existing
+ADR-007 merge mechanism, reused, not a new one; see the module
+docstring in `cks_runtime/gossip/adapter.py` for the full rationale.
+`fetch_operations_since`/`get_or_create_replica_id` remain useful as a
+transport-layer accelerant and durable peer identity, but are no
+longer the payload the merge itself is built from. All 12
+`tests/unit/gossip/test_gossip_adapter.py` cases now pass (none
+skipped); `mypy`/`ruff` are clean across the package. The gossip
+transport itself (peer discovery, scheduling, wire format) remains
+unimplemented -- see Non-Goals.
+
+**Revision (2026-08-01, v1.29.0):** Point 1's "every session created
+by that process bumps its VersionVector under `replica_id` in
+addition to ... `node_id`" is now implemented: `Runtime.create()`
+sources `replica_id` from `storage.get_or_create_replica_id()` once
+at startup (`Runtime.replica_id`, `None` for a bare `Runtime(...)`
+or a storage backend without gossip support), and
+`ExecutionPipeline._create_version` passes it through to
+`VersionManager.create(..., replica_id=...)`, which bumps the vector
+for it alongside `node_id`. This closes Problem 1 as stated --
+`replica_id` now survives a process restart the way `node_id` never
+could. It does **not**, on its own, make concurrently-bootstrapped
+replicas of the same `session_id` converge: `apply_remote_session`'s
+non-fast-forward path still goes through `MergeOperation`, which
+needs `parent_version_id` lineage to compute a three-way merge base.
+Sessions independently constructed on separate replicas (rather than
+via `create_branch`) have no such lineage, so once both sides have
+committed anything, every further gossip round between them fails
+with "could not determine a merge base" and escalates via
+`GossipConflictDetected` -- indefinitely, not just once. Confirmed
+against a 3-replica local reproduction (Supervisor/Critic/Worker,
+one field-disjoint commit each): 20+ anti-entropy rounds, zero
+transport failures, zero convergence. Establishing shared lineage
+for gossip-bootstrapped sessions is unaddressed and is the next gap
+to close, not this revision's scope.
+
+**Revision (2026-08-02, v1.30.0):** The lineage gap above is closed
+-- `EMPTY_STATE_VERSION_ID` (`cks_runtime/operations/operation_types.py`,
+`"00000000-0000-0000-0000-000000000000"`), the same trick as git's
+empty-tree hash. Two sessions whose `parent_version_id` both equal
+this constant are defined to share it as a common ancestor without
+either ever having seen the other's real `version_history`:
+`MergeOperation.execute` resolves it to an empty structure directly,
+skipping the `get_version_state()` lookup that requires the id to
+physically appear in local history. `_bootstrap_remote_session` now
+always anchors the newly-adopted local copy to it (regardless of
+what the remote's own `parent_version_id` was -- that pointer lives
+in the remote's history, which this replica never receives and never
+will, gossip carrying snapshots, not history). `GossipAdapter
+.anchor_genesis(session)` does the equivalent for a session's true
+origin -- the one replica in a deployment whose session was created
+locally via `Runtime.create_session()`, not received via gossip, and
+so needs one explicit call right after creation to get the same
+anchor every bootstrap joiner gets automatically. Re-ran the same
+3-replica reproduction from the prior revision with these three
+pieces in place: converges within a handful of rounds, zero
+escalated conflicts (`tests/unit/gossip/test_gossip_adapter.py::TestThreeReplicaConvergenceViaGenesis`).
+`EMPTY_STATE_VERSION_ID` is opt-in -- sessions that never call
+`anchor_genesis()`/never get bootstrapped keep today's `None` default
+and today's escalate-on-divergence behavior unchanged.
 
 ---
 
@@ -183,9 +266,13 @@ this ADR exists to avoid.
 
 - `replica_id` is new durable state — another migration for existing
   SQLite/Postgres deployments.
-- `fetch_operations_since` / `apply_remote_operations` are two more
-  no-op-by-default methods every backend maintainer must eventually
-  decide whether to implement.
+- `fetch_operations_since` is one more no-op-by-default method every
+  backend maintainer must eventually decide whether to implement.
+  (`apply_remote_operations`, originally proposed alongside it below,
+  was dropped during implementation — see the 2026-08-01 revision
+  note above; applying a remote snapshot goes through the existing
+  `MergeOperation`/`commit_transaction` path instead of a dedicated
+  storage method.)
 - Long-disconnected peers replaying a large operation-log range
   raises the retention/compaction question from ADR-007 from
   "eventually" to "soon."
@@ -194,9 +281,13 @@ this ADR exists to avoid.
 
 # Status
 
-Proposed. Not yet implemented. Depends on ADR-007's operation log and
-version vectors (implemented) but adds a new durable identity and two
-new `RuntimeStorage` methods that need their own interface review
-before implementation — same open-question shape ADR-007 left for
-`node_id`/`agent_id` ownership, now resolved by `replica_id` above,
-but the storage interface addition still needs sign-off.
+Partially implemented as of the 2026-08-01 revision note above:
+persistent `replica_id`, the operation-log storage methods, and
+`GossipAdapter`'s session-snapshot reconciliation (via the existing
+ADR-007 `MergeOperation`/`VersionVector` machinery) are implemented
+and unit-tested. Still open: the actual peer transport
+(`GossipTransport` has no reference implementation yet), scheduling
+of anti-entropy cycles, and bootstrapping a session neither replica
+has seen before (out of scope for `GossipAdapter` as written — see
+Non-Goals). Depends on ADR-007's operation log and version vectors
+(implemented).
