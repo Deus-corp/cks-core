@@ -693,6 +693,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../case-studies/memory-agent-graph-reuse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Saving and Reusing Knowledge Graphs Across Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2035,6 +2063,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cks-runtime/adr/ADR-010%20Proactive%20Provenance%20Staleness%20Detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-010 Proactive Provenance Staleness Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cks-runtime/adr/ADR-011%20Temporal%20Staleness%20Detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-011 Temporal Staleness Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2829,6 +2913,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#register_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list_graphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_graphs
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3369,6 +3486,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-006 Gossip Conflict Arbitration" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-006 Gossip Conflict Arbitration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3437,6 +3582,39 @@
     <span class="md-ellipsis">
       
         get_metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#register_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register_graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list_graphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_graphs
       
     </span>
   </a>
@@ -3545,6 +3723,22 @@ version's <code>cks_json</code>, if <code>include_structures</code> was set) int
 restart. Use it to spot which tool is slow or erroring most often across a
 session, not as a durable audit log (for that, see <code>list_versions</code> and
 <code>export_session</code>).</p>
+<h2 id="register_graph"><code>register_graph</code></h2>
+<p>Saves a named reference to an existing session's Knowledge Graph,
+allowing it to be found and reused later via <code>get_graph</code>.</p>
+<p><strong>Parameters:</strong> <code>name</code> (required), <code>session_id</code> (required),
+<code>description</code> (optional), <code>tags</code> (optional, comma-separated).</p>
+<p><strong>Response:</strong> <code>{"registered": true, "name": "my-graph"}</code>.</p>
+<h2 id="get_graph"><code>get_graph</code></h2>
+<p>Looks up a previously registered graph by name and returns its <code>session_id</code>
+and metadata, or <code>{"found": false}</code> if no graph is registered under that name.</p>
+<p><strong>Parameters:</strong> <code>name</code> (required).</p>
+<p><strong>Response:</strong> <code>{"found": true, "name": "my-graph", "session_id": "...", "description": "...", "tags": "...", "created_at": "...", "updated_at": "..."}</code>.</p>
+<h2 id="list_graphs"><code>list_graphs</code></h2>
+<p>Lists every registered graph, most recently updated first.
+Optionally filter to graphs whose tags contain a given substring.</p>
+<p><strong>Parameters:</strong> <code>tag</code> (optional).</p>
+<p><strong>Response:</strong> <code>{"graphs": [{"name": "my-graph", "session_id": "...", ...}, ...]}</code>.</p>
 
 
 

@@ -693,6 +693,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/memory-agent-graph-reuse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Saving and Reusing Knowledge Graphs Across Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2035,6 +2063,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-runtime/adr/ADR-010%20Proactive%20Provenance%20Staleness%20Detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-010 Proactive Provenance Staleness Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cks-runtime/adr/ADR-011%20Temporal%20Staleness%20Detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-011 Temporal Staleness Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3347,6 +3431,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-006 Gossip Conflict Arbitration" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-006 Gossip Conflict Arbitration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3420,7 +3532,7 @@
 
 
 <h1 id="tools-reference">Tools Reference</h1>
-<p><code>cks-mcp</code> exposes <strong>25 tools</strong> over the Model Context Protocol. Every tool
+<p><code>cks-mcp</code> exposes <strong>36 tools</strong> over the Model Context Protocol. Every tool
 call is a canonical operation: it runs inside a <code>RuntimeSession</code>, and any
 call that mutates state does so through a <code>Transaction</code>, producing an
 immutable <code>Version</code> (see <a href="../architecture/ARCHITECTURE/">Architecture</a>).</p>
@@ -3462,8 +3574,8 @@ used together rather than their declaration order in the registry:</p>
 </tr>
 <tr>
 <td><a href="ai-assisted/">AI-Assisted &amp; Ingestion</a></td>
-<td><code>construct_knowledge</code>, <code>suggest_evolution</code>, <code>ingest_document</code></td>
-<td>From free text or a URL to a validated structure; <code>ingest_document</code> now extracts tables, lists, metadata and supports optional LLM enrichment</td>
+<td><code>construct_knowledge</code>, <code>suggest_evolution</code>, <code>ingest_document</code>, <code>request_enrichment</code></td>
+<td>From free text, a URL, or an external search query to a validated structure</td>
 </tr>
 <tr>
 <td><a href="export-and-audit/">Export &amp; Observability</a></td>
@@ -3471,9 +3583,14 @@ used together rather than their declaration order in the registry:</p>
 <td>Get data out, and see how the server is performing</td>
 </tr>
 <tr>
+<td><a href="export-and-audit/">Memory &amp; Persistence</a></td>
+<td><code>register_graph</code>, <code>get_graph</code>, <code>list_graphs</code></td>
+<td>Save and reuse Knowledge Graphs across conversations by registering them under memorable names</td>
+</tr>
+<tr>
 <td><a href="gossip-and-conflicts/">Gossip &amp; Conflict Resolution</a></td>
-<td><code>list_gossip_conflicts</code></td>
-<td>Drain conflicts escalated by a background gossip cycle for a Critic agent to resolve</td>
+<td><code>list_gossip_conflicts</code>, <code>list_inference_conflicts</code>, <code>arbitrate_inference_conflict</code>, <code>resolve_gossip_conflict</code>, <code>refresh_verification</code>, <code>resolve_temporal_conflict</code>, <code>claim_conflict_task</code>, <code>complete_conflict_task</code>, <code>fail_conflict_task</code>, <code>dead_letter_conflict_task</code>, <code>list_dead_lettered_conflicts</code></td>
+<td>Drain and resolve conflicts escalated by gossip, inference, provenance, or temporal staleness, plus the critic‑agent task lifecycle</td>
 </tr>
 </tbody>
 </table>
@@ -3488,10 +3605,11 @@ used together rather than their declaration order in the registry:</p>
   <code>query_subgraph</code>, <code>search_semantic</code>, <code>visualize_graph</code>,
   <code>detect_contradictions</code>, <code>compare_versions</code>, <code>explain_diff</code>,
   <code>suggest_evolution</code> (without <code>operations</code>), <code>list_versions</code>,
-  <code>get_metrics</code>, and <code>list_gossip_conflicts</code> never create a new version.
-  Everything else does. (<code>list_gossip_conflicts</code> still has a side effect
-  worth knowing about — by default it drains the records it returns from
-  the conflict queue; see <a href="gossip-and-conflicts/">Gossip &amp; Conflict Resolution</a>.)</li>
+  <code>get_metrics</code>, <code>list_gossip_conflicts</code>, <code>list_inference_conflicts</code>,
+  <code>list_dead_lettered_conflicts</code> never create a new version. The
+  critic‑agent tools (<code>claim_conflict_task</code>, <code>complete_conflict_task</code>,
+  <code>fail_conflict_task</code>, <code>dead_letter_conflict_task</code>) modify outbox state
+  but never touch sessions or versions.</li>
 <li><strong>Dry-run before commit</strong> — <code>evolve_knowledge</code>, <code>merge_branch</code>,
   <code>merge_knowledge</code>, and <code>fork_sandbox</code> (when given <code>operations</code>) all
   validate the <em>prospective</em> result — including a provenance check — before

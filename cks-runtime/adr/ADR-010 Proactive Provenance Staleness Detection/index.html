@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../ADR-008%20Gossip%20Replication%20for%20Distributed%20Runtime%20Nodes/">
+        <link rel="prev" href="../ADR-009%20Proactive%20Inference%20Staleness%20Detection/">
       
       
-        <link rel="next" href="../ADR-010%20Proactive%20Provenance%20Staleness%20Detection/">
+        <link rel="next" href="../ADR-011%20Temporal%20Staleness%20Detection/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>ADR-009 Runtime API - CKS Documentation</title>
+        <title>ADR-010 Proactive Provenance Staleness Detection - CKS Documentation</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#adr-009" class="md-skip">
+        <a href="#adr-010-proactive-provenance-staleness-detection" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ADR-009 Runtime API
+              ADR-010 Proactive Provenance Staleness Detection
             
           </span>
         </div>
@@ -2048,19 +2048,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../ADR-009%20Proactive%20Inference%20Staleness%20Detection/" class="md-nav__link">
         
   
   
@@ -2076,7 +2067,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -2086,10 +2076,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../ADR-010%20Proactive%20Provenance%20Staleness%20Detection/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-010 Proactive Provenance Staleness Detection
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2105,6 +2122,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternatives considered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3443,6 +3524,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternatives considered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -3461,279 +3594,82 @@
   
 
 
-<h1 id="adr-009">ADR-009</h1>
-<h1 id="proactive-inference-staleness-detection-a-background-sweeper-for-reasoning-conflicts">Proactive Inference Staleness Detection: A Background Sweeper for Reasoning Conflicts</h1>
-<p><strong>Status:</strong> Proposed</p>
-<p><strong>Date:</strong> 2026-08-03</p>
-<p><strong>Category:</strong> Architecture Decision Record</p>
-<hr />
-<h1 id="context">Context</h1>
-<p><code>cks-core</code> (ADR-001 "Reasoning Objects", ADR-002 "Belief Revision
-Support") ships two opt-in <code>WARNING</code>-severity constraints relevant
-here: <code>InferenceConfidenceConflictConstraint</code>
-(<code>CKS-EXT-INFERENCE-CONFIDENCE-CONFLICT</code> — two or more active
-<code>InferenceStep</code>s reach the same conclusion with disagreeing
-<code>confidence</code>) and <code>StalePremiseConstraint</code>
-(<code>CKS-EXT-STALE-PREMISE</code> — an active <code>InferenceStep</code> still cites, as
-a premise, another <code>InferenceStep</code> that has itself since been
-superseded). Both live in <code>OPTIONAL_CONSTRAINTS_BY_NAME</code> and are
-never run unless a caller opts in via <code>extra_constraints</code>.</p>
-<p>Today that opt-in happens in exactly three places, all synchronous
-and all requiring a caller who already suspects something is wrong:</p>
-<ol>
-<li><code>validate_knowledge</code> / <code>evolve_knowledge</code> (<code>cks-mcp</code>) accept an
-   <code>extensions</code> list. <code>evolve_knowledge</code> fixed in v1.27.1 to stop
-   discarding a <code>WARNING</code> once a commit succeeds — but only for
-   diagnostics produced by <em>that caller's own</em> commit. Whoever
-   holds <code>step-b</code> never learns that a <strong>different</strong> agent's commit
-   just made it stale, unless that same agent happens to call
-   <code>evolve_knowledge</code>/<code>validate_knowledge</code> again with
-   <code>inference_confidence_conflict</code>/<code>stale_premise</code> requested.</li>
-<li><code>arbitrate_inference_conflict</code> resolves a conflict a caller
-   already knows the <code>conclusion_id</code> for.</li>
-<li><code>explain_inference</code> (<code>ExplainInferenceOperation</code>,
-   <code>cks_runtime/operations/operation_types.py</code>) explains one
-   <code>object_id</code> at a time, on request.</li>
-</ol>
-<p>Nothing walks a session's <code>knowledge_structure</code> on its own. A
-session's own <code>diagnostics</code> field (<code>RuntimeSession.diagnostics</code>,
-<code>cks_runtime/session/session.py</code>) and <code>Runtime.diagnostics</code>
-(populated by <code>ExecutionPipeline._validate</code>/<code>_collect_diagnostics</code>,
-<code>cks_runtime/pipeline/execution_pipeline.py</code>) are not a cache of this
-either — <code>_validate</code> there calls <code>core_bridge.validate()</code> with no
-<code>extra_constraints</code>, so it never runs these two constraints; neither
-field is populated by the reasoning extensions at all. There is no
-per-session record of "the last time anyone checked this" to read
-instead of re-validating.</p>
-<p><code>cks-runtime</code> already has the two building blocks this ADR combines.
-<code>GarbageCollector</code> (<code>cks_runtime/gc/garbage_collector.py</code>) is a
-background <code>asyncio.Task</code> that periodically calls a
-<code>RuntimeStorage</code> method returning session candidates
-(<code>list_sessions_modified_before</code>), is a no-op against a backend that
-doesn't implement it, and is wired into <code>Runtime.__init__</code>/<code>create</code>/
-<code>aclose</code> behind a <code>RuntimeConfig</code> flag (<code>gc_retention</code>). Separately,
-<code>GossipConflictDetected</code> (ADR-008) already establishes the pattern
-for surfacing a conflict a background process finds with no
-synchronous caller to raise to: publish a <code>RuntimeEvent</code> on
-<code>EventBus</code> instead. <code>cks-mcp</code>'s <code>ConflictInbox</code>
-(<code>src/cks_mcp/conflict_inbox.py</code>) already subscribes to that event
-and queues it for a Critic agent to drain via <code>list_gossip_conflicts</code>
-— proof this event → inbox → polling-tool shape works end to end for
-exactly this kind of "someone should look at this" finding.</p>
-<hr />
-<h1 id="problem">Problem</h1>
-<ol>
-<li><strong>A conflict between two <code>InferenceStep</code>s owned by different
-   agents is only found if someone happens to re-check.</strong> Agent A
-   commits a step superseding a premise Agent B's active step cites.
-   Nothing tells B. If B's session sees no further commits, the
-   <code>CKS-EXT-STALE-PREMISE</code> condition it now carries is never
-   evaluated by anyone, indefinitely.</li>
-<li><strong><code>evolve_knowledge</code>'s per-commit surfacing (v1.27.1) only covers
-   the committing agent's own diagnostics from its own commit.</strong> It
-   is a real fix for the case it targets, not a substitute for
-   catching a condition that arises without any further commit at
-   all in the affected session.</li>
-<li><strong>There is no scheduling primitive for "periodically re-check
-   reasoning constraints across sessions."</strong> <code>GarbageCollector</code>'s
-   loop exists but is answering a different question (age since last
-   modification, for eviction) with a different candidate set (only
-   closed sessions).</li>
-</ol>
-<hr />
-<h1 id="decision-proposed">Decision (proposed)</h1>
-<h2 id="1-runtimestoragelist_sessions_modified_since-mirroring-list_sessions_modified_before">1. <code>RuntimeStorage.list_sessions_modified_since</code>, mirroring <code>list_sessions_modified_before</code></h2>
-<p>A new no-op-by-default method, same signature shape as its GC
-counterpart:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">list_sessions_modified_since</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">watermark</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">RuntimeSession</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return sessions with modified_at &gt;= watermark, oldest first. Empty by default.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">[]</span>
-</code></pre></div>
-<p><code>SQLiteStorage</code>/<code>PostgresStorage</code> implement it against the same
-indexed <code>modified_at</code> column <code>list_sessions_modified_before</code> already
-queries (<code>idx_sessions_modified_at</code>), just with the comparison
-flipped and ascending order — no new column, no new index,
-<code>InMemoryStorage</code> stays unsupported exactly as it is for GC today.</p>
-<h2 id="2-inferencestalenesssweeper-a-garbagecollector-adjacent-background-worker">2. <code>InferenceStalenessSweeper</code>, a <code>GarbageCollector</code>-adjacent background worker</h2>
-<p>Same shape as <code>GarbageCollector</code> deliberately, not a shared instance
-of it (see Alternatives Considered): <code>asyncio.Task</code> loop, duck-typed
-against <code>list_sessions_modified_since</code>, <code>start()</code>/<code>stop()</code>/
-<code>run_once()</code>, batch-limited.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">InferenceStalenessSweeper</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">storage</span><span class="p">:</span> <span class="n">RuntimeStorage</span> <span class="o">|</span> <span class="n">AsyncRuntimeStorage</span><span class="p">,</span>
-        <span class="n">events</span><span class="p">:</span> <span class="n">EventBus</span><span class="p">,</span>
-        <span class="o">*</span><span class="p">,</span>
-        <span class="n">sweep_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">300.0</span><span class="p">,</span>   <span class="c1"># 5 minutes</span>
-        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
-</code></pre></div>
-<p>Each sweep:</p>
+<h1 id="adr-010-proactive-provenance-staleness-detection">ADR-010: Proactive Provenance Staleness Detection</h1>
+<p><strong>Status:</strong> Proposed
+<strong>Related:</strong> ADR-009 (Proactive Inference Staleness Detection), ADR-002 (cks-mcp, Provenance Signing), ADR-008 (Gossip Replication)</p>
+<h2 id="context">Context</h2>
+<p>ADR-009 gave <code>cks-runtime</code> a background sweeper (<code>InferenceStalenessSweeper</code>)
+that periodically walks active <code>InferenceStep</code>s, detects when a premise has
+gone stale (superseded since the step was written), and escalates an
+<code>InferenceConfidenceConflict</code> for the Critic Agent to resolve. This closed
+the gap where a stale inference could sit undetected until something
+happened to query it.</p>
+<p><code>VerificationRecord</code>s (see cks-mcp ADR-002, Provenance Signing) have the
+same class of problem and no equivalent safety net. <code>verify_source</code>
+performs a real HTTP check <em>at the moment it is called</em> and cryptographically
+signs the result. After that, the record is trusted indefinitely:</p>
 <ul>
-<li>Captures <code>sweep_started_at = datetime.now(UTC)</code> <strong>before</strong> querying
-  — the watermark for the <em>next</em> sweep is this timestamp, not the
-  latest <code>modified_at</code> seen in results, so a session modified
-  concurrently with this sweep is never skipped by a race between
-  "read candidates" and "advance watermark."</li>
-<li>Calls <code>list_sessions_modified_since(self._watermark, self._batch_size)</code>.</li>
-<li>For each candidate, runs <code>cks.validate(session.knowledge_structure,
-  extra_constraints=[OPTIONAL_CONSTRAINTS_BY_NAME["inference_confidence_conflict"],
-  OPTIONAL_CONSTRAINTS_BY_NAME["stale_premise"]])</code> — imported directly
-  from <code>cks.constraints</code>, the same registry <code>cks-mcp</code>'s
-  <code>resolve_extensions</code> already draws from, so the sweeper needs no
-  dependency on <code>cks-mcp</code> and can never drift out of sync with what
-  those extension names mean.</li>
-<li>Diffs the resulting diagnostics against an in-memory
-  <code>dict[session_id, set[(identity, location)]]</code> of what this
-  sweeper instance last found for that session. Publishes
-  <code>InferenceConflictDetected</code> (new event, below) only for entries
-  not in that set — an unresolved <code>WARNING</code> that persists across
-  many sweeps is reported once, not every <code>sweep_interval</code>. Entries
-  that disappear (resolved) are dropped from the set silently.</li>
-<li>Only advances <code>self._watermark</code> to <code>sweep_started_at</code> when
-  <code>len(candidates) &lt; batch_size</code> — a full batch means the window
-  wasn't drained, so the same watermark is retried next sweep rather
-  than risking a candidate past the batch cutoff being skipped
-  entirely (see Consequences).</li>
+<li>The source page can change its content without anyone re-checking.</li>
+<li>The source URL can go dead (link rot) without anyone re-checking.</li>
+<li>Nothing currently distinguishes "verified five minutes ago" from
+  "verified fourteen months ago" at query time.</li>
 </ul>
-<h2 id="3-new-event-inferenceconflictdetected">3. New event: <code>InferenceConflictDetected</code></h2>
-<p>Added to <code>cks_runtime/events/runtime_event.py</code>, alongside
-<code>GossipConflictDetected</code> but its own type — not a repurposing of it
-(see Alternatives Considered):</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">InferenceConflictDetected</span><span class="p">(</span><span class="n">RuntimeEvent</span><span class="p">):</span>
-    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>       <span class="c1"># session&#39;s latest version_id when observed</span>
-    <span class="n">diagnostics</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># code/severity/message/location dicts</span>
-</code></pre></div>
-<p><code>version_id</code> lets a subscriber tell whether the finding is already
-stale by the time it's handled — the same reason <code>VersionCreated</code>
-carries one.</p>
-<h2 id="4-wiring-runtimeconfig-runtime__init__createshutdown">4. Wiring: <code>RuntimeConfig</code>, <code>Runtime.__init__</code>/<code>create</code>/<code>shutdown</code></h2>
-<p>Mirrors <code>gc_retention</code>/<code>gc_sweep_interval</code>/<code>gc_batch_size</code>'s
-None-disables shape, but defaults to disabled rather than mirroring
-<code>gc_retention</code>'s default-on 24h window: <code>inference_sweep_interval:
-float | None = None</code>, <code>inference_sweep_batch_size: int = 100</code>. GC's
-default-on posture is safe because eviction only ever touches
-already-<code>closed</code> sessions; a sweep that publishes <code>EventBus</code> events
-is a new observable side effect, so it starts opt-in until there's
-operational experience with its noise level. <code>Runtime.__init__</code>
-constructs <code>InferenceStalenessSweeper</code> when the interval is set; the
-<code>create()</code> classmethod starts it (same as <code>self._gc.start()</code> at line
-332); <code>aclose()</code> stops it (same as <code>self._gc.stop()</code>) — the same two
-call sites <code>self._gc</code> already uses.</p>
-<h2 id="5-consumption-out-of-scope-here-but-unblocked">5. Consumption: out of scope here, but unblocked</h2>
-<p>A <code>cks-mcp</code>-side subscriber mirroring <code>ConflictInbox</code> — enqueue
-<code>InferenceConflictDetected</code> records, drain via a
-<code>list_inference_conflicts</code> tool analogous to <code>list_gossip_conflicts</code>
-— is the natural next step (closes open item #2, the "Critic loop"
-gap, from the same review that produced this ADR) but is a <code>cks-mcp</code>
-change with its own ADR, not decided here.</p>
-<hr />
-<h1 id="non-goals">Non-Goals</h1>
+<p>There is no proactive mechanism that revisits a <code>VerificationRecord</code> after
+it was created. This is the provenance-side analogue of the gap ADR-009
+closed for inference.</p>
+<h2 id="decision">Decision</h2>
+<p>Add <code>cks_runtime.reasoning.provenance_staleness_sweeper</code>, structurally
+parallel to <code>InferenceStalenessSweeper</code>:</p>
 <ul>
-<li><strong>Not auto-resolving anything.</strong> Detection and escalation only,
-  exactly as <code>GossipConflictDetected</code> does for merge conflicts.
-  Resolution still goes through <code>arbitrate_inference_conflict</code> or
-  <code>evolve_knowledge</code>'s <code>resolve_inference_conflict</code> operation.</li>
-<li><strong>Not running arbitrary/all validation extensions.</strong> Scoped to
-  exactly <code>inference_confidence_conflict</code> and <code>stale_premise</code> — the
-  two constraints whose triggering condition ("another agent's
-  commit changed something you cited or agreed with") is specifically
-  about content nobody local re-validates. Generalizing to arbitrary
-  opted-in extensions is future work, not this ADR.</li>
-<li><strong>Not solving cross-session staleness.</strong> Both constraints evaluate
-  a single <code>knowledge_structure</code>; a premise citation and the step it
-  cites always live in the same session's structure (an <code>InferenceStep</code>
-  cited as a premise is a reference within one structure, not across
-  branches). A conflict spanning two sessions only becomes visible
-  once they're merged (<code>merge_branch</code>, ADR-007) into one structure —
-  at which point this sweeper picks it up on its next pass over the
-  merged session like any other. No separate cross-session mechanism
-  is proposed.</li>
-<li><strong>Not persisting the dedup set across restarts.</strong> The
-  <code>dict[session_id, set[...]]</code> is in-memory and process-local, the
-  same trade-off <code>ConflictInbox</code> already makes for its own queue. A
-  restart may re-report an unresolved conflict once; accepted as
-  cheaper than adding durable dedup state for a <code>WARNING</code>-severity
-  finding.</li>
-<li><strong>Not the <code>cks-mcp</code>-side inbox/tool.</strong> See Decision point 5.</li>
+<li>Runs on the same background-task infrastructure already used by
+  <code>InferenceStalenessSweeper</code> and <code>OutboxEmbeddingWorker</code> (see
+  <code>cks_runtime.projection.outbox_worker</code>).</li>
+<li>Periodically scans <code>VerificationRecord</code> objects whose <code>verified_at</code>
+  timestamp is older than a configurable TTL (<code>CKS_PROVENANCE_TTL_SECONDS</code>,
+  default 30 days -- mirroring <code>CKS_INFERENCE_STALENESS_*</code> env var naming).</li>
+<li>For each expired record, does <strong>not</strong> re-verify itself (that would
+  require making the same outbound HTTP call <code>verify_source</code> makes, which
+  is cks-mcp's responsibility, not runtime's) -- instead it escalates a new
+  conflict class, <code>ProvenanceStalenessConflict</code>, into the same outbox table
+  <code>cks_outbox_tasks</code> uses for <code>gossip_conflict</code> / <code>inference_conflict</code>,
+  with <code>task_type = "provenance_conflict"</code>.</li>
+<li>The existing <code>claim_conflict_task</code> / <code>complete_conflict_task</code> /
+  <code>fail_conflict_task</code> / <code>dead_letter_conflict_task</code> tools are reused
+  unchanged -- <code>task_type</code> was already a free-form string, so this needs
+  no schema change to the outbox itself.</li>
 </ul>
-<hr />
-<h1 id="alternatives-considered">Alternatives Considered</h1>
-<h2 id="always-running-the-reasoning-extensions-synchronously-on-every-commit">Always running the reasoning extensions synchronously on every commit</h2>
-<p>Rejected. Would change <code>evolve_knowledge</code>/the core commit path's
-default cost for every caller regardless of whether they use
-<code>InferenceStep</code>s at all, and — the actual point of this ADR — still
-wouldn't catch the motivating case: a session nobody commits to again
-after the condition arises. A synchronous check only ever fires on
-the next write to the <em>same</em> session; the gap here is specifically
-sessions that stop being written to.</p>
-<h2 id="extending-garbagecollector-itself-to-also-run-this-check">Extending <code>GarbageCollector</code> itself to also run this check</h2>
-<p>Rejected. Different lifecycles pulling in opposite directions: GC's
-candidate set is explicitly <code>closed</code> sessions past a retention
-window (<code>session.closed == False</code> is skipped unconditionally); a
-fresh reasoning conflict is most actionable in exactly the sessions
-GC ignores — open, actively-worked ones. Conflating them would force
-one cadence/config (<code>gc_retention</code>, tuned for eviction safety) onto
-an unrelated concern (conflict latency, which wants to be checked
-much sooner than 24 hours).</p>
-<h2 id="reusing-gossipconflictdetected-instead-of-a-new-event-type">Reusing <code>GossipConflictDetected</code> instead of a new event type</h2>
-<p>Rejected. Semantically different failures — a merge conflict between
-two replicas' operation logs (ADR-008) versus a single-structure
-belief conflict (ADR-002) — with fields that don't apply both ways
-(<code>source_replica_id</code>/<code>source_session_id</code> describe a remote peer;
-there is no remote peer here). Reusing the type would force every
-existing <code>GossipConflictDetected</code> subscriber to add a discriminating
-check it doesn't need today.</p>
-<hr />
-<h1 id="consequences">Consequences</h1>
-<h2 id="positive">Positive</h2>
+<h2 id="consequences">Consequences</h2>
 <ul>
-<li>Closes the gap <code>evolve_knowledge</code>'s v1.27.1 fix explicitly doesn't:
-  a conflict that arises without a triggering commit in the affected
-  session is now found within one <code>sweep_interval</code> instead of never.</li>
-<li>Reuses <code>GarbageCollector</code>'s worker shape, <code>EventBus</code>, and
-  <code>OPTIONAL_CONSTRAINTS_BY_NAME</code> wholesale — no new constraint logic,
-  no new conflict semantics, no new Core/Runtime dependency.</li>
-<li><code>cks-mcp</code>'s <code>ConflictInbox</code> pattern already proves the
-  event-to-polling-tool path works; wiring an
-  <code>InferenceConflictDetected</code> subscriber there is expected to be a
-  small, mechanical follow-up rather than new design.</li>
+<li><strong>Reuses existing infrastructure.</strong> No new table, no new storage method
+  beyond what ADR-009 and the outbox pattern already ship. The sweeper adds
+  one new task_type value to an already-generic queue.</li>
+<li><strong>Runtime still does not perform I/O against external sources.</strong> The
+  sweeper only <em>detects</em> staleness by timestamp; the actual re-verification
+  HTTP call stays in <code>cks-mcp</code> (<code>verify_source</code>), preserving the same
+  Runtime/Core-adjacent separation of concerns ADR-001 (Runtime Layering)
+  established: Runtime orchestrates, it does not originate.</li>
+<li><strong>cks-mcp must add a consumer.</strong> <code>resolve_inference_conflict</code>'s
+  cks-mcp counterpart for inference conflicts is <code>arbitrate_inference_conflict</code>;
+  this ADR requires a symmetric cks-mcp tool (<code>refresh_verification</code>) and a
+  <code>critic_agent</code> dispatch branch for <code>task_type == "provenance_conflict"</code>.
+  See the cks-mcp-side ADR and <code>critic_agent.py</code>'s resolution-policy
+  docstring, which will need a third bullet alongside <code>gossip_conflict</code> and
+  <code>inference_conflict</code>.</li>
+<li><strong>Configuration surface grows by one TTL.</strong> Consistent with existing
+  <code>CKS_*</code> env var conventions; documented in <code>docs/getting-started.md</code>'s
+  environment variable table when implemented.</li>
 </ul>
-<h2 id="negative">Negative</h2>
+<h2 id="alternatives-considered">Alternatives considered</h2>
 <ul>
-<li>One more no-op-by-default <code>RuntimeStorage</code> method
-  (<code>list_sessions_modified_since</code>) every backend maintainer decides
-  whether to implement — same category of cost ADR-008 already
-  flagged for <code>fetch_operations_since</code>.</li>
-<li>One more background <code>asyncio.Task</code> lifecycle to manage
-  (start/stop wiring, config flag, docs).</li>
-<li>The batch-limited watermark (Decision point 2, last bullet) means
-  a deployment with more than <code>batch_size</code> sessions modified within
-  one <code>sweep_interval</code> makes no forward progress on its watermark
-  until a sweep drains the backlog below the batch size — a
-  degenerate but real case worth monitoring, not solved by pagination
-  here (kept simple, matching GC's own lack of pagination).</li>
-<li>In-memory, per-process dedup means a restart (or a multi-process
-  deployment with more than one sweeper instance) can re-publish an
-  already-known finding. Acceptable for a <code>WARNING</code>-severity,
-  non-destructive notification; would not be acceptable if this
-  pattern were reused for something that triggers an action on
-  receipt.</li>
+<li><strong>Re-verify inline inside the sweeper.</strong> Rejected: would require Runtime
+  to make outbound HTTP requests and hold cryptographic signing material,
+  both of which currently live in cks-mcp (<code>cks_mcp.provenance</code>). Keeping
+  the sweeper detection-only preserves the existing module boundary.</li>
+<li><strong>No TTL, only link-rot detection.</strong> Rejected as insufficient on its
+  own: a source can change its <em>content</em> materially without ever 404ing,
+  which a HEAD-request-only check would miss. TTL-based re-verification
+  catches both cases at the cost of periodic re-checks.</li>
 </ul>
-<hr />
-<h1 id="status">Status</h1>
-<p>Proposed. Not implemented. Depends on <code>cks-core</code>'s
-<code>InferenceConfidenceConflictConstraint</code>/<code>StalePremiseConstraint</code>
-(ADR-001/ADR-002, implemented) and <code>OPTIONAL_CONSTRAINTS_BY_NAME</code>
-(implemented), and reuses <code>cks-runtime</code>'s <code>GarbageCollector</code> shape
-and <code>EventBus</code> (ADR-006, implemented) unmodified. The <code>cks-mcp</code>-side
-consumer (Decision point 5) is unblocked by this ADR but not decided
-by it.</p>
 
 
 
