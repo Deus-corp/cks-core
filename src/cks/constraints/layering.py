@@ -11,7 +11,6 @@ from ..diagnostics import Diagnostic, DiagnosticSeverity
 from ..validation import ValidationStage
 from .base import Constraint
 
-
 # Hardcoded for the CKS ecosystem: cks-core < cks-runtime < cks-mcp.
 # A future ADR could make this configurable, but the ecosystem's own
 # layering is a property of the project, not of individual deployments.
