@@ -60,6 +60,7 @@ nav:
       - Contradiction Detection and Sandbox: case-studies/contradiction-detection-and-sandbox.md
       - Offline Semantic Search: case-studies/local-embeddings.md
       - Resolving a Reasoning Conflict with Inference Arbitration: case-studies/inference-conflict-resolution.md
+      - Saving and Reusing Knowledge Graphs Across Sessions: case-studies/memory-agent-graph-reuse.md
 
   - cks-core:
       - Overview: cks-core/index.md
@@ -103,6 +104,8 @@ nav:
           - ADR-007 Conformance Model: cks-runtime/adr/ADR-007 Concurrent Multi-Agent Writes.md
           - ADR-008 Reference Engine: cks-runtime/adr/ADR-008 Gossip Replication for Distributed Runtime Nodes.md
           - ADR-009 Runtime API: cks-runtime/adr/ADR-009 Proactive Inference Staleness Detection.md
+          - ADR-010 Proactive Provenance Staleness Detection: cks-runtime/adr/ADR-010 Proactive Provenance Staleness Detection.md
+          - ADR-011 Temporal Staleness Detection: cks-runtime/adr/ADR-011 Temporal Staleness Detection.md
       - Specifications:
           - SPEC-001 Runtime Overview: cks-runtime/standards/runtime/SPEC-001_Runtime_Overview.md
           - SPEC-002 Session Model: cks-runtime/standards/runtime/SPEC-002_Session_Model.md
@@ -141,3 +144,4 @@ nav:
           - ADR-003 Middleware Stack: cks-mcp/adr/ADR-003 Middleware Stack.md
           - ADR-004 Extension Model: cks-mcp/adr/ADR-004 Extension Model.md
           - ADR-005 Gossip Integration (Multi-Instance Session Sync): cks-mcp/adr/ADR-005 Gossip Integration.md
+          - ADR-006 Gossip Conflict Arbitration: cks-mcp/adr/ADR-006 Gossip Conflict Arbitration.md
