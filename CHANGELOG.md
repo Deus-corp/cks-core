@@ -6,6 +6,16 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.21.0] - 2026-08-04
+
+### Added
+- **`LayeringRuleConstraint`** – new opt-in extension constraint in `cks.constraints.layering` (`cks.constraints.builtin.OPTIONAL_CONSTRAINTS_BY_NAME["layering_rule"]`, identity `CKS-EXT-LAYERING-RULE`). Checks every `depends_on` relation between recognized CKS ecosystem components against a hardcoded layering order (`cks-core < cks-runtime < cks-mcp`) and raises an `ERROR` when a dependency points upstream (e.g. `cks-core → depends_on → cks-runtime`), mechanically catching what was previously enforced only by `pyproject.toml` and developer discipline. Relations naming components outside the recognized set, or with a relation type other than `depends_on`, are left untouched. See ADR-004 ("Layering Rule Constraint") for the design rationale.
+
+### Fixed
+- The `LayeringRuleConstraint` draft compared layer indices with the wrong operator (`source_layer >= target_layer`), which inverted the check: it flagged every *correct* dependency (e.g. `cks-runtime → cks-core`) and silently passed every *reverse* one (e.g. `cks-core → cks-runtime`). Corrected to `source_layer <= target_layer` before registering the constraint.
+
+---
+
 ## [1.20.0] - 2026-08-04
 
 ### Added

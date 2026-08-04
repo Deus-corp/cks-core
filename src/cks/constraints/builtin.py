@@ -12,6 +12,7 @@ etc.).
 from __future__ import annotations
 
 from .contradiction import FunctionalRelationConstraint, MutualExclusionConstraint
+from .layering import LayeringRuleConstraint
 from .ontology import RelationTypeConstraint, TypeHierarchyCycleConstraint
 from .projection import EmbeddingProjectionIntegrityConstraint
 from .reasoning import (
@@ -81,6 +82,8 @@ OPTIONAL_CONSTRAINTS = (
     StalePremiseConstraint(),
     # --- Temporal Domain (bounded fact validity, see ADR-003) ---
     TemporalValidityConstraint(),
+    # --- Architecture Domain (dependency direction, see ADR-004) ---
+    LayeringRuleConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -100,4 +103,5 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "inference_confidence_conflict": InferenceConfidenceConflictConstraint(),
     "stale_premise": StalePremiseConstraint(),
     "temporal_validity": TemporalValidityConstraint(),
+    "layering_rule": LayeringRuleConstraint(),
 }
