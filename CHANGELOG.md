@@ -6,6 +6,13 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.20.0] - 2026-08-04
+
+### Added
+- **`TemporalValidityConstraint`** – new opt-in extension constraint in `cks.constraints.temporal` (`cks.constraints.builtin.OPTIONAL_CONSTRAINTS_BY_NAME["temporal_validity"]`, identity `CKS-EXT-TEMPORAL-VALIDITY`). Checks every object's `structure` for an optional `valid_until` field (ISO-8601 datetime string, UTC-normalized); a `valid_until` in the past raises a `WARNING` (the fact is still structurally valid, just temporally expired), a malformed value raises an `ERROR`. Deliberately minimal — no interval reasoning or temporal logic — and answers exactly one question: "has this fact expired?" See ADR-003 ("Temporal Validity Constraint") for the design rationale, including how this lays the groundwork for a future `temporal_staleness_sweeper` in `cks-runtime`, mirroring `InferenceStalenessSweeper` (ADR-009).
+
+---
+
 ## [1.19.0] - 2026-08-02
 
 ### Added

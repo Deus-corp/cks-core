@@ -6,8 +6,11 @@ a declared architectural layering order. Opt-in via
 
 from __future__ import annotations
 
-from cks.constraints.base import Diagnostic, DiagnosticSeverity, StructuralConstraint
-from cks.core import KnowledgeStructure
+from ..core import KnowledgeStructure
+from ..diagnostics import Diagnostic, DiagnosticSeverity
+from ..validation import ValidationStage
+from .base import Constraint
+
 
 # Hardcoded for the CKS ecosystem: cks-core < cks-runtime < cks-mcp.
 # A future ADR could make this configurable, but the ecosystem's own
@@ -19,8 +22,9 @@ _LAYERING_ORDER = {
 }
 
 
-class LayeringRuleConstraint(StructuralConstraint):
+class LayeringRuleConstraint(Constraint):
     identity = "CKS-EXT-LAYERING-RULE"
+    stage = ValidationStage.SEMANTIC
     description = "Enforces architectural dependency direction (cks-core < cks-runtime < cks-mcp)."
     severity = DiagnosticSeverity.ERROR
 

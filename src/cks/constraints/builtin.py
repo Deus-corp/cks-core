@@ -23,6 +23,7 @@ from .reasoning import (
 )
 from .semantic import DerivationArityConstraint, DerivationCycleConstraint
 from .structural import NoDanglingRelationConstraint, UniqueIdentityConstraint
+from .temporal import TemporalValidityConstraint
 from .verification import VerificationRecordIntegrityConstraint
 
 # =============================================================================
@@ -78,6 +79,8 @@ OPTIONAL_CONSTRAINTS = (
     InferenceConfidenceConflictConstraint(),
     # --- Belief Revision Domain (cascading staleness, see ADR-002) ---
     StalePremiseConstraint(),
+    # --- Temporal Domain (bounded fact validity, see ADR-003) ---
+    TemporalValidityConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -96,4 +99,5 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "supersession_chain": SupersessionChainConstraint(),
     "inference_confidence_conflict": InferenceConfidenceConflictConstraint(),
     "stale_premise": StalePremiseConstraint(),
+    "temporal_validity": TemporalValidityConstraint(),
 }
