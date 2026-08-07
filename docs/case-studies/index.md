@@ -12,3 +12,4 @@ tracks provenance, and gives LLMs a verifiable knowledge backbone.
 | [Offline Semantic Search with Local Embeddings](local-embeddings.md) | How CKS switched to local, token-free embeddings and correctly ranked fruits above vehicles with cosine similarity 0.70 vs 0.21 |
 | [Resolving a Reasoning Conflict with Inference Arbitration](inference-conflict-resolution.md) | How CKS detects, explains, and resolves competing `InferenceStep`s using the reasoning layer (ADR-001) |
 | [Memory Agent: Saving and Reusing Knowledge Graphs Across Sessions](memory-agent-graph-reuse.md) | How CKS stores named graphs in a persistent registry, loads them in new conversations, and evolves them without rebuilding |
+| [CRDT Fork Resolution with Fork Agent](crdt-fork-resolution.md) | How CKS detects and automatically resolves CRDT forks using MV‑Register, outbox tasks, and the autonomous ForkResolutionAgent |

@@ -61,6 +61,7 @@ nav:
       - Offline Semantic Search: case-studies/local-embeddings.md
       - Resolving a Reasoning Conflict with Inference Arbitration: case-studies/inference-conflict-resolution.md
       - Saving and Reusing Knowledge Graphs Across Sessions: case-studies/memory-agent-graph-reuse.md
+      - Automatic CRDT Fork Resolution with Fork Agent: case-studies/crdt-fork-resolution.md
 
   - cks-core:
       - Overview: cks-core/index.md
