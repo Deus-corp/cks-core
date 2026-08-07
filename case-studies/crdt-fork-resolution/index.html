@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="../catching-fake-citations/">
+        <link rel="prev" href="../memory-agent-graph-reuse/">
       
       
-        <link rel="next" href="../ontology-validation-and-visualization/">
+        <link rel="next" href="../../cks-core/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Semantic Search and Partial Merge - CKS Documentation</title>
+        <title>Automatic CRDT Fork Resolution with Fork Agent - CKS Documentation</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#case-study-semantic-search-and-partial-merge" class="md-skip">
+        <a href="#case-study-automatic-crdt-fork-resolution-with-fork-agent" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Semantic Search and Partial Merge
+              Automatic CRDT Fork Resolution with Fork Agent
             
           </span>
         </div>
@@ -560,37 +560,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Semantic Search and Partial Merge
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../semantic-search-and-partial-merge/" class="md-nav__link">
         
   
   
@@ -606,153 +579,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#scenario" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Scenario
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tools-used" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tools Used
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-happened" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What Happened
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="What Happened">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-semantic-search-without-seed-ids" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Semantic search without seed IDs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-in-place-object-update" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. In-place object update
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-branching-and-divergent-edits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Branching and divergent edits
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-partial-merge-with-resolutions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Partial merge with resolutions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-compact-subgraph-extraction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Compact subgraph extraction
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-runtime-metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Runtime metrics
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Takeaways
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reproduce-it-yourself" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reproduce It Yourself
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -902,10 +728,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../crdt-fork-resolution/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic CRDT Fork Resolution with Fork Agent
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -921,6 +774,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools Used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Happened
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduce-it-yourself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduce It Yourself
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3663,78 +3602,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="What Happened">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-semantic-search-without-seed-ids" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Semantic search without seed IDs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-in-place-object-update" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. In-place object update
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-branching-and-divergent-edits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Branching and divergent edits
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-partial-merge-with-resolutions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Partial merge with resolutions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-compact-subgraph-extraction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Compact subgraph extraction
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-runtime-metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Runtime metrics
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -3742,6 +3609,17 @@
     <span class="md-ellipsis">
       
         Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Limitations
       
     </span>
   </a>
@@ -3779,105 +3657,96 @@
   
 
 
-<h1 id="case-study-semantic-search-and-partial-merge">Case Study: Semantic Search and Partial Merge</h1>
-<p><strong>Problem:</strong> Managing a knowledge graph with multiple contributors leads to
-conflicts — two people (or two LLM agents) editing the same concept
-simultaneously. Traditional tools force a manual resolution of every
-conflict, blocking the entire merge until all are resolved.</p>
-<p><strong>CKS solution:</strong> <code>merge_branch</code> now accepts a <code>resolutions</code> parameter,
-enabling partial three-way merges. The caller specifies per-object
-strategies (<code>"branch_a"</code>, <code>"branch_b"</code>, <code>None</code>, or a custom object),
-and the merge commits immediately, without manual intervention for the
-resolved identities. Combined with semantic search and in-place
-<code>update_object</code>, this enables a fully automated knowledge workflow.</p>
+<h1 id="case-study-automatic-crdt-fork-resolution-with-fork-agent">Case Study: Automatic CRDT Fork Resolution with Fork Agent</h1>
+<p><strong>Problem:</strong> When two replicas of cks-mcp concurrently modify the same
+knowledge object (e.g. via gossip), a CRDT conflict (fork) arises.
+Without automatic resolution, the conflict remains unresolved, leaving
+the graph in an inconsistent state and requiring manual intervention.</p>
+<p><strong>CKS solution:</strong> CRDT adapter (ADR-013) Stages 2–3: MV-Register,
+causality tracking, fork detection events, and a dedicated
+<code>ForkResolutionAgent</code> that autonomously claims and resolves
+<code>crdt_fork</code> tasks from the persistent outbox.</p>
 <hr />
 <h2 id="scenario">Scenario</h2>
-<p>We built a knowledge graph about machine learning with five concepts
-(Neural Networks, Backpropagation, Support Vector Machines, Training Data,
-GPU) and four relations (<code>trained_by</code>, <code>uses</code>, <code>accelerated_by</code>).
-We then:</p>
-<ol>
-<li>Used <code>search_semantic</code> to find "how to optimize neural network training"
-   without specifying any object IDs — the system returned relevant concepts
-   like Backpropagation and GPU.</li>
-<li>Updated GPU's description in place via <code>update_object</code> — no cascade
-   deletion of relations.</li>
-<li>Created a branch and made divergent edits to Neural Networks' description.</li>
-<li>Merged the branch back with <code>resolutions={"neural-networks": "branch_b"}</code> —
-   the merge succeeded in one call, no manual conflict resolution required.</li>
-<li>Extracted the final graph with <code>query_subgraph</code> in compact mode.</li>
-<li>Audited the runtime with <code>get_metrics</code>.</li>
-</ol>
+<p>We run two instances of cks-mcp (on ports 8765 and 8766) sharing
+knowledge via gossip, backed by SQLite databases <code>/tmp/cks-a.db</code> and
+<code>/tmp/cks-b.db</code>. A session with a single object <code>concept-1</code> is created
+on instance A. Then a conflicting update is applied on instance B.
+Gossip synchronises the sessions, and the CRDT layer detects a fork in
+the MV-Register.</p>
 <hr />
 <h2 id="tools-used">Tools Used</h2>
 <ul>
-<li><code>validate_knowledge</code> and <code>evolve_knowledge</code> (with <code>update_object</code>)</li>
-<li><code>search_semantic</code> (no seed IDs)</li>
-<li><code>create_branch</code>, <code>merge_branch</code> (with <code>resolutions</code>)</li>
-<li><code>query_subgraph</code> (compact mode)</li>
-<li><code>get_metrics</code></li>
+<li><code>validate_knowledge</code> / <code>evolve_knowledge</code> – creating and modifying the session.</li>
+<li><code>cks-fork-agent</code> – standalone process that resolves CRDT forks.</li>
+<li>SQLite introspection – verifying MV-Register state.</li>
 </ul>
 <hr />
 <h2 id="what-happened">What Happened</h2>
-<h3 id="1-semantic-search-without-seed-ids">1. Semantic search without seed IDs</h3>
-<div class="highlight"><pre><span></span><code>search_semantic(query=&quot;how to optimize neural network training&quot;)
-</code></pre></div>
-<p>Returned <code>neural-networks</code>, <code>backpropagation</code>, and <code>svm</code> as the top semantic
-matches. GPU appeared in the expanded subgraph via its <code>accelerated_by</code>
-relation, confirming the embedding model correctly associates GPU with
-neural network optimization even though it wasn't a top-3 seed.</p>
-<h3 id="2-in-place-object-update">2. In-place object update</h3>
-<div class="highlight"><pre><span></span><code>evolve_knowledge(operations=[{&quot;type&quot;: &quot;update_object&quot;, &quot;object_id&quot;: &quot;gpu&quot;,
-  &quot;structure_patch&quot;: {&quot;description&quot;: &quot;specialized hardware for parallel matrix
-  operations, essential for accelerating neural network training and optimization&quot;}}])
-</code></pre></div>
-<p>GPU's description changed without cascading to its relations —
-<code>accelerated_by</code> remained intact, no manual relation reconstruction needed.</p>
-<h3 id="3-branching-and-divergent-edits">3. Branching and divergent edits</h3>
-<p>Branch A set Neural Networks to <em>"deep learning models with many hidden layers"</em>.
-The original session set it to <em>"computational graphs inspired by biological
-neurons, including both shallow and deep architectures"</em>. This is a genuine
-conflict: same object, same field, diverged from the same base version.</p>
-<h3 id="4-partial-merge-with-resolutions">4. Partial merge with resolutions</h3>
-<div class="highlight"><pre><span></span><code>merge_branch(target_session_id=..., source_session_id=...,
-  resolutions={&quot;neural-networks&quot;: &quot;branch_b&quot;})
-</code></pre></div>
-<p>The merge succeeded immediately with <code>"merged": true</code>. No <code>conflicts</code> array,
-no second call needed. The resolved object carried the branch's description,
-confirming <code>"branch_b"</code> was honored correctly.</p>
-<h3 id="5-compact-subgraph-extraction">5. Compact subgraph extraction</h3>
-<div class="highlight"><pre><span></span><code>query_subgraph(seed_ids=[&quot;neural-networks&quot;], depth=2, compact_mode=true)
-</code></pre></div>
-<p>Returned all 5 nodes and 4 edges in a flat <code>nodes</code>/<code>edges</code> format — ideal
-for LLM consumption, with no redundant canonical wrappers.</p>
-<h3 id="6-runtime-metrics">6. Runtime metrics</h3>
-<div class="highlight"><pre><span></span><code>get_metrics()
-</code></pre></div>
-<p>Reported 6 <code>evolve</code> calls, 2 <code>query_subgraph</code> calls, and 2 <code>merge</code> calls,
-with average execution times of 0.13 ms, 0.15 ms, and 0.09 ms respectively.</p>
+<ol>
+<li><strong>Session creation</strong> – Instance A received a <code>concept-1</code> with
+   description "Initial version".</li>
+<li><strong>Conflicting update</strong> – Instance B independently updated the same
+   object to "Version from instance B" without coordinating with A.</li>
+<li><strong>Gossip synchronisation</strong> – After gossip rounds, both replicas
+   contained both versions of the object.</li>
+<li><strong>CRDT fork detection</strong> – The CRDT layer detected two concurrent
+   pointers for <code>concept-1</code> in <code>cks_mv_register</code> and escalated a
+   <code>CRDTForkDetected</code> event.</li>
+<li><strong>Outbox task creation</strong> – A <code>crdt_fork</code> task was written to the
+   persistent outbox (<code>cks_outbox_tasks</code>).</li>
+<li><strong>Fork Agent resolution</strong> – <code>cks-fork-agent</code> (polling every 10 s)
+   claimed the task, applied its resolution policy (causality →
+   most‑recent → alphabetical tie‑break), and called
+   <code>resolve_pointer</code>, collapsing the MV-Register to a single winner.</li>
+<li><strong>Verification</strong> – <code>SELECT * FROM cks_mv_register WHERE pointer_key =
+   'concept-1'</code> returned exactly one row; the outbox task status was
+   <code>COMPLETED</code>.</li>
+</ol>
+<p>Log excerpt:
+<div class="highlight"><pre><span></span><code>[cks-fork-agent] resolved crdt_fork task_id=3 pointer_key=concept-1
+</code></pre></div></p>
 <hr />
 <h2 id="key-takeaways">Key Takeaways</h2>
 <ul>
-<li><strong>Semantic search works without explicit IDs.</strong> The embedding model correctly
-  associates concepts by meaning, not just keywords.</li>
-<li><strong><code>update_object</code> enables surgical edits.</strong> No need to remove and re-add
-  objects with cascading relation deletions.</li>
-<li><strong>Partial merge eliminates manual conflict resolution.</strong> With <code>resolutions</code>,
-  the merge commits in one call for all specified identities.</li>
-<li><strong>Compact mode reduces token usage.</strong> Flat <code>nodes</code>/<code>edges</code> arrays are
-  smaller and faster for LLMs to process than full canonical JSON.</li>
-<li><strong>Metrics provide observability.</strong> Invocation counts and execution times
-  are available for every operation type.</li>
+<li><strong>CRDT fork resolution works end‑to‑end.</strong> The agent correctly
+  consumes outbox tasks, resolves forks, and updates the MV-Register.</li>
+<li><strong>Fully autonomous.</strong> No human intervention was required after the
+  initial session creation and conflicting update.</li>
+<li><strong>Persistent outbox ensures reliability.</strong> If the agent crashes
+  mid‑resolution, another instance can claim the task.</li>
+<li><strong>Integration with gossip is functional</strong> (verified in a separate
+  setup). The CRDT quarantine, Merkle tree, and causality checks all
+  performed as designed.</li>
+</ul>
+<hr />
+<h2 id="current-limitations">Current Limitations</h2>
+<ul>
+<li><code>OutboxEmbeddingWorker</code> raises <code>'AddObject' object has no attribute
+  'object_id'</code> in certain background tasks – tracked as a known bug
+  (see issue #...).</li>
+<li>CRDT objects are only populated during gossip exchange, not on
+  local <code>evolve_knowledge</code> calls – this is by design (ADR-013 Stage 2)
+  but means the fork agent cannot resolve conflicts that originate
+  purely within a single node.</li>
+<li>Gossip synchronisation itself requires careful ordering of startup
+  and occasional manual restart – stability improvements are planned.</li>
 </ul>
 <hr />
 <h2 id="reproduce-it-yourself">Reproduce It Yourself</h2>
 <ol>
-<li>Install <code>cks-mcp</code> and connect it to Claude Desktop.</li>
-<li>Start a chat and say:<br />
-<code>Use cks-mcp to create a knowledge graph about machine learning with 5 concepts and 4 relations. Then branch, make divergent edits, and merge with resolutions.</code></li>
-<li>Observe the conflict being resolved automatically.</li>
+<li>Start two cks-mcp instances with gossip enabled on different ports
+   and separate SQLite databases (see <code>scripts/</code> folder for helper
+   scripts).</li>
+<li>Create a session on instance A with <code>validate_knowledge</code>.</li>
+<li>Apply a conflicting update on instance B with <code>evolve_knowledge</code>.</li>
+<li>Wait for gossip rounds (or manually trigger sync).</li>
+<li>Inspect <code>cks_mv_register</code> – two rows should appear.</li>
+<li>Start <code>cks-fork-agent --poll-interval 10</code> pointing at one of the
+   databases.</li>
+<li>Verify that after ~10–20 seconds only one row remains and the
+   outbox task is marked <code>COMPLETED</code>.</li>
 </ol>
-<p>No coding required.</p>
 
 
 
