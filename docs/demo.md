@@ -9,7 +9,7 @@ client-side, loaded with a bundled snapshot of the ecosystem graph
 graph explorer, gallery, and pipeline monitor UI as the full studio, just
 without a live [cks-mcp](cks-mcp/index.md) server behind it.
 
-[Open the interactive demo &rarr;](demo.html){ .md-button .md-button--primary }
+[Open the interactive demo &rarr;](studio-demo/demo.html){ .md-button .md-button--primary }
 
 ---
 
