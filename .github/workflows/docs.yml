@@ -1,0 +1,61 @@
+name: Build and deploy docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout cks-core
+        uses: actions/checkout@v4
+
+      - name: Checkout cks-studio
+        uses: actions/checkout@v4
+        with:
+          repository: Deus-corp/cks-studio
+          path: cks-studio
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build cks-studio (includes static demo.html)
+        working-directory: cks-studio
+        run: |
+          npm ci
+          npm run build
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install mkdocs
+        run: pip install mkdocs-material mkdocstrings[python]
+
+      # mkdocs copies any non-.md file under docs/ verbatim into the built
+      # site, so dropping cks-studio's built demo.html + its /assets chunk
+      # here is enough for docs/demo.md's link to `demo.html` to resolve
+      # after `mkdocs build` -- no separate publish step for cks-studio.
+      - name: Copy static demo into docs/
+        run: |
+          cp cks-studio/dist/demo.html docs/demo.html
+          mkdir -p docs/assets
+          cp -r cks-studio/dist/assets/. docs/assets/
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdocs gh-deploy --force

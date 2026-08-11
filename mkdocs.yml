@@ -51,6 +51,7 @@ plugins:
 nav:
   - Home: index.md
   - Quick Start: quickstart.md
+  - Demo: demo.md
 
   - Case Studies:
       - Overview: case-studies/index.md

@@ -6,6 +6,14 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.21.1] - 2026-08-11
+
+### Added
+- **Documentation CI/CD** – automated GitHub Actions workflow that builds cks-studio's static demo and publishes it alongside the mkdocs site on GitHub Pages.
+- **Demo page** (`docs/demo.md`) – link to the interactive ecosystem graph demo in the documentation navigation.
+
+---
+
 ## [1.21.0] - 2026-08-04
 
 ### Added
