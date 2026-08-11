@@ -112,6 +112,6 @@ trustworthy, so nothing becomes a version unless it's already known-good.
 | `cks-runtime` | Session/transaction integrity, storage safety — doesn't know or care what a `VerificationRecord` is. |
 | `cks-core` | Structural and semantic validation — checks a `VerificationRecord`'s *shape*, never its provenance (it never sees the signing key). |
 
-See [`SECURITY.md`](/SECURITY.md) for how to report a vulnerability, and
+See [`SECURITY.md`](../SECURITY.md) for how to report a vulnerability, and
 [Extension Model](extensions.md) for the full opt-in constraint set this
 document's provenance section is one (unconditionally-enforced) part of.

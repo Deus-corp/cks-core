@@ -229,12 +229,16 @@ into local state through the following decision sequence:
    existing field-disjoint merge path is invoked as a probe (no
    persisted side effects on failure). A clean probe is committed as
    a new local Version. A conflicting probe is **escalated, not
-   raised**: a `GossipConflictDetected` event, carrying the
-   conflicting identities, is published via the Runtime `EventBus`
-   instead of raising `RuntimeMergeConflictError` synchronously — a
-   background gossip cycle has no caller waiting on the call the way
-   a synchronous merge invocation does. A subscriber resolves the
-   conflict later through the ordinary synchronous merge path.
+   raised**: a `GossipConflictDetected` event, carrying the conflicting
+   `session_id` and identities, is published via the Runtime
+   `EventBus` instead of raising `RuntimeMergeConflictError`
+   synchronously — a background gossip cycle has no caller waiting on
+   the call the way a synchronous merge invocation does. `session_id`
+   (added v1.31.2) lets a subscriber tell which of possibly several
+   concurrently-gossiping sessions conflicted, since the event has no
+   other way to disambiguate one conflict from another. A subscriber
+   resolves the conflict later through the ordinary synchronous merge
+   path.
 
 `apply_remote_session` returns `True` for outcomes 1–4 and for a
 successful merge in outcome 5, and `False` when a merge conflict was
@@ -243,6 +247,19 @@ escalated.
 A conformant implementation shall not silently guess at a merge base
 when none can be determined. No-common-ancestor divergence is
 escalated exactly as a genuine field-level conflict is.
+
+**Concurrency.** `apply_remote_session` calls that target the same
+`session_id` are serialized against each other — a second call for a
+`session_id` already being reconciled waits for the first to finish
+rather than racing it through the begin/commit sequence above. Calls
+for *different* `session_id`s are never blocked on each other. A
+third-party transport (Section 9) that fans inbound requests out
+across multiple concurrent handlers — as `GossipServer` does for
+inbound HTTP — relies on this: without it, two requests for one
+Session arriving close together could both observe no active
+transaction yet and both attempt to open one, and the second would
+fail with a transaction-conflict error instead of reconciling
+normally.
 
 ---
 
