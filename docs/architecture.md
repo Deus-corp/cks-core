@@ -172,14 +172,53 @@ Constraints are organized into **Validation Domains** (CKS‑005):
 
 - `structural.py` — unique identity, referential integrity.
 - `semantic.py` — derivation arity, cycle detection.
-- `builtin.py` — manifest that instantiates and exports all built‑in constraints.
+- `contradiction.py` — hard, ERROR‑severity contradictions between facts.
+- `reasoning.py` — belief revision: `InferenceStep` integrity, confidence bounds, supersession chains, stale‑premise citations, and the inference‑conflict WARNING (see "Belief Revision" below).
+- `temporal.py` — `TemporalValidityConstraint` (ADR‑003): flags objects whose `valid_until` has passed.
+- `layering.py` — `LayeringRuleConstraint` (ADR‑004): enforces the ecosystem's `cks-core < cks-runtime < cks-mcp` dependency direction.
+- `ontology.py`, `projection.py`, `verification.py` — additional opt‑in domains for ontology-, projection-, and verification-specific checks.
+- `builtin.py` — manifest that instantiates and exports all built‑in and optional constraints.
 
 Constraints execute after structural and semantic validation.
 
 Built‑in constraints are auto‑registered. Optional constraints,
-such as `EmbeddingProjectionIntegrityConstraint`, are not registered
-by default and must be opted‑in explicitly per validator instance
-or process‑wide (see the Plugin Development Guide).
+such as `EmbeddingProjectionIntegrityConstraint`, `temporal_validity`, and
+`layering_rule`, are not registered by default and must be opted‑in
+explicitly per validator instance or process‑wide (see the Plugin
+Development Guide).
+
+---
+
+# Belief Revision & Reasoning
+
+```
+constraints/reasoning.py
+```
+
+Alongside plain facts, a Knowledge Structure can record `InferenceStep`
+objects — a conclusion, the premises it was drawn from, an operator, a
+confidence score, and an optional justification. This lets CKS represent
+not just what is known but *why*, and reason about disagreements between
+inference paths that reach the same conclusion.
+
+The reasoning domain provides:
+
+- **Constraints** — `InferenceReferentialIntegrityConstraint`,
+  `ConfidenceBoundsConstraint`, `SupersessionChainConstraint` (rejects
+  `superseded_by` cycles), `InferenceConfidenceConflictConstraint`
+  (WARNING — active steps sharing a conclusion but disagreeing on
+  confidence), `StalePremiseConstraint` (WARNING — a premise citing an
+  already-superseded step).
+- **Pure queries** — `rank_by_entrenchment()` ranks competing steps by
+  confidence; `explain_inference()` walks a conclusion's inference chain
+  back to base facts.
+- **Evolution operators** — `RecordInference` appends a new step;
+  `ResolveInferenceConflict` atomically supersedes every losing step once
+  a winner has been chosen.
+
+None of these mutate a structure except the two evolution operators,
+which follow the same observational-purity guarantees as the rest of
+`evolution.py`. See ADR‑001 and ADR‑002 for the design rationale.
 
 ---
 
@@ -195,11 +234,50 @@ It provides:
 
 - `StructuralOperator` — abstract base class for admissible transformations.
 - `OperatorContract` — formal contract specifying preconditions, postconditions, and invariants.
-- Genesis operators: `AddObject`, `AddRelation`.
+- Genesis operators: `AddObject`, `AddRelation`, `RecordInference`.
 - Decay operators: `RemoveObject`, `RemoveRelation`.
+- Mutation operators: `UpdateObject` (merge and replace modes), `RenameObject`, `ResolveInferenceConflict`.
 - `compose()` — apply a sequence of operators in order.
+- `merge()` — three‑way merge (base/branch/branch) with conflict detection and optional per‑identity `resolutions`.
+- `query_subgraph()` — k‑hop subgraph extraction with optional budget and type‑weighted ranking.
 
 All operators are observationally pure and preserve structural invariants.
+Every operator also exposes documented, read‑only properties (`.obj`,
+`.object_id`, `.relation_id`, `.structure_patch`, `.mode`, `.new_name`) for
+safe introspection without reaching into private state.
+
+---
+
+# Import / Export Layer
+
+```
+adapters/
+```
+
+The adapters package converts between canonical structures and external
+RDF‑family formats, independent of the core semantic model:
+
+- `jsonld_to_cks.py` / `cks_to_jsonld.py` — JSON‑LD.
+- `rdf_to_cks.py` / `cks_to_rdf.py` — Turtle and RDF/XML.
+
+These are driven by the `cks convert` and `cks export` CLI commands. The
+RDF/XML reader rejects any DOCTYPE declaration to prevent entity‑expansion
+("billion laughs") attacks.
+
+---
+
+# Format Versioning
+
+```
+serialization.py, cli/commands/migrate.py
+```
+
+Every serialized structure carries `_cks_format_version`,
+`_cks_min_reader_version`, and `_cks_metadata`. `parse()` checks the
+installed `cks-core` version against a file's minimum reader requirement
+and raises `FormatVersionError` on mismatch. `is_legacy_format()` detects
+files written before this scheme (pre‑1.15.0); `cks migrate` re‑serializes
+them into the current format (`--in-place`, `--check`).
 
 ---
 
@@ -355,25 +433,51 @@ The Python reference implementation is organised as follows.
 src/
 └── cks/
     ├── __init__.py
+    ├── _version.py
     ├── interface.py
     ├── engine.py
     ├── core.py
     ├── serialization.py
+    ├── validation.py
     ├── validator.py
     ├── diagnostics.py
     ├── result.py
     ├── evolution.py
+    ├── plugin.py
+    ├── schema.py
+    ├── schemas/
+    ├── adapters/
+    │   ├── jsonld_to_cks.py
+    │   ├── cks_to_jsonld.py
+    │   ├── rdf_to_cks.py
+    │   └── cks_to_rdf.py
     ├── cli/
     │   ├── __init__.py
-    │   └── formatters.py
-    ├── constraints/
-    │   ├── __init__.py
-    │   ├── base.py
-    │   ├── builtin.py
-    │   ├── registry.py
-    │   ├── structural.py
-    │   └── semantic.py
-    └── ...
+    │   ├── formatters.py
+    │   └── commands/
+    │       ├── validate.py
+    │       ├── parse.py
+    │       ├── inspect.py
+    │       ├── evolve.py
+    │       ├── convert.py
+    │       ├── export.py
+    │       ├── migrate.py
+    │       ├── plugin.py
+    │       └── schema.py
+    └── constraints/
+        ├── __init__.py
+        ├── base.py
+        ├── builtin.py
+        ├── registry.py
+        ├── structural.py
+        ├── semantic.py
+        ├── contradiction.py
+        ├── reasoning.py
+        ├── temporal.py
+        ├── layering.py
+        ├── ontology.py
+        ├── projection.py
+        └── verification.py
 
 docs/
 examples/
@@ -391,14 +495,18 @@ tests/
 
 The architecture is intentionally modular.
 
+Delivered through this extension model: the belief‑revision/reasoning
+domain, the temporal‑validity and layering‑rule optional constraints, the
+RDF‑family import/export adapters, and format versioning — none of which
+required changes to the Core layer's semantic model.
+
 Future versions may introduce additional components such as:
 
-- constraint libraries;
+- semantic reasoning tools (pathfinding, concept similarity) beyond belief revision;
 - alternative serialization formats;
 - optimisation engines;
 - additional language bindings;
-- CLI extensions;
-- Reference Corpus (CKS‑009).
+- CLI extensions.
 
 These extensions should integrate through the existing canonical interfaces without modifying the semantic model.
 

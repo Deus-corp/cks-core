@@ -247,12 +247,33 @@ Two fundamental classes of operators exist:
 
 - **Genesis** — introduces new Knowledge Objects or Canonical Relations, expanding the structure.
 - **Decay** — removes existing objects or relations, simplifying the structure.
+- **Mutation** — changes an existing object in place (updating its structure, renaming it, or resolving a conflict between competing inferences) without altering its identity or cascading deletions to dependent relations.
 
 All evolution operators are governed by **formal contracts** specifying preconditions, postconditions, and invariant obligations. Composition of operators yields complex developmental trajectories.
 
 Structural evolution ensures that knowledge can grow, adapt, and be refined while remaining canonically valid.
 
 The formal theory of structural evolution is defined in CKS‑004.
+
+---
+
+# Inference and Belief Revision
+
+Not every Knowledge Object is a base fact. An **`InferenceStep`** records a
+conclusion together with the premises it was drawn from, the operator
+used to derive it, a confidence score, and an optional justification —
+knowledge about *how a belief was reached*, not just the belief itself.
+
+Because independent inference paths can reach the same conclusion with
+different confidence, CKS treats this as an ordinary, resolvable
+disagreement rather than a structural error: it is reported at WARNING
+severity, ranked by entrenchment, and resolved by explicitly superseding
+the losing steps — never by silently overwriting them. The superseded
+steps remain in the structure, preserving the belief's revision history.
+
+This principle — that conflicting beliefs are data, not errors — is what
+allows a Knowledge Structure to represent a reasoning process that
+changes its mind over time while staying canonically valid.
 
 ---
 
@@ -332,7 +353,7 @@ Every implementation should expose behaviour consistent with the CKS specificati
 
 # CLI and Reference Corpus
 
-The CKS ecosystem provides a **command-line interface (CLI)** for interacting with Knowledge Structures from the terminal. Commands include `validate`, `parse`, `inspect`, and `evolve`.
+The CKS ecosystem provides a **command-line interface (CLI)** for interacting with Knowledge Structures from the terminal. Commands include `validate`, `parse`, `inspect`, `evolve`, `convert`, `export`, `migrate`, `schema`, and `plugin`.
 
 A **Reference Corpus** of canonical examples (valid and invalid structures) is maintained under `examples/corpus/` to serve as a test suite and a learning resource.
 

@@ -68,7 +68,7 @@ Whenever practical, new functionality should include corresponding unit tests.
 
 The Python implementation follows modern Python practices:
 
-* Python 3.11+
+* Python 3.12+
 * type annotations
 * immutable data structures where appropriate
 * descriptive docstrings

@@ -21,7 +21,7 @@ The reference implementation evolves together with the formal CKS specifications
 
 ---
 
-# Current Status (August 2026 — v1.19.0)
+# Current Status (August 2026 — v1.21.1)
 
 The project has progressed well beyond the original version-by-version roadmap below. Verified against `CHANGELOG.md`:
 
@@ -29,6 +29,9 @@ The project has progressed well beyond the original version-by-version roadmap b
 - **Merge engine:** three-way merge with conflict detection (`KnowledgeStructure.merge()`) — **done** (v1.8.0).
 - **Belief revision / reasoning engine (ADR-001, ADR-002):** `InferenceStep` objects, the `inference_confidence_conflict` and `stale_premise` extension constraints, `rank_by_entrenchment`, `explain_inference`, and the `resolve_inference_conflict` evolution operator — **done** (v1.16.0–v1.19.0). This is the mechanism `cks-mcp` uses for its conflict-resolution tools.
 - **Event system, time-travel operations, delta version storage, Merkle-tree hashing/structural diff** — **done**.
+- **Temporal validity checking (ADR-003):** opt-in `temporal_validity` extension constraint flagging objects with an expired `valid_until` — **done** (v1.20.0). Groundwork for a future `temporal_staleness_sweeper` in `cks-runtime`.
+- **Ecosystem layering rule (ADR-004):** opt-in `layering_rule` extension constraint mechanically enforcing the `cks-core < cks-runtime < cks-mcp` dependency direction on `depends_on` relations, previously only enforced by convention — **done** (v1.21.0).
+- **Documentation publishing pipeline:** CI workflow builds `cks-studio`'s static demo and publishes it alongside the mkdocs site on GitHub Pages — **done** (v1.21.1).
 
 **Note on version numbering:** actual shipped releases (currently 1.19.0) no longer track the thematic `0.x`/`1.x` plan below 1:1 — work has shipped faster and in a different order than originally sequenced, and the section headers below (Version 1.4, 1.5, ...) should be read as *thematic milestones*, not as promises about which release number they'll land in. This document previously said Version 1.3 was current and described AI/LLM Integration (originally planned as "Version 1.4") as unstarted future work, while a separate summary paragraph in the same file claimed it was already done — an internal contradiction caused by this document not being updated as fast as the code. Both are corrected below.
 
@@ -171,7 +174,7 @@ Also delivered as part of this phase, beyond the original scope: the belief-revi
 
 # Version 1.5 — Semantic Tools (next up)
 
-Planned work — verified **not yet started** (no matching implementation in `CHANGELOG.md` as of v1.19.0):
+Planned work — verified **not yet started** (no matching implementation in `CHANGELOG.md` as of v1.21.1):
 
 * Build reasoning tools on top of CKS (pathfinding across relations, concept similarity).
 * Expose semantic tools via MCP and CLI.

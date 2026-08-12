@@ -330,6 +330,15 @@ in `cks.constraints.projection`) enforces that an `EmbeddingProjection`
 object points to a valid source object and references its vector
 payload externally.
 
+Other optional constraints, available via `OPTIONAL_CONSTRAINTS_BY_NAME`:
+
+| Name                          | Module                       | Checks |
+| ------------------------------ | ----------------------------- | ------ |
+| `temporal_validity`            | `cks.constraints.temporal`    | An object's `structure.valid_until`, if present, has not passed (WARNING) |
+| `layering_rule`                | `cks.constraints.layering`    | `depends_on` relations between recognized ecosystem components respect `cks-core < cks-runtime < cks-mcp` (ERROR) |
+| `inference_confidence_conflict`| `cks.constraints.reasoning`   | Active `InferenceStep`s sharing a conclusion but disagreeing on confidence (WARNING) |
+| `stale_premise`                | `cks.constraints.reasoning`   | An active `InferenceStep` citing a premise that has itself been superseded (WARNING) |
+
 To activate an optional constraint, register it in the global registry
 or in a scoped `ConstraintRegistry`:
 
@@ -339,6 +348,10 @@ from cks.constraints.registry import registry
 
 for constraint in OPTIONAL_CONSTRAINTS:
     registry.register(constraint)
+
+# Or activate a single named constraint:
+from cks.constraints.builtin import OPTIONAL_CONSTRAINTS_BY_NAME
+registry.register(OPTIONAL_CONSTRAINTS_BY_NAME["temporal_validity"])
 ```
 
 See the Plugin Development Guide for more details.
@@ -349,7 +362,7 @@ See the Plugin Development Guide for more details.
 
 ## evolve()
 
-Apply a sequence of admissible structural operators (Genesis/Decay) to a Knowledge Structure.
+Apply a sequence of admissible structural operators (Genesis/Decay/Mutation) to a Knowledge Structure.
 
 ### Signature
 
@@ -362,27 +375,88 @@ evolve(
 
 ### Operators
 
-| Operator         | Description                                |
-| ---------------- | ------------------------------------------ |
-| `AddObject`      | Introduce a new KnowledgeObject            |
-| `AddRelation`    | Introduce a new CanonicalRelation          |
-| `RemoveObject`   | Remove a KnowledgeObject (and related relations) |
-| `RemoveRelation` | Remove a CanonicalRelation                 |
+| Operator                  | Class      | Description                                              |
+| -------------------------- | ---------- | --------------------------------------------------------- |
+| `AddObject`                | Genesis    | Introduce a new KnowledgeObject                           |
+| `AddRelation`               | Genesis    | Introduce a new CanonicalRelation                         |
+| `RecordInference`           | Genesis    | Append a new `InferenceStep` (conclusion + premises)      |
+| `RemoveObject`              | Decay      | Remove a KnowledgeObject (and related relations)          |
+| `RemoveRelation`            | Decay      | Remove a CanonicalRelation                                |
+| `UpdateObject`              | Mutation   | Update an object's structure in place (`merge`/`replace` modes) |
+| `RenameObject`              | Mutation   | Change `identity.name` without invalidating relations     |
+| `ResolveInferenceConflict`  | Mutation   | Supersede every losing `InferenceStep` in favor of a chosen winner |
+
+Every operator exposes read-only introspection properties (`.obj`, `.object_id`, `.relation_id`, `.structure_patch`, `.mode`, `.new_name`) so callers can inspect a pending operator without depending on private attributes.
 
 ### Example
 
 ```python
-from cks.evolution import AddObject, AddRelation, compose
+from cks.evolution import AddObject, AddRelation, RenameObject, compose
 
 ops = [
     AddObject(new_object),
     AddRelation(new_relation),
+    RenameObject("obj-1", "New Name"),
 ]
 
 evolved = evolve(structure, ops)
 ```
 
 All operators are observationally pure — the original structure is never modified.
+
+---
+
+# Belief Revision Queries
+
+Two pure query functions in `cks.constraints.reasoning` support reasoning over `InferenceStep` objects without mutating the structure. Neither produces a `Diagnostic`.
+
+## rank_by_entrenchment()
+
+Ranks the active `InferenceStep`s sharing a conclusion by confidence (descending).
+
+```python
+rank_by_entrenchment(structure: KnowledgeStructure, conclusion_id: str) -> list[KnowledgeObject]
+```
+
+## explain_inference()
+
+Walks every active `InferenceStep` chain concluding `object_id` back through its premises to base facts, reporting operator, confidence, justification, alternatives considered, and supersession history per step.
+
+```python
+explain_inference(
+    structure: KnowledgeStructure,
+    object_id: str,
+    *,
+    max_depth: int = 25,
+) -> dict
+```
+
+To resolve a detected conflict, apply `ResolveInferenceConflict` through `evolve()`:
+
+```python
+from cks.evolution import ResolveInferenceConflict
+
+winner = rank_by_entrenchment(structure, "concl-1")[0]
+resolved = evolve(structure, [ResolveInferenceConflict("concl-1", winner.identity.id)])
+```
+
+---
+
+# Subgraph Extraction
+
+## query_subgraph()
+
+k-hop subgraph extraction around a starting object, with an optional traversal budget and type-weighted ranking of candidates.
+
+```python
+query_subgraph(
+    structure: KnowledgeStructure,
+    start_id: str,
+    *,
+    k: int = 2,
+    budget: int | None = None,
+) -> SubgraphResult
+```
 
 ---
 
@@ -399,8 +473,12 @@ merge(
     base: KnowledgeStructure,
     branch_a: KnowledgeStructure,
     branch_b: KnowledgeStructure,
+    *,
+    resolutions: dict[str, str] | None = None,
 ) -> KnowledgeStructure
 ```
+
+`resolutions` maps a conflicting `object_id` to `"branch_a"` or `"branch_b"`, resolving that conflict instead of raising. Any conflict not covered by `resolutions` still raises `MergeConflictError`.
 
 ### Example
 
@@ -416,11 +494,14 @@ try:
 except MergeConflictError as e:
     for conflict in e.conflicts:
         print(f"Conflict on {conflict.object_id}")
+
+# Or resolve specific conflicts explicitly:
+merged = merge(base, branch_a, branch_b, resolutions={"obj-1": "branch_a"})
 ```
 
 ### MergeConflictError
 
-Raised when `branch_a` and `branch_b` changed the same identity to different results. The `conflicts` attribute is a list of `MergeConflict` objects, each containing:
+Raised when `branch_a` and `branch_b` changed the same identity to different results and no `resolutions` entry covers it. The `conflicts` attribute is a list of `MergeConflict` objects, each containing:
 
 | Field      | Description                                      |
 |------------|--------------------------------------------------|

@@ -2,14 +2,15 @@
 
 ## Supported Versions
 
-The current reference implementation is under active development.
+The reference implementation is production/stable and follows semantic versioning where practical.
 
-Security fixes are provided for the latest released version.
+Security fixes are provided for the latest released 1.x version. Given the project's small surface area and single-maintainer model, older 1.x releases are not separately patched — users are expected to upgrade to the latest release.
 
 | Version          | Supported |
 | ---------------- | --------- |
-| 0.1.x            | ✅         |
-| Earlier versions | ❌         |
+| 1.x (latest)      | ✅         |
+| Earlier 1.x       | ❌         |
+| 0.x               | ❌         |
 
 ---
 

@@ -119,13 +119,13 @@ This repository contains the official Python reference implementation.
 Current components include:
 
 * immutable semantic model;
-* canonical serializer;
-* validator with constraint registry;
+* canonical serializer with format versioning;
+* validator with constraint registry (including belief-revision, temporal, and layering domains);
 * reference engine;
-* structural evolution (Genesis/Decay operators);
+* structural evolution (Genesis/Decay/Mutation operators);
 * command-line interface (CLI);
 * public interface;
-* conformance tests (116 tests);
+* conformance tests (400+ tests);
 * reference corpus (valid and invalid examples);
 * documentation.
 
@@ -182,21 +182,25 @@ The Python implementation serves as the first canonical implementation of the CK
 Completed milestones include:
 
 * ✅ Core semantic model (CKS‑001)
-* ✅ Canonical serialization (CKS‑003)
+* ✅ Canonical serialization (CKS‑003) with format versioning and migration
 * ✅ Validation pipeline (CKS‑005)
 * ✅ Reference Engine (CKS‑006)
 * ✅ Canonical Knowledge Interface (CKS‑007)
-* ✅ Structural Evolution (CKS‑004)
+* ✅ Structural Evolution (CKS‑004), including three-way merge and subgraph queries
 * ✅ Command-Line Interface
 * ✅ Reference Corpus
+* ✅ Belief Revision & Reasoning Engine (ADR‑001, ADR‑002)
+* ✅ Temporal Validity and Layering Rule extension constraints (ADR‑003, ADR‑004)
+* ✅ Plugin architecture (constraint entry points)
+* ✅ RDF‑family import/export adapters (JSON‑LD, Turtle, RDF/XML)
+* ✅ MCP Server, shipped separately as `cks-mcp`
 
 Future work includes:
 
 * additional reference implementations (Rust, TypeScript);
-* extended constraint libraries;
-* interoperability tooling;
-* domain-specific knowledge models;
-* SDK and plugin architecture.
+* semantic reasoning tools beyond belief revision (pathfinding, concept similarity);
+* CKS Studio (visual workspace);
+* IDE integration.
 
 ---
 

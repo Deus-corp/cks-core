@@ -2,9 +2,10 @@
 
 > A universal, representation-independent foundation for knowledge.
 
-![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-400%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-1.21.1-blue)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
 CKS is an open specification that defines how knowledge can be represented,
@@ -168,6 +169,30 @@ The current Python reference implementation provides:
 - **Public operator properties** — safe, documented introspection of structural operators (`.obj`, `.object_id`, `.relation_id`, `.structure_patch`, `.mode`, `.new_name`)
 - k‑hop subgraph extraction (`query_subgraph`) with optional budget and type‑weighted ranking
 - Partial three‑way merge with per‑identity conflict resolution (`resolutions` parameter)
+- Format versioning (`_cks_format_version` / `_cks_min_reader_version`) and `cks migrate` for legacy files
+- Constraint entry points — third‑party packages register custom constraints via `cks.constraints` in `pyproject.toml`
+
+### Belief Revision & Reasoning
+
+CKS can represent not just facts but the *inferences* drawn from them, and reason about conflicts between those inferences (see ADR‑001, ADR‑002):
+
+- **`InferenceStep`** objects — record a conclusion, its premises, an operator, a confidence score, and an optional justification
+- **`RecordInference`** evolution operator — appends a new `InferenceStep` to a structure
+- **`InferenceConfidenceConflictConstraint`** — flags active inference steps that share a conclusion but disagree on confidence (WARNING, not ERROR — a resolvable belief conflict, not a structural error)
+- **`StalePremiseConstraint`** — flags an active step citing a premise that has itself been superseded
+- **`SupersessionChainConstraint`** — validates `superseded_by` chains and rejects cycles
+- **`rank_by_entrenchment`** — ranks competing inference steps by confidence
+- **`explain_inference`** — walks a conclusion's inference chain back to base facts, reporting operator, confidence, justification, and supersession history per step
+- **`ResolveInferenceConflict`** operator — the write‑side counterpart: given a conclusion and a chosen winner, atomically supersedes every other active step reaching that conclusion
+
+This is the reasoning substrate that `cks-mcp`'s conflict‑resolution tools are built on.
+
+### Optional Extension Constraints
+
+Opt‑in validators for specialised knowledge types, registered via `cks.constraints.builtin.OPTIONAL_CONSTRAINTS_BY_NAME`:
+
+- **`temporal_validity`** (ADR‑003) — flags objects whose `structure.valid_until` has passed
+- **`layering_rule`** (ADR‑004) — enforces the CKS ecosystem's dependency direction (`cks-core < cks-runtime < cks-mcp`) on `depends_on` relations
 
 ---
 
@@ -203,12 +228,16 @@ Currently implemented:
 - ✅ Command-Line Interface
 - ✅ Structural Evolution (CKS‑004)
 - ✅ Reference Knowledge Corpus
-- ✅ Conformance Test Suite (114 tests)
+- ✅ Conformance Test Suite (400+ tests)
 - ✅ PyPI Publication
 - ✅ Import/Export Adapters (JSON‑LD, Turtle, RDF/XML)
 - ✅ Modular CLI (commands refactored into separate handlers)
 - ✅ Contract Documentation (`docs/contracts.md`)
 - ✅ Static Type Checking (mypy)
+- ✅ Format Versioning & `cks migrate`
+- ✅ Constraint Entry Points (third‑party plugin registration)
+- ✅ Belief Revision & Reasoning Engine (`InferenceStep`, conflict detection, `explain_inference`)
+- ✅ Temporal Validity & Layering Rule extension constraints
 
 Planned:
 
@@ -228,7 +257,7 @@ Or from source:
 
 ```bash
 git clone https://github.com/Deus-corp/cks-core.git
-cd CKS
+cd cks-core
 pip install -e .
 ```
 
@@ -386,6 +415,11 @@ Current implementation status:
 | RenameObject Operator | ✅ Complete |
 | Public Operator Properties | ✅ Complete |
 | Partial Merge (Resolutions) | ✅ Complete |
+| Format Versioning & Migration | ✅ Complete |
+| Constraint Entry Points | ✅ Complete |
+| Belief Revision & Reasoning Engine | ✅ Complete |
+| Temporal Validity Constraint | ✅ Complete |
+| Layering Rule Constraint | ✅ Complete |
 
 The current implementation serves as the reference implementation of the
 existing CKS specifications.

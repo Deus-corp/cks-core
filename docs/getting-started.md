@@ -222,15 +222,32 @@ src/
         interface.py
         engine.py
         validator.py
+        validation.py
         serialization.py
         diagnostics.py
         result.py
         evolution.py
         schema.py
         plugin.py
+        schemas/
+        adapters/
+            jsonld_to_cks.py
+            cks_to_jsonld.py
+            rdf_to_cks.py
+            cks_to_rdf.py
         cli/
             __init__.py
             formatters.py
+            commands/
+                validate.py
+                parse.py
+                inspect.py
+                evolve.py
+                convert.py
+                export.py
+                migrate.py
+                plugin.py
+                schema.py
         constraints/
             __init__.py
             base.py
@@ -238,6 +255,13 @@ src/
             registry.py
             structural.py
             semantic.py
+            contradiction.py
+            reasoning.py
+            temporal.py
+            layering.py
+            ontology.py
+            projection.py
+            verification.py
 
 docs/
 examples/
