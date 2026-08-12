@@ -7,6 +7,8 @@
 ![Tests](https://img.shields.io/badge/tests-400%20passed-brightgreen)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
+> 🚀 **[Live demo →](https://deus-corp.github.io/cks-website/demo/demo.html)** — explore the CKS ecosystem graph directly in your browser, no server required.
+
 CKS is an open specification that defines how knowledge can be represented,
 validated, exchanged, and evolved independently of programming languages,
 document formats, databases, or AI systems.
@@ -29,6 +31,9 @@ Other projects build upon it:
 | **cks-mcp** | MCP server – exposes CKS to LLMs and autonomous agents. | [Deus-corp/cks-mcp](https://github.com/Deus-corp/cks-mcp) |
 | **cks-studio** | Visual workspace – explore, monitor, and manage graphs. | [Deus-corp/cks-studio](https://github.com/Deus-corp/cks-studio) |
 | **cks-website** | Documentation & demo site. | [Deus-corp/cks-website](https://github.com/Deus-corp/cks-website) |
+
+📖 **Full documentation, case studies, and an interactive demo**
+are available at the **[CKS Documentation Site](https://deus-corp.github.io/cks-website/)**.
 
 ---
 
@@ -368,9 +373,12 @@ The test suite verifies:
 
 # Documentation
 
-The complete specification is published separately.
+The complete specification, architecture guides, case studies, and API
+reference for all CKS projects are published on the documentation site:
 
-Core specifications:
+📚 **[CKS Documentation](https://deus-corp.github.io/cks-website/)**
+
+### Core specifications
 
 - CKS-000 — Foundations
 - CKS-001 — Core Specification
