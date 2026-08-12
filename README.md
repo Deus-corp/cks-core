@@ -5,7 +5,6 @@
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-400%20passed-brightgreen)
-![Version](https://img.shields.io/badge/version-1.21.1-blue)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
 CKS is an open specification that defines how knowledge can be represented,
@@ -385,7 +384,7 @@ Core specifications:
 
 DOI:
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21332624.svg)](https://doi.org/10.5281/zenodo.21332624)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21332624-blue)](https://doi.org/10.5281/zenodo.21332624)
 
 ---
 
