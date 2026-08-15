@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://img.shields.io/badge/tests-400%20passed-brightgreen)
+![Tests](https://img.shields.io/badge/tests-415%20passed-brightgreen)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
 > 🚀 **[Live demo →](https://deus-corp.github.io/cks-website/demo/demo.html)** — explore the CKS ecosystem graph directly in your browser, no server required.
@@ -356,7 +356,7 @@ python -m pytest -v
 
 Current status:
 
-- 400+ tests
+- 415+ tests
 - all passing
 
 The test suite verifies:

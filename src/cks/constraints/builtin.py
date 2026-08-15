@@ -11,6 +11,7 @@ etc.).
 
 from __future__ import annotations
 
+from .claim import ClaimIntegrityConstraint
 from .contradiction import FunctionalRelationConstraint, MutualExclusionConstraint
 from .layering import LayeringRuleConstraint
 from .ontology import RelationTypeConstraint, TypeHierarchyCycleConstraint
@@ -84,6 +85,8 @@ OPTIONAL_CONSTRAINTS = (
     TemporalValidityConstraint(),
     # --- Architecture Domain (dependency direction, see ADR-004) ---
     LayeringRuleConstraint(),
+    # --- Claim Domain (asserted statements + support/contradiction graph) ---
+    ClaimIntegrityConstraint(),
 )
 
 # Stable name -> constraint lookup for callers that select extensions by
@@ -104,4 +107,5 @@ OPTIONAL_CONSTRAINTS_BY_NAME = {
     "stale_premise": StalePremiseConstraint(),
     "temporal_validity": TemporalValidityConstraint(),
     "layering_rule": LayeringRuleConstraint(),
+    "claim_integrity": ClaimIntegrityConstraint(),
 }

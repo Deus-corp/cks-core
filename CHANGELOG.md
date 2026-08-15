@@ -6,6 +6,17 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.22.0] - 2026-08-15
+
+### Added
+- **Claim Integrity Constraint** – new optional extension `claim_integrity` for validating `Claim` objects. Enforces required fields (`statement`, `confidence`, `author`, `created_at`, `status`), valid confidence range [0,1], closed status vocabulary, ISO-8601 timestamps, valid reference lists, and consistent support/contradiction graph.
+
+### Changed
+- `OPTIONAL_CONSTRAINTS_BY_NAME` now includes `claim_integrity`.
+- No changes to core `KnowledgeObject`/`KnowledgeStructure` semantics; Claim remains a conventional `KnowledgeObject` type.
+
+---
+
 ## [1.21.1] - 2026-08-11
 
 ### Added
