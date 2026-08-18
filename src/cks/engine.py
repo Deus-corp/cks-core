@@ -93,8 +93,13 @@ class ReferenceEngine:
         structure: KnowledgeStructure,
         *,
         extra_constraints: "Iterable[Constraint] | None" = None,
+        include_structure_constraints: bool = False,
     ) -> ValidationResult:
-        return _validate(structure, extra_constraints=extra_constraints)
+        return _validate(
+            structure,
+            extra_constraints=extra_constraints,
+            include_structure_constraints=include_structure_constraints,
+        )
 
     def diagnose(
         self,

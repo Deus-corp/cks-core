@@ -21,6 +21,7 @@ from dataclasses import dataclass
 import cks.constraints  # noqa: F401
 
 from .constraints.base import Constraint
+from .constraints.from_structure import load_dynamic_constraints
 from .constraints.registry import ConstraintRegistry
 from .constraints.registry import registry as _registry
 from .core import KnowledgeStructure
@@ -158,13 +159,50 @@ class ReferenceValidator:
     # Execute Validation
     # ------------------------------------------------------------------
 
+    def _resolve_extra_constraints(
+        self,
+        extra_constraints: Iterable[Constraint] | None,
+        *,
+        include_structure_constraints: bool,
+        structure: KnowledgeStructure,
+    ) -> Iterable[Constraint] | None:
+        """Combine caller-supplied ``extra_constraints`` with any
+        structure-declared (``OntologyRule``) constraints, when opted
+        in via ``include_structure_constraints``.
+
+        Structure-declared constraints are appended *after* any
+        explicit ``extra_constraints`` -- ``_scoped_registry`` skips a
+        constraint whose identity is already registered, so an
+        explicit constraint always wins over a same-identity dynamic
+        one built from the graph, never the reverse. Returns
+        ``extra_constraints`` unchanged (including ``None``) when
+        ``include_structure_constraints`` is ``False``, so the default
+        (opted-out) path allocates nothing extra and behaves exactly
+        as it did before this parameter existed.
+        """
+        if not include_structure_constraints:
+            return extra_constraints
+
+        dynamic = load_dynamic_constraints(structure)
+        if not dynamic:
+            return extra_constraints
+        if not extra_constraints:
+            return dynamic
+        return (*extra_constraints, *dynamic)
+
     def validate(
         self,
         structure: KnowledgeStructure,
         *,
         min_severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
         extra_constraints: Iterable[Constraint] | None = None,
+        include_structure_constraints: bool = False,
     ) -> ValidationResult:
+        extra_constraints = self._resolve_extra_constraints(
+            extra_constraints,
+            include_structure_constraints=include_structure_constraints,
+            structure=structure,
+        )
         if extra_constraints:
             # Scoped path: bypass self._pipeline (which is bound to
             # self._registry) and evaluate the same canonical stage
@@ -260,6 +298,7 @@ def validate(
     *,
     min_severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
     extra_constraints: Iterable[Constraint] | None = None,
+    include_structure_constraints: bool = False,
 ) -> ValidationResult:
     """
     Execute the complete canonical validation pipeline.
@@ -270,11 +309,19 @@ def validate(
     process-wide global registry is never mutated by this parameter —
     other callers and subsequent calls without ``extra_constraints``
     are unaffected.
+
+    ``include_structure_constraints``, when ``True``, additionally
+    scans ``structure`` itself for ``OntologyRule`` objects (see
+    ``cks.constraints.from_structure``) and evaluates the constraints
+    they declare for this call only -- same scoping guarantee as
+    ``extra_constraints``, never touching the global registry.
+    Defaults to ``False``: existing callers see identical behaviour.
     """
     return _validator.validate(
         structure,
         min_severity=min_severity,
         extra_constraints=extra_constraints,
+        include_structure_constraints=include_structure_constraints,
     )
 
 
@@ -283,6 +330,7 @@ def validate_all(
     *,
     min_severity: DiagnosticSeverity = DiagnosticSeverity.ERROR,
     extra_constraints: Iterable[Constraint] | None = None,
+    include_structure_constraints: bool = False,
 ) -> list[ValidationResult]:
     """Validate multiple KnowledgeStructures and return individual results."""
     return [
@@ -290,6 +338,7 @@ def validate_all(
             s,
             min_severity=min_severity,
             extra_constraints=extra_constraints,
+            include_structure_constraints=include_structure_constraints,
         )
         for s in structures
     ]

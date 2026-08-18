@@ -6,6 +6,20 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.23.0] - 2026-08-18
+
+### Added
+- **Constraints-as-Data pilot** – new opt-in `include_structure_constraints` parameter on public validation APIs (`validate`, `validate_all`, `ReferenceValidator.validate`, `ReferenceEngine.validate`). When `True`, the validator scans the `KnowledgeStructure` for `OntologyRule` objects and evaluates the constraints they declare.
+- **`OntologyRule` object type** – declarative rule objects supporting `functional_relation`, `mutual_exclusion`, `temporal_validity`, and `layering_rule` constraint types.
+- **`load_dynamic_constraints`** – deterministic, pure loader in `cks.constraints.from_structure`.
+- **Dynamic constraint adapters** – delegating/direct adapters reuse existing constraint logic without modifying the global constraint registry.
+- **Tests** – coverage for default opt-out, enabled/disabled rules, malformed rules, unknown types, built-in fallback, and registry isolation.
+
+### Changed
+- Existing validation APIs now accept `include_structure_constraints=False` by default, preserving current behavior.
+
+---
+
 ## [1.22.0] - 2026-08-15
 
 ### Added
