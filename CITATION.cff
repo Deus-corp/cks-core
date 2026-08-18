@@ -12,9 +12,9 @@ authors:
   - family-names: "Hruznov"
     given-names: "Vladyslav"
 
-repository-code: "https://github.com/Deus-corp/cks-core"
+repository-code: "https://github.com/PunctumActus/cks-core"
 
-url: "https://github.com/Deus-corp/cks-core"
+url: "https://github.com/PunctumActus/cks-core"
 
 license: "MIT"
 
@@ -51,4 +51,4 @@ preferred-citation:
       given-names: "Vladyslav"
   title: "Canonical Knowledge Structure (CKS)"
   doi: "10.5281/zenodo.21332624"
-  url: "https://github.com/Deus-corp/cks-core"
+  url: "https://github.com/PunctumActus/cks-core"

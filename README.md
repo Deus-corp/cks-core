@@ -7,7 +7,7 @@
 ![Tests](https://img.shields.io/badge/tests-426%20passed-brightgreen)
 [![PyPI](https://img.shields.io/pypi/v/cks-core)](https://pypi.org/project/cks-core/)
 
-> 🚀 **[Live demo →](https://deus-corp.github.io/cks-website/demo/demo.html)** — explore the CKS ecosystem graph directly in your browser, no server required.
+> 🚀 **[Live demo →](https://punctumactus.github.io/cks-website/demo/demo.html)** — explore the CKS ecosystem graph directly in your browser, no server required.
 
 CKS is an open specification that defines how knowledge can be represented,
 validated, exchanged, and evolved independently of programming languages,
@@ -26,14 +26,14 @@ Other projects build upon it:
 
 | Project | Description | Repository |
 |---------|-------------|------------|
-| **cks-core** | Canonical semantic engine – the single source of canonical truth. | [Deus-corp/cks-core](https://github.com/Deus-corp/cks-core) |
-| **cks-runtime** | Operational environment – sessions, transactions, persistence. | [Deus-corp/cks-runtime](https://github.com/Deus-corp/cks-runtime) |
-| **cks-mcp** | MCP server – exposes CKS to LLMs and autonomous agents. | [Deus-corp/cks-mcp](https://github.com/Deus-corp/cks-mcp) |
-| **cks-studio** | Visual workspace – explore, monitor, and manage graphs. | [Deus-corp/cks-studio](https://github.com/Deus-corp/cks-studio) |
-| **cks-website** | Documentation & demo site. | [Deus-corp/cks-website](https://github.com/Deus-corp/cks-website) |
+| **cks-core** | Canonical semantic engine – the single source of canonical truth. | [cks-core](https://github.com/PunctumActus/cks-core) |
+| **cks-runtime** | Operational environment – sessions, transactions, persistence. | [cks-runtime](https://github.com/PunctumActus/cks-runtime) |
+| **cks-mcp** | MCP server – exposes CKS to LLMs and autonomous agents. | [cks-mcp](https://github.com/PunctumActus/cks-mcp) |
+| **cks-studio** | Visual workspace – explore, monitor, and manage graphs. | [cks-studio](https://github.com/PunctumActus/cks-studio) |
+| **cks-website** | Documentation & demo site. | [cks-website](https://github.com/PunctumActus/cks-website) |
 
 📖 **Full documentation, case studies, and an interactive demo**
-are available at the **[CKS Documentation Site](https://deus-corp.github.io/cks-website/)**.
+are available at the **[CKS Documentation Site](https://punctumactus.github.io/cks-website/)**.
 
 ---
 
@@ -260,7 +260,7 @@ pip install cks-core
 Or from source:
 
 ```bash
-git clone https://github.com/Deus-corp/cks-core.git
+git clone https://github.com/PunctumActus/cks-core.git
 cd cks-core
 pip install -e .
 ```
@@ -376,7 +376,7 @@ The test suite verifies:
 The complete specification, architecture guides, case studies, and API
 reference for all CKS projects are published on the documentation site:
 
-📚 **[CKS Documentation](https://deus-corp.github.io/cks-website/)**
+📚 **[CKS Documentation](https://punctumactus.github.io/cks-website/)**
 
 ### Core specifications
 

@@ -29,8 +29,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Deus-corp/cks-core"
-Documentation = "https://github.com/Deus-corp/cks-core"
+Homepage = "https://github.com/PunctumActus/cks-core"
+Documentation = "https://github.com/PunctumActus/cks-core"
 
 [tool.setuptools.dynamic]
 version = {attr = "cks._version.__version__"}

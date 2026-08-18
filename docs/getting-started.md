@@ -40,7 +40,7 @@ pip install canonical-ks
 Or from source:
 
 ```bash
-git clone https://github.com/Deus-corp/CKS.git
+git clone https://github.com/PunctumActus/CKS.git
 cd CKS
 pip install -e .
 ```
