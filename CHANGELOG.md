@@ -6,6 +6,22 @@ The project follows a semantic versioning strategy where practical.
 
 ---
 
+## [1.23.1] - 2026-08-19
+
+### Changed
+- **`evolution.py` split into a package** – `cks.evolution` now lives under `src/cks/evolution/` with one module per operator plus `parse.py` and `compose.py`. Public imports (`from cks.evolution import ...`, `cks.evolution.X`) remain unchanged.
+- **Explicit `CanonicalRelation` re-export** – `cks.evolution` now documents and preserves `CanonicalRelation`, which was previously available only as an accidental module-level leak. Its canonical home remains `cks.core.CanonicalRelation`.
+
+### Fixed
+- Verified compatibility with `cks-runtime` and `cks-mcp` against the new package layout.
+
+### Tests
+- cks-core: 426 passed.
+- cks-runtime: 773 passed, 69 skipped.
+- cks-mcp: 1121 passed, 6 skipped.
+
+---
+
 ## [1.23.0] - 2026-08-18
 
 ### Added
@@ -299,21 +315,6 @@ See ADR-002 ("Belief Revision Support") for the design rationale, including why 
 ### Added
 - `merge()` function in the public `cks.interface` module, delegating to `KnowledgeStructure.merge()`.
 - `MergeConflict` and `MergeConflictError` now exported from the top-level `cks` package.
-
----
-
-## [1.8.1] - 2026-07-21
-
-### Added
-- `KnowledgeStructure.merge()` – three-way merge of independently evolved structures with conflict detection via object hashes, referential integrity enforcement, and structured `MergeConflictError`.
-- `MergeConflict` and `MergeConflictError` types, exported from the top-level `cks` package.
-- `merge()` function in `cks.interface`, wired through `ReferenceEngine`.
-- `KnowledgeObject._id_hash` – cached canonical hash of `identity.id`, making `KnowledgeStructure` construction ~10× faster.
-- New tests for `identity_equivalent`, `_id_hash` caching, and merge (7 new tests, total 167 passed).
-
-### Changed
-- `KnowledgeStructure.__init__` now uses each object's cached `_id_hash` instead of recomputing `_canonical_hash(id)` for every object on every construction.
-- `CanonicalRelation.__init__` sets `_id_hash` explicitly, matching the cache behaviour of `KnowledgeObject.__post_init__`.
 
 ---
 
